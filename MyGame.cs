@@ -13,12 +13,12 @@ public class MyGame : Game {
 
     public MyGame () {
         _graphics = new GraphicsDeviceManager ( this ) ;
-        Content . RootDirectory = "Content/images";
+        Content.RootDirectory = "Content/images";
         IsMouseVisible = true ;
     }
 
     protected override void Initialize () {
-        base . Initialize () ;
+        base.Initialize();
     }
 
     protected override void LoadContent () {
@@ -32,9 +32,8 @@ public class MyGame : Game {
     }
 
     protected override void Update ( GameTime gameTime ) {
-        if ( GamePad . GetState ( PlayerIndex . One ) . Buttons . Back == ButtonState .
-                 Pressed ||
-             Keyboard . GetState () . IsKeyDown ( Keys . Escape ) )
+        if ( GamePad.GetState ( PlayerIndex.One ).Buttons.Back == ButtonState.Pressed ||
+             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit () ;
         _ship . Update ( gameTime ) ;
         _enemy.enemyPattern(gameTime, _ship);

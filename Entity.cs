@@ -1,22 +1,38 @@
-using System ;
-using Microsoft . Xna . Framework ;
-using Microsoft . Xna . Framework . Graphics ;
-using Microsoft . Xna . Framework . Input ;
+using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
-namespace Projet_Survivor ;
+namespace Projet_Survivor;
 
-public class Entity {
+public class Entity
+{
+    private Hitbox _hitbox;
 
-    private Hitbox hitbox { get; init; }
-    private Sprite sprite { get; set; }
-    private Position position { get; set; }
-    
-    public Entity (Hitbox hitbox, Sprite sprite, Position position){
-        this.hitbox=hitbox;
-        this.sprite=sprite;
-        this.position=position;
+    public Hitbox _Hitbox
+    {
+        get => _hitbox;
+        init => _hitbox = value;
     }
-    
-    private void gestionAnimation(){
+
+    private Sprite sprite { get; set; }
+
+    private Position _position;
+
+    public Position _Position
+    {
+        get => _position;
+        set => _position = value;
+    }
+
+    public Entity(Hitbox hitbox, Sprite sprite, Position position)
+    {
+        this._Hitbox = hitbox;
+        this.sprite = sprite;
+        this._Position = position;
+    }
+
+    private void gestionAnimation()
+    {
     }
 }
