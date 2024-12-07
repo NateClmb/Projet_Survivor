@@ -23,6 +23,7 @@ public class Player : Entity
         double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
+        this.weapon = new Weapon(World._missileSprite, 1, 1, 1, this, 1.0f);
     }
 
     public void heal(int heal)
@@ -83,15 +84,13 @@ public class Player : Entity
         //Attaque
         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
-            Projectile missile = weapon.fire();
-            World.AddEntity(missile);
+            World.AddEntity(weapon.fire());
         }
         //Fin attaque
     }
 
     private class Weapon
     {
-        private String name;
         private readonly Rectangle projectileHitbox = new Rectangle(0, 0, 100, 100);
         private Sprite projectileSprite;
         private int piercePotential;
@@ -100,10 +99,20 @@ public class Player : Entity
         private bool smart;
         private Player player;
         private float projectileSpeed;
-        
+
+        public Weapon(Sprite projectileSprite, int piercePotential, int damage, float baseFireRate, Player player, float projectileSpeed)
+        {
+            this.projectileSprite = projectileSprite;
+            this.piercePotential = piercePotential;
+            this.damage = damage;
+            this.baseFireRate = baseFireRate;
+            this.player = player;
+            this.projectileSpeed = projectileSpeed;
+        }
+
         public Projectile fire()
         {
-            return new Projectile(projectileHitbox, projectileSprite, new Vector2(), calculateSpeed(), piercePotential,
+            return new Projectile(projectileHitbox, projectileSprite, player.Position, calculateSpeed(), piercePotential,
                 damage, smart, true);
         }
 

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,7 +16,7 @@ public class World : Game
     private SpriteBatch _spriteBatch;
     public Sprite _shipSprite; // instance de Sprite
     public Sprite _enemySprite; // instance de Sprite
-    public Sprite _missileSprite; // instance de Sprite
+    public static Sprite _missileSprite; // instance de Sprite
 
     public World()
     {
@@ -57,7 +58,7 @@ public class World : Game
         Rectangle hitbox = new Rectangle(0, 0, 100, 100);
         Player player = new Player(hitbox, _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
         _entities.Add(player);
-        Enemy enemy = new Enemy(hitbox, _enemySprite, new Vector2(), new Vector2(), 100, "virus", 10, Behavior.HAND_TO_HAND);
+        Enemy enemy = new Enemy(hitbox, _enemySprite, new Vector2(), new Vector2(1, 1), 100, "virus", 10, Behavior.HAND_TO_HAND);
         _entities.Add(enemy);
         
     }
@@ -67,7 +68,9 @@ public class World : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        foreach (Entity e in _entities)
+        Entity[] copyEntities = new Entity[_entities.Count]; 
+        _entities.CopyTo(copyEntities);
+        foreach (Entity e in copyEntities)
         {
                 e.Sprite.Update(gameTime, e);
         }
