@@ -8,11 +8,10 @@ namespace Projet_Survivor;
 public class Sprite
 {
     private Texture2D _texture;
-    public Vector2 _position;
+    private Vector2 _position;
     private int _size = 200;
     private static readonly int _sizeMin = -200;
     private static readonly int _sizeMax = 200;
-    protected Vector2 _speed;
 
 
     private Color _color = Color.Pink;
@@ -41,79 +40,10 @@ public class Sprite
         _Size = size;
     }
 
-    public void Moktar(GameTime gameTime, Sprite player, Sprite missile, Sprite enemy)
-    {
-        float spd_lat = 15f;
-        float spd_ver = 15f;
-
-        if (Keyboard.GetState().IsKeyDown(Keys.M))
-        {
-            if (_position.X < -50 || _position.X > 850)
-            {
-                _position.X = player._position.X;
-                _position.Y = player._position.Y;
-            }
-        }
-
-        if (_position.X > 0 && _position.X < 800)
-        {
-            if (_position.X + spd_lat > enemy._position.X || _position.X - spd_lat < enemy._position.X) spd_lat /= 2;
-            if (_position.Y + spd_ver > enemy._position.Y || _position.Y - spd_ver < enemy._position.Y) spd_ver /= 2;
-
-
-            if (_position.X > enemy._position.X)
-            {
-                _position.X -= spd_lat;
-            }
-            else
-            {
-                _position.X += spd_lat;
-            }
-
-            if (_position.Y > enemy._position.Y)
-            {
-                _position.Y -= spd_ver;
-            }
-            else
-            {
-                _position.Y += spd_ver;
-            }
-
-            if (enemy._position.X - 10f < _position.X && enemy._position.X + 10f > _position.X &&
-                enemy._position.Y - 10f < _position.Y && enemy._position.Y + 10f > _position.Y)
-            {
-                _position.X = -100;
-                _position.Y = -100;
-            }
-        }
-    }
-
-
-    public void enemyPattern(GameTime gameTime, Sprite joueur)
-    {
-        if (_position.X > joueur._position.X)
-        {
-            _position.X -= 0.5f;
-        }
-        else
-        {
-            _position.X += 0.5f;
-        }
-
-        if (_position.Y > joueur._position.Y)
-        {
-            _position.Y -= 0.5f;
-        }
-        else
-        {
-            _position.Y += 0.5f;
-        }
-    }
-
-
     public void Update(GameTime gameTime, Entity caller)
     {
         caller.Move(gameTime);
+        _position = caller.Position;
     }
 
     public void Draw(SpriteBatch spriteBatch)
