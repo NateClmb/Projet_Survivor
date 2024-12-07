@@ -10,7 +10,7 @@ public class Enemy : Entity
     private String name;
     private int xpValue { get; init; }
     private Behavior behavior;
-    private Player player = (Player) World.GetEntities()[0];
+    private readonly Player player = (Player) World.GetEntities()[0];
 
     public Enemy(Rectangle hitbox,
         Sprite sprite,
