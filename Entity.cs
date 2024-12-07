@@ -1,38 +1,45 @@
 using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace Projet_Survivor;
 
-public class Entity
+public abstract class Entity
 {
-    private Hitbox _hitbox;
+    public Rectangle Hitbox { init; get; }
+    public Sprite Sprite;
+    public Vector2 Position;
+    private int _hp;
+    protected Vector2 Speed;
 
-    public Hitbox _Hitbox
+    public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
     {
-        get => _hitbox;
-        init => _hitbox = value;
+        this.Hitbox = hitbox;
+        this.Sprite = sprite;
+        this.Position = position;
+        this.Speed = speed;
+        SetHp(hp);
     }
 
-    private Sprite sprite { get; set; }
+    public abstract void Move(GameTime gameTime);
 
-    private Position _position;
-
-    public Position _Position
+    public void hit(int damage)
     {
-        get => _position;
-        set => _position = value;
+        _hp -= damage;
     }
 
-    public Entity(Hitbox hitbox, Sprite sprite, Position position)
+    private void GestionAnimation()
     {
-        this._Hitbox = hitbox;
-        this.sprite = sprite;
-        this._Position = position;
     }
 
-    private void gestionAnimation()
+    private void SetHp(int hp)
     {
+        if (hp <= 0)
+        {
+            hp = 1;
+        }
+        _hp = hp;
     }
 }

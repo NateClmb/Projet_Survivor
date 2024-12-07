@@ -111,70 +111,9 @@ public class Sprite
     }
 
 
-    public void Update(GameTime gameTime)
+    public void Update(GameTime gameTime, Entity caller)
     {
-        if (Keyboard.GetState().IsKeyDown(Keys.Right))
-        {
-            if (_speed.X < 12.0f)
-            {
-                _speed.X += 1.1f;
-            }
-
-            if (_Size < 0)
-            {
-                _Size = -_Size;
-            }
-        }
-
-        if (Keyboard.GetState().IsKeyDown(Keys.Left))
-        {
-            if (_speed.X > -12.0f)
-            {
-                _speed.X -= 1.1f;
-            }
-
-            if (_Size > 0)
-            {
-                _Size = -_Size;
-            }
-        }
-
-        if (Keyboard.GetState().IsKeyDown(Keys.Down))
-        {
-            if (_speed.Y < 6.0f)
-            {
-                _speed.Y += 0.5f;
-            }
-        }
-
-        if (Keyboard.GetState().IsKeyDown(Keys.Up))
-        {
-            if (_speed.Y > -6.0f)
-            {
-                _speed.Y -= 0.5f;
-            }
-        }
-
-
-        _position.X += _speed.X;
-        _position.Y += _speed.Y;
-
-
-        if (_position.X < 25) _position.X = 25;
-        if (_position.X > 775) _position.X = 775;
-        if (_position.Y < 25) _position.Y = 25;
-        if (_position.Y > 450) _position.Y = 450;
-
-        if (_speed.X > 0) _speed.X -= 0.05f;
-        if (_speed.X < 0) _speed.X += 0.1f;
-        if (_speed.Y > 0) _speed.Y -= 0.1f;
-        if (_speed.Y < 0) _speed.Y += 0.1f;
-
-        /*
-        if (Keyboard.GetState().IsKeyDown(Keys.Left)) if(_Size>0) {_Size = -_Size; }
-        if (Keyboard.GetState().IsKeyDown(Keys.Right)) if(_Size<0) {_Size = -_Size; }
-        //...
-        */
+        caller.Move(gameTime);
     }
 
     public void Draw(SpriteBatch spriteBatch)

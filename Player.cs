@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -5,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projet_Survivor;
 
-public class Player : Creature
+public class Player : Entity
 {
     private double attackSpd { get; set; }
     private int level;
@@ -14,12 +15,12 @@ public class Player : Creature
     private readonly float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
 
-    public Player(Hitbox h,
+    public Player(Rectangle hitbox,
         Sprite sprite,
-        Position pos,
-        double hp,
+        Vector2 pos,
         Vector2 speed,
-        double attackSpd) : base(h, sprite, pos, hp, speed)
+        int hp,
+        double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
     }
@@ -29,56 +30,119 @@ public class Player : Creature
         return;
     }
 
-    public void Move(GameTime gameTime)
+    public override void Move(GameTime gameTime)
     {
         //déplacements aux flèches du clavier
         if (Keyboard.GetState().IsKeyDown(Keys.Right))
         {
-            if (_speed.X < MAX_SPEED)
-                _speed.X += ACCELERATION;
+            if (Speed.X < MAX_SPEED)
+                Speed.X += ACCELERATION;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.Left))
         {
-            if (_speed.X > -MAX_SPEED)
+            if (Speed.X > -MAX_SPEED)
             {
-                _speed.X -= ACCELERATION;
+                Speed.X -= ACCELERATION;
             }
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.Down))
         {
-            if (_speed.Y < MAX_SPEED)
+            if (Speed.Y < MAX_SPEED)
             {
-                _speed.Y += ACCELERATION;
+                Speed.Y += ACCELERATION;
             }
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.Up))
         {
-            if (_speed.Y > -MAX_SPEED)
+            if (Speed.Y > -MAX_SPEED)
             {
-                _speed.Y -= ACCELERATION;
+                Speed.Y -= ACCELERATION;
             }
         }
 
-        _Position.X += _speed.X;
-        _Position.Y += _speed.Y;
+        Position.X += Speed.X;
+        Position.Y += Speed.Y;
 
         //limite dans la box (sûrement à retirer plus tard)
-        if (_Position.X < 25) _Position.X = 25;
-        if (_Position.X > 775) _Position.X = 775;
-        if (_Position.Y < 25) _Position.Y = 25;
-        if (_Position.Y > 450) _Position.Y = 450;
+        if (Position.X < 25) Position.X = 25;
+        if (Position.X > 775) Position.X = 775;
+        if (Position.Y < 25) Position.Y = 25;
+        if (Position.Y > 450) Position.Y = 450;
 
         //décélération avec le temps
-        if (_speed.X > 0) _speed.X -= 0.05f;
-        if (_speed.X < 0) _speed.X += 0.1f;
-        if (_speed.Y > 0) _speed.Y -= 0.1f;
-        if (_speed.Y < 0) _speed.Y += 0.1f;
+        if (Speed.X > 0) Speed.X -= 0.1f;
+        if (Speed.X < 0) Speed.X += 0.1f;
+        if (Speed.Y > 0) Speed.Y -= 0.1f;
+        if (Speed.Y < 0) Speed.Y += 0.1f;
+
+        //Fin déplacement
+
+        //Attaque
+        if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+        {
+            Projectile missile = weapon.fire();
+            World.AddEntity(missile);
+        }
+        //Fin attaque
     }
 
-    private class Weapon()
+    private class Weapon
     {
+        private String name;
+        private readonly Rectangle projectileHitbox = new Rectangle(0, 0, 100, 100);
+        private Sprite projectileSprite;
+        private int piercePotential;
+        private int damage;
+        private float baseFireRate;
+        private bool smart;
+        private Player player;
+        private float projectileSpeed;
+        
+        public Projectile fire()
+        {
+            return new Projectile(projectileHitbox, projectileSprite, new Vector2(), calculateSpeed(), piercePotential,
+                damage, smart, true);
+        }
+
+        private Vector2 calculateSpeed()
+        {
+            Vector2 speed = new Vector2(projectileSpeed, 0);
+            if (smart)
+            {
+                Entity nearestEnemy = NearestTarget();
+                if (nearestEnemy != null)
+                {
+                    Vector2.Rotate(speed, (float)Math.Atan2(nearestEnemy.Position.Y - player.Position.Y,
+                        nearestEnemy.Position.X - player.Position.X));
+                }
+            }
+            else
+            {
+                Vector2.Rotate(speed, (float)Math.Atan2(Mouse.GetState().Y - player.Position.Y,
+                    Mouse.GetState().Position.X - player.Position.X));
+            }
+
+            return speed;
+        }
+
+        private Enemy? NearestTarget()
+        {
+            Enemy nearest = null;
+            float minDist = float.MaxValue;
+            foreach (Entity e in World.GetEntities())
+            {
+                if (e.GetType() == typeof(Enemy))
+                {
+                    float dist = Vector2.Distance(e.Position, player.Position);
+                    if (dist < minDist)
+                        minDist = dist;
+                }
+            }
+
+            return nearest;
+        }
     }
 }

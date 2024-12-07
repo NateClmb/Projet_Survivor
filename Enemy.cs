@@ -5,20 +5,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projet_Survivor;
 
-public class Enemy : Creature
+public class Enemy : Entity
 {
     private String name;
     private int xpValue { get; init; }
     private Behavior behavior;
+    private Player player = (Player) World.GetEntities()[0];
 
-    public Enemy(Hitbox h,
+    public Enemy(Rectangle hitbox,
         Sprite sprite,
-        Position pos,
-        double hp,
+        Vector2 pos,
         Vector2 speed,
+        int hp,
         String name,
         int xpValue,
-        Behavior behavior) : base(h, sprite, pos, hp, speed)
+        Behavior behavior) : base(hitbox, sprite, pos, speed, hp)
     {
         this.name = name;
         this.xpValue = xpValue;
@@ -26,24 +27,26 @@ public class Enemy : Creature
     }
 
     //l'ennemi se rapproche en permanence du joueur
-    public void move(GameTime gameTime, Player player)
+    
+     
+    public override void Move(GameTime gameTime)
     {
-        if (_Position.X > player._Position.X)
+        if (Position.X > player.Position.X)
         {
-            _Position.X -= _speed.X;
+            Position.X -= Speed.X;
         }
         else
         {
-            _Position.X += _speed.X;
+            Position.X += Speed.X;
         }
 
-        if (_Position.Y > player._Position.Y)
+        if (Position.Y > player.Position.Y)
         {
-            _Position.Y -= _speed.Y;
+            Position.Y -= Speed.Y;
         }
         else
         {
-            _Position.Y += _speed.Y;
+            Position.Y += Speed.Y;
         }
     }
 }

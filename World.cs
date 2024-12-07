@@ -8,22 +8,35 @@ namespace Projet_Survivor;
 public class World : Game
 {
     //liste des entités présentes à un instant t
-    private ArrayList entities = new ArrayList();
+    //Le joueur est toujours l'entité à l'indice 0
+    private static ArrayList _entities = new ArrayList();
 
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    protected Sprite _shipSprite; // instance de Sprite
-    protected Sprite _enemySprite; // instance de Sprite
-    protected Sprite _missileSprite; // instance de Sprite
-    protected Enemy _enemy;
-    protected Player _ship;
-    protected Projectile _missile;
+    public Sprite _shipSprite; // instance de Sprite
+    public Sprite _enemySprite; // instance de Sprite
+    public Sprite _missileSprite; // instance de Sprite
 
     public World()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content/images";
         IsMouseVisible = true;
+    }
+
+    public static void AddEntity(Entity e)
+    {
+        _entities.Add(e);
+    }
+
+    public static ArrayList GetEntities()
+    {
+        return _entities;
+    }
+
+    public static void RemoveEntity(Entity e)
+    {
+        _entities.Remove(e);
     }
 
     protected override void Initialize()
@@ -41,10 +54,12 @@ public class World : Game
         Texture2D missileTexture = Content.Load<Texture2D>("missile1");
         _missileSprite = new Sprite(missileTexture, new Vector2(-100, -100), 30);
 
-        Hitbox hitbox = new Hitbox();
-        _enemy = new Enemy(hitbox, _enemySprite, new Position(), 100, new Vector2(), "virus", 10, Behavior.HAND_TO_HAND);
-        _ship = new Player(hitbox, _shipSprite, new Position(), 100, new Vector2(), 1.0);
-        _missile = new Projectile(hitbox, _missileSprite, new Position(), 100, new Vector2(), 10, false, true);
+        Rectangle hitbox = new Rectangle(0, 0, 100, 100);
+        Player player = new Player(hitbox, _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
+        _entities.Add(player);
+        Enemy enemy = new Enemy(hitbox, _enemySprite, new Vector2(), new Vector2(), 100, "virus", 10, Behavior.HAND_TO_HAND);
+        _entities.Add(enemy);
+        
     }
 
     protected override void Update(GameTime gameTime)
@@ -52,9 +67,10 @@ public class World : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        _shipSprite.Update(gameTime);
-        _enemySprite.enemyPattern(gameTime, _shipSprite);
-        _missileSprite.Moktar(gameTime, _shipSprite, _missileSprite, _enemySprite);
+        foreach (Entity e in _entities)
+        {
+                e.Sprite.Update(gameTime, e);
+        }
         base.Update(gameTime);
     }
 
@@ -62,9 +78,10 @@ public class World : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        _shipSprite.Draw(_spriteBatch);
-        _enemySprite.Draw(_spriteBatch);
-        _missileSprite.Draw(_spriteBatch);
+        foreach (Entity e in _entities)
+        {
+            e.Sprite.Draw(_spriteBatch);
+        }
         _spriteBatch.End();
         base.Draw(gameTime);
     }
