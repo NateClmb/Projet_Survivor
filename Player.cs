@@ -112,13 +112,14 @@ public class Player : Entity
             this.damage = damage;
             this.baseFireRate = baseFireRate;
             this.projectileSpeed = projectileSpeed;
-            this.smart = false;
+            this.smart = true;
         }
 
         public Projectile fire()
         {
             lastTimeFired = baseFireRate;
-            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position, projectileSpeed,
+            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position,
+                projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }
 
@@ -131,15 +132,17 @@ public class Player : Entity
                 Entity? nearestEnemy = NearestTarget();
                 if (nearestEnemy != null)
                 {
-                    Vector2.Rotate(direction, (float)Math.Atan2(nearestEnemy.Position.Y - player.Position.Y,
-                        nearestEnemy.Position.X - player.Position.X));
+                    direction = nearestEnemy.Position - player.Position;
                 }
+
+                direction.Normalize();
             }
             else
             {
                 direction = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) - player.Position;
                 direction.Normalize();
             }
+
             return direction;
         }
 
@@ -153,11 +156,13 @@ public class Player : Entity
                 {
                     float dist = Vector2.Distance(e.Position, player.Position);
                     if (dist < minDist)
+                    {
                         minDist = dist;
+                        nearest = (Enemy)e;
+                    }
                 }
             }
 
-            Console.Write(nearest);
             return nearest;
         }
     }
