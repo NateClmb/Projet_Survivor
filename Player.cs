@@ -23,7 +23,7 @@ public class Player : Entity
         double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
-        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 1, 500, this, 1.0f);
+        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 1, 500, this, new Vector2(10.0f, 10.0f));
     }
 
     public void heal(int heal)
@@ -100,11 +100,11 @@ public class Player : Entity
         private int damage;
         private double baseFireRate;
         private bool smart;
-        private float projectileSpeed;
+        private Vector2 projectileSpeed;
         public double lastTimeFired = 0;
 
         public Weapon(Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate, Player player,
-            float projectileSpeed)
+            Vector2 projectileSpeed)
         {
             this.player = player;
             this.projectileTexture = projectileTexture;
@@ -112,35 +112,35 @@ public class Player : Entity
             this.damage = damage;
             this.baseFireRate = baseFireRate;
             this.projectileSpeed = projectileSpeed;
-            this.smart = true;
+            this.smart = false;
         }
 
         public Projectile fire()
         {
             lastTimeFired = baseFireRate;
-            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position,
+            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position, projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }
 
         private Vector2 calculateSpeed()
         {
-            Vector2 speed = new Vector2(projectileSpeed, 0);
+            Vector2 direction;
             if (smart)
             {
+                direction = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) - player.Position;
                 Entity? nearestEnemy = NearestTarget();
                 if (nearestEnemy != null)
                 {
-                    Vector2.Rotate(speed, (float)Math.Atan2(nearestEnemy.Position.Y - player.Position.Y,
+                    Vector2.Rotate(direction, (float)Math.Atan2(nearestEnemy.Position.Y - player.Position.Y,
                         nearestEnemy.Position.X - player.Position.X));
                 }
             }
             else
             {
-                Vector2.Rotate(speed, (float)Math.Atan2(Mouse.GetState().Y - player.Position.Y,
-                    Mouse.GetState().Position.X - player.Position.X));
+                direction = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) - player.Position;
+                direction.Normalize();
             }
-
-            return speed;
+            return direction;
         }
 
         private Enemy? NearestTarget()
