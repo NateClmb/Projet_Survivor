@@ -32,5 +32,12 @@ public class Projectile : Entity
     public override void Move(GameTime gameTime)
     {
         Position += direction * Speed;
+        autoDestruct();
+    }
+
+    public void autoDestruct()
+    {
+        if(Position.X < 25 || Position.X > 775 || Position.Y < 25 || Position.Y > 450)
+            World.RemoveEntity(this);
     }
 }
