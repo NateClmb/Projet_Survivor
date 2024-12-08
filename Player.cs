@@ -11,7 +11,7 @@ public class Player : Entity
     private double attackSpd { get; set; }
     private int level;
     private int exp;
-    private Weapon weapon { get; init; }
+    private Weapon weapon { get; set; }
     private readonly float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
 
@@ -23,7 +23,7 @@ public class Player : Entity
         double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
-        this.weapon = new Weapon(World._missileSprite, 1, 1, 1, this, 1.0f);
+        this.weapon = new Weapon(World.defaultProjectileTexture , 1, 1, 1, this, 1.0f);
     }
 
     public void heal(int heal)
@@ -91,28 +91,29 @@ public class Player : Entity
 
     private class Weapon
     {
+        private Player player;
         private readonly Rectangle projectileHitbox = new Rectangle(0, 0, 100, 100);
-        private Sprite projectileSprite;
+        private Texture2D projectileTexture;
         private int piercePotential;
         private int damage;
         private float baseFireRate;
         private bool smart;
-        private Player player;
         private float projectileSpeed;
 
-        public Weapon(Sprite projectileSprite, int piercePotential, int damage, float baseFireRate, Player player, float projectileSpeed)
+        public Weapon(Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate, Player player, float projectileSpeed)
         {
-            this.projectileSprite = projectileSprite;
+            this.player = player;
+            this.projectileTexture = projectileTexture;
             this.piercePotential = piercePotential;
             this.damage = damage;
             this.baseFireRate = baseFireRate;
-            this.player = player;
             this.projectileSpeed = projectileSpeed;
+            this.smart = true;
         }
 
         public Projectile fire()
         {
-            return new Projectile(projectileHitbox, projectileSprite, player.Position, calculateSpeed(), piercePotential,
+            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position, calculateSpeed(), piercePotential,
                 damage, smart, true);
         }
 
@@ -121,7 +122,7 @@ public class Player : Entity
             Vector2 speed = new Vector2(projectileSpeed, 0);
             if (smart)
             {
-                Entity nearestEnemy = NearestTarget();
+                Entity? nearestEnemy = NearestTarget();
                 if (nearestEnemy != null)
                 {
                     Vector2.Rotate(speed, (float)Math.Atan2(nearestEnemy.Position.Y - player.Position.Y,
@@ -139,7 +140,7 @@ public class Player : Entity
 
         private Enemy? NearestTarget()
         {
-            Enemy nearest = null;
+            Enemy? nearest = null;
             float minDist = float.MaxValue;
             foreach (Entity e in World.GetEntities())
             {
@@ -150,7 +151,7 @@ public class Player : Entity
                         minDist = dist;
                 }
             }
-
+            Console.Write(nearest);
             return nearest;
         }
     }

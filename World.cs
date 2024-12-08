@@ -16,7 +16,7 @@ public class World : Game
     private SpriteBatch _spriteBatch;
     public Sprite _shipSprite; // instance de Sprite
     public Sprite _enemySprite; // instance de Sprite
-    public static Sprite _missileSprite; // instance de Sprite
+    public static Texture2D defaultProjectileTexture;
 
     public World()
     {
@@ -52,8 +52,7 @@ public class World : Game
         _shipSprite = new Sprite(shipTexture, new Vector2(150, 150), 60);
         Texture2D enemyTexture = Content.Load<Texture2D>("virus_tiles");
         _enemySprite = new Sprite(enemyTexture, new Vector2(250, 250), 200);
-        Texture2D missileTexture = Content.Load<Texture2D>("missile1");
-        _missileSprite = new Sprite(missileTexture, new Vector2(-100, -100), 30);
+        defaultProjectileTexture = Content.Load<Texture2D>("missile1");
 
         Rectangle hitbox = new Rectangle(0, 0, 100, 100);
         Player player = new Player(hitbox, _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
