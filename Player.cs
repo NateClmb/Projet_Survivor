@@ -23,7 +23,7 @@ public class Player : Entity
         double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
-        this.weapon = new Weapon(World.defaultProjectileTexture , 1, 1, 1, this, 1.0f);
+        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 1, 500, this, 1.0f);
     }
 
     public void heal(int heal)
@@ -84,7 +84,9 @@ public class Player : Entity
         //Attaque
         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
-            World.AddEntity(weapon.fire());
+            weapon.lastTimeFired -= gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (weapon.lastTimeFired < 0)
+                World.AddEntity(weapon.fire());
         }
         //Fin attaque
     }
@@ -96,11 +98,13 @@ public class Player : Entity
         private Texture2D projectileTexture;
         private int piercePotential;
         private int damage;
-        private float baseFireRate;
+        private double baseFireRate;
         private bool smart;
         private float projectileSpeed;
+        public double lastTimeFired = 0;
 
-        public Weapon(Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate, Player player, float projectileSpeed)
+        public Weapon(Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate, Player player,
+            float projectileSpeed)
         {
             this.player = player;
             this.projectileTexture = projectileTexture;
@@ -113,8 +117,9 @@ public class Player : Entity
 
         public Projectile fire()
         {
-            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position, calculateSpeed(), piercePotential,
-                damage, smart, true);
+            lastTimeFired = baseFireRate;
+            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position,
+                calculateSpeed(), piercePotential, damage, smart, true);
         }
 
         private Vector2 calculateSpeed()
@@ -151,6 +156,7 @@ public class Player : Entity
                         minDist = dist;
                 }
             }
+
             Console.Write(nearest);
             return nearest;
         }
