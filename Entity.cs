@@ -27,8 +27,8 @@ public abstract class Entity
 
     protected void setHitboxPosition()
     {
-        this.Hitbox.X = (int)this.Position.X;
-        this.Hitbox.Y = (int)this.Position.Y;
+        this.Hitbox.X = (int)this.Position.X - Hitbox.Width / 2;
+        this.Hitbox.Y = (int)this.Position.Y - Hitbox.Height / 2;
     }
 
     public void hit(int damage)

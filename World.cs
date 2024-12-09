@@ -50,13 +50,13 @@ public class World : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         Texture2D shipTexture = Content.Load<Texture2D>("ship2");
         _shipSprite = new Sprite(shipTexture, new Vector2(150, 150), 60);
-        Texture2D enemyTexture = Content.Load<Texture2D>("virus_tiles");
-        _enemySprite = new Sprite(enemyTexture, new Vector2(250, 250), 200);
+        Texture2D enemyTexture = Content.Load<Texture2D>("virus1");
+        _enemySprite = new Sprite(enemyTexture, new Vector2(500, 500), 100);
         defaultProjectileTexture = Content.Load<Texture2D>("missile1");
 
         Player player = new Player(new Rectangle(0, 0, 30, 30), _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
         _entities.Add(player);
-        Enemy enemy = new Enemy(new Rectangle(0, 0, 100, 100), _enemySprite, new Vector2(), new Vector2(1, 1), 100, "virus", 10, Behavior.HAND_TO_HAND);
+        Enemy enemy = new Enemy(new Rectangle(500, 500, 100, 100), _enemySprite, new Vector2(), new Vector2(1, 1), 100, "virus", 10, Behavior.HAND_TO_HAND);
         _entities.Add(enemy);
         
     }
