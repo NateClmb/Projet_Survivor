@@ -112,7 +112,7 @@ public class Player : Entity
             this.damage = damage;
             this.baseFireRate = baseFireRate;
             this.projectileSpeed = projectileSpeed;
-            this.smart = true;
+            this.smart = false;
         }
 
         public Projectile fire()
@@ -134,15 +134,13 @@ public class Player : Entity
                 {
                     direction = nearestEnemy.Position - player.Position;
                 }
-
-                direction.Normalize();
             }
             else
             {
                 direction = new Vector2(Mouse.GetState().X, Mouse.GetState().Y) - player.Position;
-                direction.Normalize();
             }
 
+            direction.Normalize();
             return direction;
         }
 
