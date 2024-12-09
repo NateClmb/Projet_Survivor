@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -78,6 +79,9 @@ public class Player : Entity
         if (Speed.X < 0) Speed.X += 0.1f;
         if (Speed.Y > 0) Speed.Y -= 0.1f;
         if (Speed.Y < 0) Speed.Y += 0.1f;
+        
+        //réalignement de la hitbox sur le sprite
+        setHitboxPosition();
 
         //Fin déplacement
 
@@ -94,7 +98,6 @@ public class Player : Entity
     private class Weapon
     {
         private Player player;
-        private readonly Rectangle projectileHitbox = new Rectangle(0, 0, 100, 100);
         private Texture2D projectileTexture;
         private int piercePotential;
         private int damage;
@@ -118,7 +121,8 @@ public class Player : Entity
         public Projectile fire()
         {
             lastTimeFired = baseFireRate;
-            return new Projectile(projectileHitbox, new Sprite(projectileTexture, player.Position, 30), player.Position,
+            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 30, 30),
+                new Sprite(projectileTexture, player.Position, 30), player.Position,
                 projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }

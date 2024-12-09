@@ -54,10 +54,9 @@ public class World : Game
         _enemySprite = new Sprite(enemyTexture, new Vector2(250, 250), 200);
         defaultProjectileTexture = Content.Load<Texture2D>("missile1");
 
-        Rectangle hitbox = new Rectangle(0, 0, 100, 100);
-        Player player = new Player(hitbox, _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
+        Player player = new Player(new Rectangle(0, 0, 30, 30), _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
         _entities.Add(player);
-        Enemy enemy = new Enemy(hitbox, _enemySprite, new Vector2(), new Vector2(1, 1), 100, "virus", 10, Behavior.HAND_TO_HAND);
+        Enemy enemy = new Enemy(new Rectangle(0, 0, 100, 100), _enemySprite, new Vector2(), new Vector2(1, 1), 100, "virus", 10, Behavior.HAND_TO_HAND);
         _entities.Add(enemy);
         
     }

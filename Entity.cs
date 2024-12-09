@@ -8,10 +8,10 @@ namespace Projet_Survivor;
 
 public abstract class Entity
 {
-    public Rectangle Hitbox { init; get; }
+    public Rectangle Hitbox;
     public Sprite Sprite;
     public Vector2 Position;
-    private int _hp;
+    protected int _hp;
     protected Vector2 Speed;
 
     public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
@@ -24,6 +24,12 @@ public abstract class Entity
     }
 
     public abstract void Move(GameTime gameTime);
+
+    protected void setHitboxPosition()
+    {
+        this.Hitbox.X = (int)this.Position.X;
+        this.Hitbox.Y = (int)this.Position.Y;
+    }
 
     public void hit(int damage)
     {

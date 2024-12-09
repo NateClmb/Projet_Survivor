@@ -48,5 +48,7 @@ public class Enemy : Entity
         {
             Position.Y += Speed.Y;
         }
+        
+        setHitboxPosition();
     }
 }
