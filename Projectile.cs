@@ -41,11 +41,9 @@ public class Projectile : Entity
     {
         foreach (Entity e in World.GetEntities())
         {
-            Console.WriteLine(e.Hitbox + ", " + this.Hitbox);
             if (e.Hitbox.Intersects(Hitbox) && (this.friendly && e.GetType() == typeof(Enemy) ||
                                                 !friendly && e.GetType() == typeof(Player))) 
             {
-                Console.WriteLine("Hit! " + e);
                 e.hit(this.damage);
                 this._hp--;
             }

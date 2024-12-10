@@ -56,7 +56,7 @@ public class World : Game
 
         Player player = new Player(new Rectangle(0, 0, 30, 30), _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
         _entities.Add(player);
-        Enemy enemy = new Enemy(new Rectangle(500, 500, 100, 100), _enemySprite, new Vector2(), new Vector2(1, 1), 100, "virus", 10, Behavior.HAND_TO_HAND);
+        Enemy enemy = new Enemy(new Rectangle(500, 500, 100, 100), _enemySprite, new Vector2(), new Vector2(1, 1), 10, "virus", 10, Behavior.HAND_TO_HAND);
         _entities.Add(enemy);
         
     }
