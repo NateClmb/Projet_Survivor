@@ -24,7 +24,7 @@ public class Player : Entity
         double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
-        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 1, 500, this, new Vector2(10.0f, 10.0f));
+        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 10, 500, this, new Vector2(10.0f, 10.0f));
     }
 
     public void heal(int heal)
@@ -79,7 +79,7 @@ public class Player : Entity
         if (Speed.X < 0) Speed.X += 0.1f;
         if (Speed.Y > 0) Speed.Y -= 0.1f;
         if (Speed.Y < 0) Speed.Y += 0.1f;
-        
+
         //réalignement de la hitbox sur le sprite
         setHitboxPosition();
 
@@ -88,9 +88,9 @@ public class Player : Entity
         //Attaque
         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
-            weapon.lastTimeFired -= gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (weapon.lastTimeFired < 0)
-                World.AddEntity(weapon.fire());
+            double time = gameTime.TotalGameTime.TotalMilliseconds;
+            if (time >= weapon.lastTimeFired + weapon.baseFireRate)
+                World.AddEntity(weapon.fire(time));
         }
         //Fin attaque
     }
@@ -101,9 +101,9 @@ public class Player : Entity
         private Texture2D projectileTexture;
         private int piercePotential;
         private int damage;
-        private double baseFireRate;
         private bool smart;
         private Vector2 projectileSpeed;
+        public double baseFireRate;
         public double lastTimeFired = 0;
 
         public Weapon(Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate, Player player,
@@ -118,12 +118,11 @@ public class Player : Entity
             this.smart = false;
         }
 
-        public Projectile fire()
+        public Projectile fire(double time)
         {
-            lastTimeFired = baseFireRate;
+            lastTimeFired = time;
             return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 30, 30),
-                new Sprite(projectileTexture, player.Position, 30), player.Position,
-                projectileSpeed,
+                new Sprite(projectileTexture, player.Position, 30), player.Position, projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }
 

@@ -33,18 +33,18 @@ public class Projectile : Entity
     {
         Position += direction * Speed;
         setHitboxPosition();
-        hitTest();
+        hitTest(gameTime);
         autoDestruct();
     }
 
-    private void hitTest()
+    private void hitTest(GameTime gameTime)
     {
         foreach (Entity e in World.GetEntities())
         {
             if (e.Hitbox.Intersects(Hitbox) && (this.friendly && e.GetType() == typeof(Enemy) ||
                                                 !friendly && e.GetType() == typeof(Player))) 
             {
-                e.hit(this.damage);
+                e.hit(this.damage, gameTime);
                 this._hp--;
             }
         }

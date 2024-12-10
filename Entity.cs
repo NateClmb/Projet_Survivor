@@ -13,6 +13,8 @@ public abstract class Entity
     public Vector2 Position;
     protected int _hp;
     protected Vector2 Speed;
+    private double lastTimeHit = 0;
+    private static readonly double HIT_COUNTDOWN = 10;
 
     public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
     {
@@ -31,9 +33,14 @@ public abstract class Entity
         this.Hitbox.Y = (int)this.Position.Y - Hitbox.Height / 2;
     }
 
-    public void hit(int damage)
+    public void hit(int damage, GameTime gameTime)
     {
-        _hp -= damage;
+        double time = gameTime.TotalGameTime.TotalMilliseconds;
+        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        {
+            lastTimeHit = time;
+            _hp -= damage;
+        }
     }
 
     private void GestionAnimation()
@@ -46,6 +53,7 @@ public abstract class Entity
         {
             hp = 1;
         }
+
         _hp = hp;
     }
 }
