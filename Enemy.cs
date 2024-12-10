@@ -50,5 +50,13 @@ public class Enemy : Entity
         }
         
         setHitboxPosition();
+        die();
+    }
+    
+    private void die()
+    {
+        //TODO change Position condition to adapt to all screen sizes
+        if (_hp <= 0)
+            World.RemoveEntity(this);
     }
 }
