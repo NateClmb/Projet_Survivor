@@ -42,7 +42,7 @@ public class Projectile : Entity
         foreach (Entity e in World.GetEntities())
         {
             if (e.Hitbox.Intersects(Hitbox) && (this.friendly && e.GetType() == typeof(Enemy) ||
-                                                !friendly && e.GetType() == typeof(Player))) 
+                                                !friendly && e.GetType() == typeof(Player)))
             {
                 e.hit(this.damage, gameTime);
                 this._hp--;
@@ -52,8 +52,8 @@ public class Projectile : Entity
 
     private void autoDestruct()
     {
-        //TODO change Position condition to adapt to all screen sizes
-        if (Position.X < 25 || Position.X > 775 || Position.Y < 25 || Position.Y > 450 || _hp <= 0)
+        if (Position.X < 0 || Position.X > World.WorldWidth || Position.Y < 0 || Position.Y > World.WorldHeight ||
+            _hp <= 0)
             World.RemoveEntity(this);
     }
 }

@@ -13,6 +13,8 @@ public class World : Game
     private static ArrayList _entities = new ArrayList();
 
     private GraphicsDeviceManager _graphics;
+    public static int WorldWidth;
+    public static int WorldHeight;
     private SpriteBatch _spriteBatch;
     public Sprite _shipSprite; // instance de Sprite
     public Sprite _enemySprite; // instance de Sprite
@@ -21,6 +23,8 @@ public class World : Game
     public World()
     {
         _graphics = new GraphicsDeviceManager(this);
+        WorldWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+        WorldHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         Content.RootDirectory = "Content/images";
         IsMouseVisible = true;
     }
@@ -40,8 +44,17 @@ public class World : Game
         _entities.Remove(e);
     }
 
+    private void spawnEnemy()
+    {
+        
+    }
+
     protected override void Initialize()
     {
+        _graphics.PreferredBackBufferWidth = WorldWidth;
+        _graphics.PreferredBackBufferHeight = WorldHeight; 
+        _graphics.IsFullScreen = true;
+        _graphics.ApplyChanges();
         base.Initialize();
     }
 

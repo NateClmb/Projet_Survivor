@@ -9,9 +9,9 @@ public class Sprite
 {
     private Texture2D _texture;
     private Vector2 _position;
-    private int _size = 200;
-    private static readonly int _sizeMin = -200;
-    private static readonly int _sizeMax = 200;
+    private int _size;
+    private static readonly int _sizeMax = 256;
+    private static readonly int _sizeMin = -_sizeMax;
 
 
     private Color _color = Color.Pink;

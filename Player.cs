@@ -68,11 +68,12 @@ public class Player : Entity
         Position.X += Speed.X;
         Position.Y += Speed.Y;
 
-        //limite dans la box (sûrement à retirer plus tard)
-        if (Position.X < 25) Position.X = 25;
-        if (Position.X > 775) Position.X = 775;
-        if (Position.Y < 25) Position.Y = 25;
-        if (Position.Y > 450) Position.Y = 450;
+        //limite dans la box
+        float halfSpriteSize = Sprite._Size / 2.0f;
+        if (Position.X < halfSpriteSize) Position.X = halfSpriteSize;
+        if (Position.X > World.WorldWidth - halfSpriteSize) Position.X = World.WorldWidth - halfSpriteSize;
+        if (Position.Y < halfSpriteSize) Position.Y = halfSpriteSize;
+        if (Position.Y > World.WorldHeight - halfSpriteSize) Position.Y = World.WorldHeight - halfSpriteSize;
 
         //décélération avec le temps
         if (Speed.X > 0) Speed.X -= 0.1f;
@@ -121,8 +122,8 @@ public class Player : Entity
         public Projectile fire(double time)
         {
             lastTimeFired = time;
-            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 30, 30),
-                new Sprite(projectileTexture, player.Position, 30), player.Position, projectileSpeed,
+            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 32, 32),
+                new Sprite(projectileTexture, player.Position, 32), player.Position, projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }
 
