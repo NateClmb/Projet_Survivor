@@ -10,8 +10,9 @@ namespace Projet_Survivor;
 public class Player : Entity
 {
     private double attackSpd { get; set; }
-    private int level;
-    private int exp;
+    public int level;
+    private int xpObjective = 100;
+    private int totalXp;
     private Weapon weapon { get; set; }
     private readonly float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
@@ -29,7 +30,22 @@ public class Player : Entity
 
     public void heal(int heal)
     {
-        return;
+        
+    }
+
+    public void gainXp(int xp)
+    {
+        totalXp += xp;
+        levelUp();
+    }
+        
+    private void levelUp()
+    {
+        if (totalXp >= xpObjective)
+        {
+            level++;
+            xpObjective = (int) (xpObjective * 1.5);
+        }
     }
 
     public override void Move(GameTime gameTime)

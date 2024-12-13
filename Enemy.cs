@@ -10,7 +10,7 @@ public class Enemy : Entity
     private String name;
     private int xpValue { get; init; }
     private Behavior behavior;
-    private readonly Player player = (Player) World.GetEntities()[0];
+    private readonly Player player = (Player)World.GetEntities()[0];
 
     public Enemy(Rectangle hitbox,
         Sprite sprite,
@@ -27,7 +27,7 @@ public class Enemy : Entity
     }
 
     //l'ennemi se rapproche en permanence du joueur
-     
+
     public override void Move(GameTime gameTime)
     {
         if (Position.X > player.Position.X)
@@ -47,12 +47,12 @@ public class Enemy : Entity
         {
             Position.Y += Speed.Y;
         }
-        
+
         setHitboxPosition();
         testOverlapseWithEnemy();
         die();
     }
-    
+
     private void testOverlapseWithEnemy()
     {
         foreach (Entity e in World.GetEntities())
@@ -65,10 +65,13 @@ public class Enemy : Entity
             }
         }
     }
-    
+
     private void die()
     {
         if (_hp <= 0)
+        {
+            player.gainXp(xpValue);
             World.RemoveEntity(this);
+        }
     }
 }

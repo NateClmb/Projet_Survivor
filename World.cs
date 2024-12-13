@@ -21,6 +21,7 @@ public class World : Game
     public static Texture2D defaultProjectileTexture;
     public static Texture2D _enemyTexture;
 
+    private Player player;
     private Random random;
 
     public World()
@@ -50,7 +51,7 @@ public class World : Game
 
     private void spawnEnemy(GameTime gameTime)
     {
-        if ((int) gameTime.TotalGameTime.Ticks % (60 * 4) == 0)
+        if ((int) gameTime.TotalGameTime.Ticks % (6 * (40 - player.level)) == 0)
         {
             int x = random.Next(0, WorldWidth);
             int y = random.Next(0, WorldHeight);
@@ -76,7 +77,7 @@ public class World : Game
         _enemyTexture = Content.Load<Texture2D>("virus1");
         defaultProjectileTexture = Content.Load<Texture2D>("missile1");
 
-        Player player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 30, 30), _shipSprite,
+        player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 30, 30), _shipSprite,
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             100, 1.0);
         _entities.Add(player);
