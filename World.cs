@@ -19,6 +19,9 @@ public class World : Game
     public Sprite _shipSprite; // instance de Sprite
     public Sprite _enemySprite; // instance de Sprite
     public static Texture2D defaultProjectileTexture;
+    public static Texture2D _enemyTexture;
+
+    private Random random;
 
     public World()
     {
@@ -27,6 +30,7 @@ public class World : Game
         WorldHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         Content.RootDirectory = "Content/images";
         IsMouseVisible = true;
+        random = new Random();
     }
 
     public static void AddEntity(Entity e)
@@ -44,15 +48,21 @@ public class World : Game
         _entities.Remove(e);
     }
 
-    private void spawnEnemy()
+    private void spawnEnemy(GameTime gameTime)
     {
-        
+        if ((int) gameTime.TotalGameTime.Ticks % (60 * 4) == 0)
+        {
+            int x = random.Next(0, WorldWidth);
+            int y = random.Next(0, WorldHeight);
+            _entities.Add(new Enemy(new Rectangle(x, y, 64, 64),
+                new Sprite(_enemyTexture, new Vector2(500, 500), 100), new Vector2(x, y), new Vector2(1, 1), 30, "virus", 10, Behavior.HAND_TO_HAND));
+        }
     }
 
     protected override void Initialize()
     {
         _graphics.PreferredBackBufferWidth = WorldWidth;
-        _graphics.PreferredBackBufferHeight = WorldHeight; 
+        _graphics.PreferredBackBufferHeight = WorldHeight;
         _graphics.IsFullScreen = true;
         _graphics.ApplyChanges();
         base.Initialize();
@@ -63,15 +73,13 @@ public class World : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         Texture2D shipTexture = Content.Load<Texture2D>("ship2");
         _shipSprite = new Sprite(shipTexture, new Vector2(150, 150), 60);
-        Texture2D enemyTexture = Content.Load<Texture2D>("virus1");
-        _enemySprite = new Sprite(enemyTexture, new Vector2(500, 500), 100);
+        _enemyTexture = Content.Load<Texture2D>("virus1");
         defaultProjectileTexture = Content.Load<Texture2D>("missile1");
 
-        Player player = new Player(new Rectangle(0, 0, 30, 30), _shipSprite, new Vector2(), new Vector2(), 100, 1.0);
+        Player player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 30, 30), _shipSprite,
+            new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
+            100, 1.0);
         _entities.Add(player);
-        Enemy enemy = new Enemy(new Rectangle(500, 500, 100, 100), _enemySprite, new Vector2(), new Vector2(1, 1), 10, "virus", 10, Behavior.HAND_TO_HAND);
-        _entities.Add(enemy);
-        
     }
 
     protected override void Update(GameTime gameTime)
@@ -79,12 +87,14 @@ public class World : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        Entity[] copyEntities = new Entity[_entities.Count]; 
+        spawnEnemy(gameTime);
+        Entity[] copyEntities = new Entity[_entities.Count];
         _entities.CopyTo(copyEntities);
         foreach (Entity e in copyEntities)
         {
-                e.Sprite.Update(gameTime, e);
+            e.Sprite.Update(gameTime, e);
         }
+
         base.Update(gameTime);
     }
 
@@ -96,6 +106,7 @@ public class World : Game
         {
             e.Sprite.Draw(_spriteBatch);
         }
+
         _spriteBatch.End();
         base.Draw(gameTime);
     }
