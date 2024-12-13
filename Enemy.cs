@@ -27,7 +27,6 @@ public class Enemy : Entity
     }
 
     //l'ennemi se rapproche en permanence du joueur
-    
      
     public override void Move(GameTime gameTime)
     {
@@ -50,12 +49,25 @@ public class Enemy : Entity
         }
         
         setHitboxPosition();
+        testOverlapseWithEnemy();
         die();
+    }
+    
+    private void testOverlapseWithEnemy()
+    {
+        foreach (Entity e in World.GetEntities())
+        {
+            if (e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Enemy))
+            {
+                Vector2 stepAside = new Vector2(Position.X - e.Position.X, Position.Y - e.Position.Y);
+                Position.X += 0.05f * stepAside.X;
+                Position.Y += 0.05f * stepAside.Y;
+            }
+        }
     }
     
     private void die()
     {
-        //TODO change Position condition to adapt to all screen sizes
         if (_hp <= 0)
             World.RemoveEntity(this);
     }
