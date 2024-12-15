@@ -11,6 +11,7 @@ public class Enemy : Entity
     private int xpValue { get; init; }
     private Behavior behavior;
     private readonly Player player = (Player) World.GetEntities()[0];
+    private readonly float MinDistance = 100.0f;
 
     public Enemy(Rectangle hitbox,
         Sprite sprite,
@@ -29,28 +30,52 @@ public class Enemy : Entity
     //l'ennemi se rapproche en permanence du joueur
     
      
+    // Main movement method
     public override void Move(GameTime gameTime)
     {
-        if (Position.X > player.Position.X)
+        switch (behavior)
         {
-            Position.X -= Speed.X;
-        }
-        else
-        {
-            Position.X += Speed.X;
-        }
+            case Behavior.HAND_TO_HAND:
+                MoveTowardsPlayer(player);
+                break;
 
-        if (Position.Y > player.Position.Y)
-        {
-            Position.Y -= Speed.Y;
+            case Behavior.DISTANCE:
+                MaintainDistanceFromPlayer(player);
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        else
-        {
-            Position.Y += Speed.Y;
-        }
-        
+    }
+
+    // Moves the enemy directly toward the player's position
+    private void MoveTowardsPlayer(Player player)
+    {
+        Vector2 direction = Vector2.Normalize(player.Position - Position);
+        Position += direction * Speed;
         setHitboxPosition();
         die();
+    }
+
+    // Maintains a specific distance from the player
+    private void MaintainDistanceFromPlayer(Player player)
+    {
+        float distanceToPlayer = Vector2.Distance(Position, player.Position);
+        Vector2 direction = Vector2.Normalize(player.Position - Position);
+
+        if (distanceToPlayer < MinDistance)
+        {
+            // Move away from the player
+            Position -= direction * Speed;
+        }
+        else 
+        {
+            // Move closer to the player
+            Position += direction * Speed;
+        }
+        setHitboxPosition();
+        die();
+        // If within the desired range, do not move
     }
     
     private void die()
