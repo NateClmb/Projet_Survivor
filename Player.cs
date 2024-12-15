@@ -10,8 +10,9 @@ namespace Projet_Survivor;
 public class Player : Entity
 {
     private double attackSpd { get; set; }
-    private int level;
-    private int exp;
+    public int level;
+    private int xpObjective = 100;
+    private int totalXp;
     private Weapon weapon { get; set; }
     private readonly float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
@@ -29,19 +30,34 @@ public class Player : Entity
 
     public void heal(int heal)
     {
-        return;
+        
+    }
+
+    public void gainXp(int xp)
+    {
+        totalXp += xp;
+        levelUp();
+    }
+        
+    private void levelUp()
+    {
+        if (totalXp >= xpObjective)
+        {
+            level++;
+            xpObjective = (int) (xpObjective * 1.5);
+        }
     }
 
     public override void Move(GameTime gameTime)
     {
         //déplacements aux flèches du clavier
-        if (Keyboard.GetState().IsKeyDown(Keys.Right))
+        if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
         {
             if (Speed.X < MAX_SPEED)
                 Speed.X += ACCELERATION;
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Left))
+        if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
         {
             if (Speed.X > -MAX_SPEED)
             {
@@ -49,7 +65,7 @@ public class Player : Entity
             }
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Down))
+        if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
         {
             if (Speed.Y < MAX_SPEED)
             {
@@ -57,7 +73,7 @@ public class Player : Entity
             }
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Up))
+        if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.Z))
         {
             if (Speed.Y > -MAX_SPEED)
             {
@@ -68,11 +84,12 @@ public class Player : Entity
         Position.X += Speed.X;
         Position.Y += Speed.Y;
 
-        //limite dans la box (sûrement à retirer plus tard)
-        if (Position.X < 25) Position.X = 25;
-        if (Position.X > 775) Position.X = 775;
-        if (Position.Y < 25) Position.Y = 25;
-        if (Position.Y > 450) Position.Y = 450;
+        //limite dans la box
+        float halfSpriteSize = Sprite._Size / 2.0f;
+        if (Position.X < halfSpriteSize) Position.X = halfSpriteSize;
+        if (Position.X > World.WorldWidth - halfSpriteSize) Position.X = World.WorldWidth - halfSpriteSize;
+        if (Position.Y < halfSpriteSize) Position.Y = halfSpriteSize;
+        if (Position.Y > World.WorldHeight - halfSpriteSize) Position.Y = World.WorldHeight - halfSpriteSize;
 
         //décélération avec le temps
         if (Speed.X > 0) Speed.X -= 0.1f;
@@ -121,8 +138,8 @@ public class Player : Entity
         public Projectile fire(double time)
         {
             lastTimeFired = time;
-            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 30, 30),
-                new Sprite(projectileTexture, player.Position, 30), player.Position, projectileSpeed,
+            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 32, 32),
+                new Sprite(projectileTexture, player.Position, 32), player.Position, projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }
 
