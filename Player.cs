@@ -10,11 +10,19 @@ namespace Projet_Survivor;
 public class Player : Entity
 {
     private double attackSpd { get; set; }
-    private int level;
-    private int exp;
+    public int level = 0;
+    private int xpObjective = 100;
+    public int totalXp { get; set; } = 0;
     private Weapon weapon { get; set; }
-    private readonly float MAX_SPEED = 6.0f;
+    private float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
+    
+    //points pour les stats
+    private int ptsAttributs;
+    protected int ptsHP;
+    protected int ptsAtkSpd;
+    protected int ptsAtk;
+    protected int ptsSpd;
 
     public Player(Rectangle hitbox,
         Sprite sprite,
@@ -29,7 +37,25 @@ public class Player : Entity
 
     public void heal(int heal)
     {
-        return;
+        
+    }
+
+    /*
+    public void gainXp(GameTime gameTime)
+    {
+        if (totalXp>=xpObjective)
+        {
+            totalXp-=xpObjective;
+            levelUp();
+        }
+    }
+    */
+        
+    private void levelUp()
+    {
+        level++;
+        ptsAttributs++;
+        xpObjective = (int) (xpObjective * 1.2);
     }
 
     public override void Move(GameTime gameTime)
@@ -67,12 +93,16 @@ public class Player : Entity
 
         Position.X += Speed.X;
         Position.Y += Speed.Y;
+        
+        
+        
 
-        //limite dans la box (sûrement à retirer plus tard)
-        if (Position.X < 25) Position.X = 25;
-        if (Position.X > 775) Position.X = 775;
-        if (Position.Y < 25) Position.Y = 25;
-        if (Position.Y > 450) Position.Y = 450;
+        //limite dans la box
+        float halfSpriteSize = Sprite._Size / 2.0f;
+        if (Position.X < halfSpriteSize) Position.X = halfSpriteSize;
+        if (Position.X > World.WorldWidth - halfSpriteSize) Position.X = World.WorldWidth - halfSpriteSize;
+        if (Position.Y < halfSpriteSize) Position.Y = halfSpriteSize;
+        if (Position.Y > World.WorldHeight - halfSpriteSize) Position.Y = World.WorldHeight - halfSpriteSize;
 
         //décélération avec le temps
         if (Speed.X > 0) Speed.X -= 0.1f;
@@ -84,7 +114,52 @@ public class Player : Entity
         setHitboxPosition();
 
         //Fin déplacement
-
+        
+        
+        
+        ////////////////////////////////////// lié au niveau, à faire valider
+        if (Keyboard.GetState().IsKeyDown(Keys.V)){
+            Console.WriteLine("\n"+totalXp+"\n"+xpObjective+"\n"+level+"\nHP:"+ptsHP+"\natk spd: "+ptsAtkSpd+"\nspeed: "+ptsSpd+"\natk: "+ptsAtk);
+        }
+        
+        if (totalXp>=xpObjective)
+        {
+            totalXp-=xpObjective;
+            levelUp();
+        }
+        
+        if (Keyboard.GetState().IsKeyDown(Keys.U)){
+            if (ptsAttributs>=1){
+                ptsAttributs--;
+                ptsHP++;
+                _hp+=50;
+            }
+        }
+        if (Keyboard.GetState().IsKeyDown(Keys.I)){
+            if (ptsAttributs>=1){
+                ptsAttributs--;
+                ptsAtkSpd++;
+                weapon.baseFireRate-=1;
+            }
+        }
+        if (Keyboard.GetState().IsKeyDown(Keys.O)){
+            if (ptsAttributs>=1){
+                ptsAttributs--;
+                ptsAtk++;
+                weapon.damage+=15;
+            }
+        }
+        if (Keyboard.GetState().IsKeyDown(Keys.P)){
+            if (ptsAttributs>=1){
+                ptsAttributs--;
+                ptsSpd++;
+                MAX_SPEED += 1.5f;
+            }
+        }
+    //////////////////////////////////////////////////////////////////
+    
+    
+    
         //Attaque
         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
@@ -94,13 +169,14 @@ public class Player : Entity
         }
         //Fin attaque
     }
+    
 
     private class Weapon
     {
         private Player player;
         private Texture2D projectileTexture;
         private int piercePotential;
-        private int damage;
+        public int damage;
         private bool smart;
         private Vector2 projectileSpeed;
         public double baseFireRate;
@@ -121,8 +197,8 @@ public class Player : Entity
         public Projectile fire(double time)
         {
             lastTimeFired = time;
-            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 30, 30),
-                new Sprite(projectileTexture, player.Position, 30), player.Position, projectileSpeed,
+            return new Projectile(new Rectangle((int)player.Position.X, (int)player.Position.Y, 32, 32),
+                new Sprite(projectileTexture, player.Position, 32), player.Position, projectileSpeed,
                 calculateSpeed(), piercePotential, damage, smart, true);
         }
 
