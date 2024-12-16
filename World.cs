@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using Microsoft.Xna.Framework.Content;
 
 namespace Projet_Survivor;
 
@@ -20,6 +21,7 @@ public class World : Game
     public Sprite _enemySprite; // instance de Sprite
     public static Texture2D defaultProjectileTexture;
     public static Texture2D _enemyTexture;
+    public static ContentManager Content;
 
     private Player player;
     private Random random;
@@ -107,7 +109,7 @@ public class World : Game
         {
             e.Sprite.Draw(_spriteBatch);
         }
-
+        
         _spriteBatch.End();
         base.Draw(gameTime);
     }
