@@ -59,13 +59,13 @@ public class World : Game
             if (rand_enemy == 0)
             {
                 _entities.Add(new Enemy(new Rectangle(x, y, 64, 64),
-                    new Sprite(_enemyTexture, new Vector2(500, 500), 100), new Vector2(x, y), new Vector2(1, 1), 30,
-                    "virus", 10, Behavior.HAND_TO_HAND));
+                    new Sprite(_enemyTexture, new Vector2(500, 500), 100), new Vector2(x, y), new Vector2(1+player.level/10, 1+player.level/10), (int)(30*(1+0.6*player.level)),
+                    "virus", 50, Behavior.HAND_TO_HAND));
             } else if (rand_enemy == 1)
             {
                 _entities.Add(new Enemy(new Rectangle(x, y, 64, 64),
-                    new Sprite(_enemyTexture, new Vector2(500, 500), 50), new Vector2(x, y), new Vector2(3/2, 3/2), 20,
-                    "virus", 10, Behavior.DISTANCE));
+                    new Sprite(_enemyTexture, new Vector2(500, 500), 50), new Vector2(x, y), new Vector2(3/2+player.level/4, 3/2+player.level/4), (int)(20*(1+0.2*player.level)),
+                    "virus", 50, Behavior.DISTANCE));
             }
         }   
     }
