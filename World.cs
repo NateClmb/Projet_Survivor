@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
-using Microsoft.Xna.Framework.Content;
 
 namespace Projet_Survivor;
 
@@ -19,9 +18,10 @@ public class World : Game
     private SpriteBatch _spriteBatch;
     public Sprite _shipSprite; // instance de Sprite
     public Sprite _enemySprite; // instance de Sprite
+    public static Texture2D xpBarBackground;
+    public static Texture2D xpBarForeground;
     public static Texture2D defaultProjectileTexture;
     public static Texture2D _enemyTexture;
-    public static ContentManager Content;
 
     private Player player;
     private Random random;
@@ -78,6 +78,8 @@ public class World : Game
         _shipSprite = new Sprite(shipTexture, new Vector2(150, 150), 60);
         _enemyTexture = Content.Load<Texture2D>("virus1");
         defaultProjectileTexture = Content.Load<Texture2D>("missile1");
+        xpBarBackground = Content.Load<Texture2D>("xp_bar_background");
+        xpBarForeground = Content.Load<Texture2D>("xp_bar_foreground");
 
         player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 30, 30), _shipSprite,
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
@@ -97,7 +99,7 @@ public class World : Game
         {
             e.Sprite.Update(gameTime, e);
         }
-
+        
         base.Update(gameTime);
     }
 
@@ -109,7 +111,7 @@ public class World : Game
         {
             e.Sprite.Draw(_spriteBatch);
         }
-        
+        player.XpBar.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);
     }

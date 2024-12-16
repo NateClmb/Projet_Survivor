@@ -12,10 +12,12 @@ public class Player : Entity
     private double attackSpd { get; set; }
     public int level;
     private int xpObjective = 100;
-    private int totalXp;
+    private int currentXp;
     private Weapon weapon { get; set; }
     private readonly float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
+
+    public ProgressBar XpBar;
 
     public Player(Rectangle hitbox,
         Sprite sprite,
@@ -26,6 +28,7 @@ public class Player : Entity
     {
         this.attackSpd = attackSpd;
         this.weapon = new Weapon(World.defaultProjectileTexture, 1, 10, 500, this, new Vector2(10.0f, 10.0f));
+        XpBar = new ProgressBar(World.xpBarBackground, World.xpBarForeground, new Vector2(30, 30));
     }
 
     public void heal(int heal)
@@ -35,15 +38,17 @@ public class Player : Entity
 
     public void gainXp(int xp)
     {
-        totalXp += xp;
+        currentXp += xp;
         levelUp();
+        XpBar.Update(currentXp * 100 /xpObjective);
     }
         
     private void levelUp()
     {
-        if (totalXp >= xpObjective)
+        if (currentXp >= xpObjective)
         {
             level++;
+            currentXp -= xpObjective;
             xpObjective = (int) (xpObjective * 1.5);
         }
     }
