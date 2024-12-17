@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,6 +15,11 @@ public class Player : Entity
     private int xpObjective = 50;
     private int currentXp;
     private int maxHp;
+    
+    private int frameCounter = 0;
+    private double lastTimeFrame = 0;
+    private readonly double FRAME_INTERVAL = 100;
+    
     private Weapon weapon { get; set; }
 
     private float MAX_SPEED
@@ -27,7 +33,7 @@ public class Player : Entity
     public ProgressBar XpBar;
 
     public Player(Rectangle hitbox,
-        Sprite sprite,
+        ArrayList sprite,
         Vector2 pos,
         Vector2 speed,
         int hp,
@@ -125,13 +131,14 @@ public class Player : Entity
         if (Position.Y > World.WorldHeight - halfSpriteSize) Position.Y = World.WorldHeight - halfSpriteSize;
 
         //décélération avec le temps
-        if (Speed.X > 0) Speed.X -= 0.1f;
-        if (Speed.X < 0) Speed.X += 0.1f;
-        if (Speed.Y > 0) Speed.Y -= 0.1f;
-        if (Speed.Y < 0) Speed.Y += 0.1f;
+        if (Speed.X > 0) Speed.X -= 0.5f;
+        if (Speed.X < 0) Speed.X += 0.5f;
+        if (Speed.Y > 0) Speed.Y -= 0.5f;
+        if (Speed.Y < 0) Speed.Y += 0.5f;
 
         //réalignement de la hitbox sur le sprite
         setHitboxPosition();
+        GestionAnimation(gameTime);
 
         //Fin déplacement
 
@@ -143,6 +150,34 @@ public class Player : Entity
                 World.AddEntity(weapon.fire(time));
         }
         //Fin attaque
+    }
+
+    protected override void GestionAnimation(GameTime gameTime)
+    {
+        if (Math.Abs(Speed.X) < 0.1f && Math.Abs(Speed.Y) < 0.1f)
+        {
+            Sprite = (Sprite) spriteSheets[0];
+        }
+        else if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
+        {
+            lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
+            frameCounter = ((frameCounter + 1) % spriteSheets.Count);
+            bool flip = Sprite.Flipped;
+            Sprite = (Sprite) spriteSheets[frameCounter];
+            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
+            Sprite._position = this.Position;
+            Sprite.Flipped = flip;
+            if (Speed.X > 0.1f)
+            {
+                Sprite.Flipped = true;
+            }
+            else
+            {
+                Sprite.Flipped = false;
+            }
+        }
+        
+        //TODO retourner sprite quand cours vers la gauche
     }
 
     private class Weapon

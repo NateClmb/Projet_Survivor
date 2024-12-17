@@ -12,6 +12,10 @@ public class Enemy : Entity
     private int xpValue { get; init; }
     private Behavior behavior;
     private readonly Player player = (Player)World.GetEntities()[0];
+    
+    private int frameCounter = 0;
+    private double lastTimeFrame = 0;
+    private readonly double FRAME_INTERVAL = 250;
 
     public Enemy(Rectangle hitbox,
         ArrayList sprite,
@@ -73,6 +77,29 @@ public class Enemy : Entity
         if (_hp <= 0)
         {
             player.gainXp(xpValue);
+            World.GetEntities().Remove(this);
+        }
+    }
+
+    protected override void GestionAnimation(GameTime gameTime)
+    {
+        if (this.Position.X > World.player.Position.X - 10)
+        {
+            Sprite.Flipped = true;
+        }
+        else
+        {
+            Sprite.Flipped = false;
+        }
+        if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
+        {
+            lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
+            frameCounter = (frameCounter + 1) % spriteSheets.Count;
+            bool flip = Sprite.Flipped;
+            Sprite = (Sprite) spriteSheets[frameCounter];
+            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
+            Sprite._position = this.Position;
+            Sprite.Flipped = flip;
         }
     }
 }

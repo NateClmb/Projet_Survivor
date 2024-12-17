@@ -56,4 +56,9 @@ public class Projectile : Entity
             _hp <= 0)
             World.RemoveEntity(this);
     }
+
+    protected override void GestionAnimation(GameTime gameTime)
+    {
+        return;
+    }
 }

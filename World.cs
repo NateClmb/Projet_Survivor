@@ -8,27 +8,27 @@ namespace Projet_Survivor;
 
 public class World : Game
 {
+
+    private GraphicsDeviceManager _graphics;
+    private SpriteBatch _spriteBatch;
+
+    public static int WorldWidth;
+    public static int WorldHeight;
+
     //liste des entités présentes à un instant t
     //Le joueur est toujours l'entité à l'indice 0
     private static ArrayList _entities = new ArrayList();
     private static ArrayList _buttons = new ArrayList();
 
-    private GraphicsDeviceManager _graphics;
-
-    public static int WorldWidth;
-    public static int WorldHeight;
-    private SpriteBatch _spriteBatch;
-
-    public Sprite _playerSprite; // instance de Sprite
-    public Sprite _enemySprite; // instance de Sprite
     public static Texture2D xpBarBackground;
     public static Texture2D xpBarForeground;
     public static Texture2D defaultProjectileTexture;
 
     private ArrayList _enemyTextureList = new ArrayList();
+    private ArrayList _playerTextureList = new ArrayList();
 
-    private Texture2D backgroundTexture;
     public static Player player;
+    private Texture2D backgroundTexture;
     private Random random;
     private static bool isPaused;
 
@@ -113,7 +113,12 @@ public class World : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         Texture2D playerTexture = Content.Load<Texture2D>("playerStill");
         backgroundTexture = Content.Load<Texture2D>("background");
-        _playerSprite = new Sprite(playerTexture, new Vector2(150, 150), 100);
+        
+        _playerTextureList.Add(Content.Load<Texture2D>("playerStill"));
+        for (int i = 0; i < 2; i++)
+        {
+            _playerTextureList.Add(Content.Load<Texture2D>("playerMoving" + i.ToString()));
+        }
         
         for (int i = 0; i < 8; i++)
         {
@@ -146,7 +151,7 @@ public class World : Game
         attackSpeedUpgradeButton.addAction(() => player.increaseAttackSpeed());
         _buttons.Add(attackSpeedUpgradeButton);
 
-        player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50), _playerSprite,
+        player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50), constructSpriteSheet(_playerTextureList),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             5, 1.0);
         _entities.Add(player);

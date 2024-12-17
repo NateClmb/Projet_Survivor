@@ -14,12 +14,9 @@ public abstract class Entity
     public Vector2 Position;
     protected int _hp;
     protected Vector2 Speed;
-    private ArrayList spriteSheets = new ArrayList(); 
+    protected ArrayList spriteSheets = new ArrayList(); 
     private double lastTimeHit = 0;
     private static readonly double HIT_COUNTDOWN = 10;
-    private int frameCounter = 0;
-    private double lastTimeFrame = 0;
-    private readonly double FRAME_INTERVAL = 250;
 
     public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
     {
@@ -58,27 +55,7 @@ public abstract class Entity
         }
     }
 
-    protected void GestionAnimation(GameTime gameTime)
-    {
-        if (this.Position.X > World.player.Position.X - 10)
-        {
-            Sprite.Flipped = true;
-        }
-        else
-        {
-            Sprite.Flipped = false;
-        }
-        if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
-        {
-            lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
-            frameCounter = (frameCounter + 1) % spriteSheets.Count;
-            bool flip = Sprite.Flipped;
-            Sprite = (Sprite) spriteSheets[frameCounter];
-            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
-            Sprite._position = this.Position;
-            Sprite.Flipped = flip;
-        }
-    }
+    protected abstract void GestionAnimation(GameTime gameTime);
 
     private void SetHp(int hp)
     {
