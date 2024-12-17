@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Projet_Survivor;
 
@@ -11,6 +12,8 @@ public class World : Game
     //liste des entités présentes à un instant t
     //Le joueur est toujours l'entité à l'indice 0
     private static ArrayList _entities = new ArrayList();
+    List<EnemyData> enemyDataList;
+    List<Enemy> enemies = new List<Enemy>();
 
     private GraphicsDeviceManager _graphics;
     public static int WorldWidth;
@@ -49,29 +52,49 @@ public class World : Game
         _entities.Remove(e);
     }
 
+    private int enemySpawnTimer = 0; // Compteur pour gérer le spawn des ennemis
+    
     private void spawnEnemy(GameTime gameTime)
     {
-        if ((int) gameTime.TotalGameTime.Ticks % (6 * (40 - player.level)) == 0)
+        // Augmenter le timer avec le temps écoulé
+        enemySpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
+    
+        // Si le timer atteint un certain seuil, spawn un ennemi
+        if (enemySpawnTimer >= (6000 - player.level * 500)) // Le spawn devient plus rapide avec le niveau du joueur
         {
+            enemySpawnTimer = 0; // Réinitialiser le timer
+    
+            // Sélectionner un ennemi aléatoire parmi les données
+            EnemyData data = enemyDataList[random.Next(enemyDataList.Count)];
+    
             int x = random.Next(0, WorldWidth);
             int y = random.Next(0, WorldHeight);
-            int rand_enemy = random.Next(0, 2);
-            if (rand_enemy == 0)
-            {
-                _entities.Add(new Enemy(new Rectangle(x, y, 64, 64),
-                    new Sprite(_enemyTexture, new Vector2(500, 500), 100), new Vector2(x, y), new Vector2(1+player.level/10, 1+player.level/10), (int)(30*(1+0.6*player.level)),
-                    "virus", 50, Behavior.HAND_TO_HAND));
-            } else if (rand_enemy == 1)
-            {
-                _entities.Add(new Enemy(new Rectangle(x, y, 64, 64),
-                    new Sprite(_enemyTexture, new Vector2(500, 500), 50), new Vector2(x, y), new Vector2(3/2+player.level/4, 3/2+player.level/4), (int)(20*(1+0.2*player.level)),
-                    "virus", 50, Behavior.DISTANCE));
-            }
-        }   
+    
+            // Déterminer le comportement de l'ennemi en fonction de son type
+            Behavior behavior = data.Type == "Corps à corps" ? Behavior.HAND_TO_HAND : Behavior.DISTANCE;
+    
+            // Créer un nouvel ennemi avec les données récupérées
+            Enemy enemy = new Enemy(
+                new Rectangle(x, y, 50, 50), // Hitbox de l'ennemi
+                new Sprite(_enemyTexture, new Vector2(x, y), 50), // Sprite de l'ennemi
+                new Vector2(x, y), // Position initiale de l'ennemi
+                new Vector2(data.Speed, data.Speed), // Vitesse de l'ennemi
+                data.HP, // Points de vie
+                data.Name, // Nom de l'ennemi
+                data.XPValue, // Valeur XP
+                behavior // Comportement de l'ennemi
+            );
+    
+            // Ajouter l'ennemi à la liste des entités
+            _entities.Add(enemy);
+        }
     }
 
     protected override void Initialize()
     {
+        // Charger les données des ennemis depuis le fichier XML
+        enemyDataList = EnemyLoader.LoadEnemiesFromXML("Content/XML/Enemies.xml");
+
         _graphics.PreferredBackBufferWidth = WorldWidth;
         _graphics.PreferredBackBufferHeight = WorldHeight;
         _graphics.IsFullScreen = true;
@@ -86,38 +109,49 @@ public class World : Game
         _shipSprite = new Sprite(shipTexture, new Vector2(150, 150), 60);
         _enemyTexture = Content.Load<Texture2D>("virus1");
         defaultProjectileTexture = Content.Load<Texture2D>("missile1");
-
+    
         player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 30, 30), _shipSprite,
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             100, 1.0);
         _entities.Add(player);
+        
     }
 
     protected override void Update(GameTime gameTime)
     {
+        // Vérification de la sortie du jeu
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+    
+        // Faire apparaître des ennemis
         spawnEnemy(gameTime);
+    
         Entity[] copyEntities = new Entity[_entities.Count];
-        _entities.CopyTo(copyEntities);
-        foreach (Entity e in copyEntities)
-        {
-            e.Sprite.Update(gameTime, e);
-        }
-
+            _entities.CopyTo(copyEntities);
+            foreach (Entity e in copyEntities)
+            {
+                e.Sprite.Update(gameTime, e);
+            }
+    
         base.Update(gameTime);
     }
-
+    
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+    
+        // Dessiner le joueur
+        Player player = (Player)GetEntities()[0]; // Accéder au joueur dans la liste des entités
+        player.Sprite.Draw(_spriteBatch); // Dessiner le joueur
+    
+        // Dessiner tous les ennemis présents dans la liste _entities
         foreach (Entity e in _entities)
-        {
-            e.Sprite.Draw(_spriteBatch);
-        }
-
+                {
+                    e.Sprite.Draw(_spriteBatch);
+                }
+    
         _spriteBatch.End();
         base.Draw(gameTime);
     }
