@@ -11,26 +11,23 @@ public class Button
     private Texture2D texture;
     private Rectangle hitbox;
     private Action action;
+    private bool newClick = false;
+    private bool startClick = false;
 
     public Button(Texture2D texture, Vector2 pos)
     {
         this.texture = texture;
-        this.position = position;
-        hitbox = new Rectangle((int)this.position.X, (int)this.position.Y, World.WorldWidth/5,
+        this.position = pos;
+        hitbox = new Rectangle((int)this.position.X, (int)this.position.Y, World.WorldWidth / 5,
             (texture.Height * World.WorldWidth / 5) / World.WorldHeight);
     }
 
     /**
      * @return true: If a player enters the button with mouse
      */
-    public bool enterButton()
+    public bool inButton()
     {
-        if (hitbox.Contains(Mouse.GetState().Position))
-        {
-            return true;
-        }
-
-        return false;
+        return hitbox.Contains(Mouse.GetState().Position);
     }
 
     public void addAction(Action action)
@@ -40,10 +37,27 @@ public class Button
 
     public void Update(GameTime gameTime)
     {
-        if (enterButton() && Mouse.GetState().LeftButton == ButtonState.Pressed)
+        if (World.IsPaused)
         {
-            action();
-            World.Unpause();
+            if (inButton() && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                startClick = true;
+            }
+
+            if (Mouse.GetState().LeftButton == ButtonState.Released)
+            {
+                if (newClick && startClick && inButton())
+                {
+                    newClick = false;
+                    Console.Out.WriteLine($"{action}");
+                    action();
+                    World.Unpause();
+                }
+                
+                if (World.IsPaused)
+                    newClick = true;
+                startClick = false;
+            }
         }
     }
 
@@ -54,7 +68,7 @@ public class Button
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        if (enterButton())
+        if (inButton())
             Draw(spriteBatch, Color.Gray);
         else
             Draw(spriteBatch, Color.White);

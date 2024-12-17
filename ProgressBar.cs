@@ -23,15 +23,14 @@ public class ProgressBar
     public void Update(int value)
     {
         percentage = value / 100.0f;
-        fraction.Width = (int) (percentage * foreground.Width);
+        fraction.Width = (int)(percentage * foreground.Width);
     }
-    
+
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(background, position, Color.White);
         spriteBatch.Draw(foreground, position, fraction, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 1f);
-        
     }
-    
+
     public int Width => background.Width;
 }

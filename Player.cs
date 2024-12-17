@@ -13,6 +13,7 @@ public class Player : Entity
     public int level;
     private int xpObjective = 100;
     private int currentXp;
+    private int maxHp;
     private Weapon weapon { get; set; }
     private readonly float MAX_SPEED = 6.0f;
     private readonly float ACCELERATION = 1.1f;
@@ -29,28 +30,33 @@ public class Player : Entity
         this.attackSpd = attackSpd;
         this.weapon = new Weapon(World.defaultProjectileTexture, 1, 10, 500, this, new Vector2(10.0f, 10.0f));
         XpBar = new ProgressBar(World.xpBarBackground, World.xpBarForeground, new Vector2(30, 30));
+        maxHp = hp;
+    }
+
+    public void increaseMaxHp()
+    {
+        maxHp++;
+        Console.Out.WriteLine($"Max HP: {maxHp}");
     }
 
     public void heal(int heal)
     {
-        
     }
 
     public void gainXp(int xp)
     {
         currentXp += xp;
-        levelUp();
-        XpBar.Update(currentXp * 100 /xpObjective);
+        if (currentXp >= xpObjective)
+            levelUp();
+        XpBar.Update(currentXp * 100 / xpObjective);
     }
-        
+
     private void levelUp()
     {
-        if (currentXp >= xpObjective)
-        {
-            level++;
-            currentXp -= xpObjective;
-            xpObjective = (int) (xpObjective * 1.5);
-        }
+        level++;
+        currentXp -= xpObjective;
+        xpObjective = (int)(xpObjective * 1.5);
+        World.Pause();
     }
 
     public override void Move(GameTime gameTime)
