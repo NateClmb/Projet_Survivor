@@ -28,7 +28,7 @@ public class World : Game
 
     public static Player player;
     private Texture2D backgroundTexture;
-    private Random random;
+    public static Random random;
     private static bool isPaused;
     private static bool isGameOver;
 
@@ -64,12 +64,12 @@ public class World : Game
         _entities.Remove(e);
     }
 
-    private ArrayList constructSpriteSheet(ArrayList textureList)
+    private ArrayList ConstructSpriteSheet(ArrayList textureList)
     {
         ArrayList spriteSheet = new ArrayList();
-        for (int i = 0; i < textureList.Count; i++)
+        foreach (var t in textureList)
         {
-            spriteSheet.Add(new Sprite((Texture2D)textureList[i], Vector2.Zero, 100));
+            spriteSheet.Add(new Sprite((Texture2D)t, Vector2.Zero, 100));
         }
 
         return spriteSheet;
@@ -81,7 +81,7 @@ public class World : Game
         {
             int x = random.Next(0, WorldWidth);
             int y = random.Next(0, WorldHeight);
-            _entities.Add(new Enemy(new Rectangle(x, y, 45, 70), constructSpriteSheet(_enemyTextureList),
+            _entities.Add(new Enemy(new Rectangle(x, y, 45, 70), ConstructSpriteSheet(_enemyTextureList),
                 new Vector2(x, y), new Vector2(1, 1), 3, "eyeShooter", 10, Behavior.HAND_TO_HAND));
         }
     }
@@ -122,6 +122,11 @@ public class World : Game
             _playerTextureList.Add(Content.Load<Texture2D>("playerMoving" + i.ToString()));
         }
 
+        for (int i = 0; i < 3; i++)
+        {
+            _playerTextureList.Add(Content.Load<Texture2D>("playerHit" + i.ToString()));
+        }
+
         for (int i = 0; i < 8; i++)
         {
             _enemyTextureList.Add(Content.Load<Texture2D>("enemyShooter" + i.ToString()));
@@ -154,7 +159,7 @@ public class World : Game
         _buttons.Add(attackSpeedUpgradeButton);
 
         player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
-            constructSpriteSheet(_playerTextureList),
+            ConstructSpriteSheet(_playerTextureList),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             5, 1.0);
         _entities.Add(player);

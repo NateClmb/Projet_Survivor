@@ -30,7 +30,7 @@ public abstract class Entity
     {
         this.Hitbox = hitbox;
         this.spriteSheets = spriteSheets;
-        this.Sprite = (Sprite) spriteSheets[0];
+        this.Sprite = (Sprite) spriteSheets[World.random.Next(0, spriteSheets.Count)];
         this.Position = position;
         this.Speed = speed;
         SetHp(hp);

@@ -14,14 +14,16 @@ public class Player : Entity
     public int level;
     private int xpObjective = 50;
     private int currentXp;
-
     private int maxHp;
 
     private int frameCounter = 0;
     private double lastTimeFrame = 0;
     private readonly double FRAME_INTERVAL = 50;
 
+    private bool hit = false;
     private static readonly double HIT_COUNTDOWN = 1000;
+    private static readonly int nbFrameMovement = 3;
+    private static readonly int nbFrameHit = 3;
 
     private Weapon weapon { get; set; }
 
@@ -96,6 +98,7 @@ public class Player : Entity
         double time = gameTime.TotalGameTime.TotalMilliseconds;
         if (time >= lastTimeHit + HIT_COUNTDOWN)
         {
+            hit = true;
             lastTimeHit = time;
             _hp -= damage;
         }
@@ -171,20 +174,31 @@ public class Player : Entity
         HitTest(gameTime,
             e => e.Hitbox.Intersects(Hitbox) && (e.GetType() == typeof(Enemy) ||
                                                  (e.GetType() == typeof(Projectile) && !((Projectile)e).isFriendly())));
+        if (gameTime.TotalGameTime.TotalMilliseconds >= lastTimeHit + HIT_COUNTDOWN)
+            hit = false;
     }
 
     protected override void GestionAnimation(GameTime gameTime)
     {
-        if (Math.Abs(Speed.X) < 0.1f && Math.Abs(Speed.Y) < 0.1f)
+        if (!hit && Math.Abs(Speed.X) < 0.1f && Math.Abs(Speed.Y) < 0.1f)
         {
             Sprite = (Sprite)spriteSheets[0];
         }
         else if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
         {
             lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
-            frameCounter = ((frameCounter + 1) % spriteSheets.Count);
+            if (hit)
+            {
+                frameCounter = (frameCounter + 1) % (spriteSheets.Count - nbFrameMovement);
+                Sprite = (Sprite)spriteSheets[frameCounter + nbFrameMovement];
+            }
+            else
+            {
+                frameCounter = (frameCounter + 1) % (nbFrameMovement);
+                Sprite = (Sprite)spriteSheets[frameCounter];
+            }
+
             bool flip = Sprite.Flipped;
-            Sprite = (Sprite)spriteSheets[frameCounter];
             //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
             Sprite._position = this.Position;
             Sprite.Flipped = flip;
