@@ -12,9 +12,10 @@ public class Sprite
     private int _size;
     private static readonly int _sizeMax = 256;
     private static readonly int _sizeMin = -_sizeMax;
+    public bool Flipped = false;
 
 
-    private Color _color = Color.Pink;
+    private Color _color = Color.White;
 
     public Texture2D _Texture
     {
@@ -40,6 +41,11 @@ public class Sprite
         _Size = size;
     }
 
+    public void Flip()
+    {
+        Flipped = !Flipped;
+    }
+
     public void Update(GameTime gameTime, Entity caller)
     {
         caller.Move(gameTime);
@@ -48,14 +54,23 @@ public class Sprite
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        SpriteEffects effects;
         var origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
-        spriteBatch.Draw(_texture, // Texture2D ,
-            _Rect, // Rectangle destinationRectangle ,
-            null, // Nullable < Rectangle > sourceRectangle ,
-            _color, // Color ,
-            0.0f, // float rotation ,
-            origin, // Vector2 origin ,
-            SpriteEffects.None, // SpriteEffects effects ,
-            0f); // float layerDepth
+        if (Flipped)
+        {
+            effects = SpriteEffects.FlipHorizontally;
+        }
+        else
+        {
+            effects = SpriteEffects.None;
+        }
+        spriteBatch.Draw(_texture, 
+            _Rect, 
+            null, 
+            _color, 
+            0.0f,
+            origin, 
+            effects, 
+            0f); 
     }
 }

@@ -60,13 +60,23 @@ public abstract class Entity
 
     protected void GestionAnimation(GameTime gameTime)
     {
+        if (this.Position.X > World.player.Position.X - 10)
+        {
+            Sprite.Flipped = true;
+        }
+        else
+        {
+            Sprite.Flipped = false;
+        }
         if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
         {
             lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
             frameCounter = (frameCounter + 1) % spriteSheets.Count;
+            bool flip = Sprite.Flipped;
             Sprite = (Sprite) spriteSheets[frameCounter];
             //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
             Sprite._position = this.Position;
+            Sprite.Flipped = flip;
         }
     }
 

@@ -28,7 +28,7 @@ public class World : Game
     private ArrayList _enemyTextureList = new ArrayList();
 
     private Texture2D backgroundTexture;
-    private Player player;
+    public static Player player;
     private Random random;
     private static bool isPaused;
 
