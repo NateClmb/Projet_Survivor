@@ -12,6 +12,8 @@ public class Projectile : Entity
     private Vector2 direction;
     private bool smart;
     private bool friendly;
+    
+    private static readonly double HIT_COUNTDOWN = 100;
 
     public Projectile(Rectangle hitbox,
         Sprite sprite,
@@ -33,21 +35,24 @@ public class Projectile : Entity
     {
         Position += direction * Speed;
         setHitboxPosition();
-        hitTest(gameTime);
         autoDestruct();
+        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && (this.friendly && e.GetType() == typeof(Enemy) ||
+                                                               !friendly && e.GetType() == typeof(Player)));
     }
 
-    private void hitTest(GameTime gameTime)
+    protected override void IsHit(int damage, GameTime gameTime)
     {
-        foreach (Entity e in World.GetEntities())
+        double time = gameTime.TotalGameTime.TotalMilliseconds;
+        if (time >= lastTimeHit + HIT_COUNTDOWN)
         {
-            if (e.Hitbox.Intersects(Hitbox) && (this.friendly && e.GetType() == typeof(Enemy) ||
-                                                !friendly && e.GetType() == typeof(Player)))
-            {
-                e.hit(this.damage, gameTime);
-                this._hp--;
-            }
+            lastTimeHit = time;
+            _hp -= damage;
         }
+    }
+
+    public bool isFriendly()
+    {
+        return friendly;
     }
 
     private void autoDestruct()

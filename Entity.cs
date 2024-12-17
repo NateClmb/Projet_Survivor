@@ -15,8 +15,7 @@ public abstract class Entity
     protected int _hp;
     protected Vector2 Speed;
     protected ArrayList spriteSheets = new ArrayList(); 
-    private double lastTimeHit = 0;
-    private static readonly double HIT_COUNTDOWN = 10;
+    protected double lastTimeHit = 0;
 
     public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
     {
@@ -45,16 +44,18 @@ public abstract class Entity
         this.Hitbox.Y = (int)this.Position.Y - Hitbox.Height / 2;
     }
 
-    public void hit(int damage, GameTime gameTime)
+    protected abstract void IsHit(int damage, GameTime gameTime);
+
+    protected void HitTest(GameTime gameTime, Func<Entity, bool> test)
     {
-        double time = gameTime.TotalGameTime.TotalMilliseconds;
-        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        foreach (Entity e in World.GetEntities())
         {
-            lastTimeHit = time;
-            _hp -= damage;
+            if (test(e))
+            {
+                IsHit(1, gameTime);
+            }
         }
     }
-
     protected abstract void GestionAnimation(GameTime gameTime);
 
     private void SetHp(int hp)

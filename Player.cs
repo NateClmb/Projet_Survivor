@@ -14,21 +14,20 @@ public class Player : Entity
     public int level;
     private int xpObjective = 50;
     private int currentXp;
+
     private int maxHp;
-    
+
     private int frameCounter = 0;
     private double lastTimeFrame = 0;
-    private readonly double FRAME_INTERVAL = 100;
-    
+    private readonly double FRAME_INTERVAL = 50;
+
+    private static readonly double HIT_COUNTDOWN = 1000;
+
     private Weapon weapon { get; set; }
 
-    private float MAX_SPEED
-    {
-        get;
-        set;
-    }
+    private float MAX_SPEED { get; set; }
 
-    private float ACCELERATION = 1.1f;
+    private float ACCELERATION = 1.3f;
 
     public ProgressBar XpBar;
 
@@ -53,8 +52,8 @@ public class Player : Entity
 
     public void increaseMaxSpeed()
     {
-        ACCELERATION += ACCELERATION * (MAX_SPEED + 0.1f) / MAX_SPEED;
-        MAX_SPEED += 0.1f;
+        ACCELERATION += ACCELERATION * (MAX_SPEED + 0.2f) / MAX_SPEED;
+        MAX_SPEED += 0.2f;
     }
 
     public void increaseDamage()
@@ -69,6 +68,11 @@ public class Player : Entity
 
     public void heal(int heal)
     {
+        _hp += heal;
+        if (_hp > maxHp)
+        {
+            _hp = maxHp;
+        }
     }
 
     public void gainXp(int xp)
@@ -87,37 +91,46 @@ public class Player : Entity
         World.Pause();
     }
 
+    protected override void IsHit(int damage, GameTime gameTime)
+    {
+        double time = gameTime.TotalGameTime.TotalMilliseconds;
+        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        {
+            lastTimeHit = time;
+            _hp -= damage;
+        }
+
+        if (_hp <= 0)
+        {
+            World.Pause();
+        }
+    }
+
     public override void Move(GameTime gameTime)
     {
         //déplacements aux flèches du clavier
         if (Keyboard.GetState().IsKeyDown(Keys.Right))
         {
-            if (Speed.X < MAX_SPEED)
-                Speed.X += ACCELERATION;
+            Speed.X += ACCELERATION;
+            if (Speed.X > MAX_SPEED) Speed.X = MAX_SPEED;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.Left))
         {
-            if (Speed.X > -MAX_SPEED)
-            {
-                Speed.X -= ACCELERATION;
-            }
+            Speed.X -= ACCELERATION;
+            if (Speed.X < -MAX_SPEED) Speed.X = -MAX_SPEED;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.Down))
         {
-            if (Speed.Y < MAX_SPEED)
-            {
-                Speed.Y += ACCELERATION;
-            }
+            Speed.Y += ACCELERATION;
+            if (Speed.Y > MAX_SPEED) Speed.Y = MAX_SPEED;
         }
 
         if (Keyboard.GetState().IsKeyDown(Keys.Up))
         {
-            if (Speed.Y > -MAX_SPEED)
-            {
-                Speed.Y -= ACCELERATION;
-            }
+            Speed.Y -= ACCELERATION;
+            if (Speed.Y < -MAX_SPEED) Speed.Y = -MAX_SPEED;
         }
 
         Position.X += Speed.X;
@@ -136,6 +149,10 @@ public class Player : Entity
         if (Speed.Y > 0) Speed.Y -= 0.5f;
         if (Speed.Y < 0) Speed.Y += 0.5f;
 
+        //arrêt net si vitesse basse
+        if (Math.Abs(Speed.X) < 0.5f) Speed.X = 0;
+        if (Math.Abs(Speed.Y) < 0.5f) Speed.Y = 0;
+
         //réalignement de la hitbox sur le sprite
         setHitboxPosition();
         GestionAnimation(gameTime);
@@ -150,20 +167,24 @@ public class Player : Entity
                 World.AddEntity(weapon.fire(time));
         }
         //Fin attaque
+
+        HitTest(gameTime,
+            e => e.Hitbox.Intersects(Hitbox) && (e.GetType() == typeof(Enemy) ||
+                                                 (e.GetType() == typeof(Projectile) && !((Projectile)e).isFriendly())));
     }
 
     protected override void GestionAnimation(GameTime gameTime)
     {
         if (Math.Abs(Speed.X) < 0.1f && Math.Abs(Speed.Y) < 0.1f)
         {
-            Sprite = (Sprite) spriteSheets[0];
+            Sprite = (Sprite)spriteSheets[0];
         }
         else if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
         {
             lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
             frameCounter = ((frameCounter + 1) % spriteSheets.Count);
             bool flip = Sprite.Flipped;
-            Sprite = (Sprite) spriteSheets[frameCounter];
+            Sprite = (Sprite)spriteSheets[frameCounter];
             //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
             Sprite._position = this.Position;
             Sprite.Flipped = flip;
@@ -176,8 +197,6 @@ public class Player : Entity
                 Sprite.Flipped = false;
             }
         }
-        
-        //TODO retourner sprite quand cours vers la gauche
     }
 
     private class Weapon

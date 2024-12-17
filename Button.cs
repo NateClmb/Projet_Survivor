@@ -49,7 +49,6 @@ public class Button
                 if (newClick && startClick && inButton())
                 {
                     newClick = false;
-                    Console.Out.WriteLine($"{action}");
                     action();
                     World.Unpause();
                 }

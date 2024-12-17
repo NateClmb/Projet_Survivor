@@ -16,6 +16,8 @@ public class Enemy : Entity
     private int frameCounter = 0;
     private double lastTimeFrame = 0;
     private readonly double FRAME_INTERVAL = 250;
+    
+    private static readonly double HIT_COUNTDOWN = 100;
 
     public Enemy(Rectangle hitbox,
         ArrayList sprite,
@@ -55,6 +57,7 @@ public class Enemy : Entity
 
         setHitboxPosition();
         GestionAnimation(gameTime);
+        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).isFriendly());
         testOverlapseWithEnemy();
         die();
     }
@@ -100,6 +103,17 @@ public class Enemy : Entity
             //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
             Sprite._position = this.Position;
             Sprite.Flipped = flip;
+        }
+    }
+    
+    protected override void IsHit(int damage, GameTime gameTime)
+    {
+        Console.Out.WriteLine($"{name} hit for {damage}");
+        double time = gameTime.TotalGameTime.TotalMilliseconds;
+        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        {
+            lastTimeHit = time;
+            _hp -= damage;
         }
     }
 }
