@@ -112,25 +112,25 @@ public class Player : Entity
     public override void Move(GameTime gameTime)
     {
         //déplacements aux flèches du clavier
-        if (Keyboard.GetState().IsKeyDown(Keys.Right))
+        if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
         {
             Speed.X += ACCELERATION;
             if (Speed.X > MAX_SPEED) Speed.X = MAX_SPEED;
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Left))
+        if (Keyboard.GetState().IsKeyDown(Keys.Left) || Keyboard.GetState().IsKeyDown(Keys.Q))
         {
             Speed.X -= ACCELERATION;
             if (Speed.X < -MAX_SPEED) Speed.X = -MAX_SPEED;
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Down))
+        if (Keyboard.GetState().IsKeyDown(Keys.Down) || Keyboard.GetState().IsKeyDown(Keys.S))
         {
             Speed.Y += ACCELERATION;
             if (Speed.Y > MAX_SPEED) Speed.Y = MAX_SPEED;
         }
 
-        if (Keyboard.GetState().IsKeyDown(Keys.Up))
+        if (Keyboard.GetState().IsKeyDown(Keys.Up) || Keyboard.GetState().IsKeyDown(Keys.Z))
         {
             Speed.Y -= ACCELERATION;
             if (Speed.Y < -MAX_SPEED) Speed.Y = -MAX_SPEED;
