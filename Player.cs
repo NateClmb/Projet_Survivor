@@ -11,12 +11,12 @@ public class Player : Entity
 {
     private double attackSpd { get; set; }
     public int level;
-    private int xpObjective = 100;
+    private int xpObjective = 10;
     private int currentXp;
     private int maxHp;
     private Weapon weapon { get; set; }
-    private readonly float MAX_SPEED = 6.0f;
-    private readonly float ACCELERATION = 1.1f;
+    private float MAX_SPEED = 6.0f;
+    private float ACCELERATION = 1.1f;
 
     public ProgressBar XpBar;
 
@@ -28,7 +28,7 @@ public class Player : Entity
         double attackSpd) : base(hitbox, sprite, pos, speed, hp)
     {
         this.attackSpd = attackSpd;
-        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 10, 500, this, new Vector2(10.0f, 10.0f));
+        this.weapon = new Weapon(World.defaultProjectileTexture, 1, 1, 500, this, new Vector2(10.0f, 10.0f));
         XpBar = new ProgressBar(World.xpBarBackground, World.xpBarForeground, new Vector2(30, 30));
         maxHp = hp;
     }
@@ -39,6 +39,23 @@ public class Player : Entity
         Console.Out.WriteLine($"Max HP: {maxHp}");
     }
 
+    public void increaseMaxSpeed()
+    {
+        ACCELERATION += ACCELERATION * (MAX_SPEED + 1f) / MAX_SPEED;
+        MAX_SPEED += 1f;
+        Console.Out.WriteLine($"Max Speed: {MAX_SPEED}");
+    }
+
+    public void increaseDamage()
+    {
+        weapon.increaseDamage();
+    }
+
+    public void increaseAttackSpeed()
+    {
+        attackSpd -= 0.5;
+    }
+    
     public void heal(int heal)
     {
     }
@@ -117,7 +134,7 @@ public class Player : Entity
         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
             double time = gameTime.TotalGameTime.TotalMilliseconds;
-            if (time >= weapon.lastTimeFired + weapon.baseFireRate)
+            if (time >= weapon.lastTimeFired + weapon.baseFireRate * attackSpd)
                 World.AddEntity(weapon.fire(time));
         }
         //Fin attaque
@@ -193,6 +210,11 @@ public class Player : Entity
             }
 
             return nearest;
+        }
+
+        public void increaseDamage()
+        {
+            damage++;
         }
     }
 }
