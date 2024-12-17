@@ -8,7 +8,7 @@ namespace Projet_Survivor;
 public class Sprite
 {
     private Texture2D _texture;
-    private Vector2 _position;
+    public Vector2 _position;
     private int _size;
     private static readonly int _sizeMax = 256;
     private static readonly int _sizeMin = -_sizeMax;

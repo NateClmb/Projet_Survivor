@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,7 @@ public class Enemy : Entity
     private readonly Player player = (Player)World.GetEntities()[0];
 
     public Enemy(Rectangle hitbox,
-        Sprite sprite,
+        ArrayList sprite,
         Vector2 pos,
         Vector2 speed,
         int hp,
@@ -49,6 +50,7 @@ public class Enemy : Entity
         }
 
         setHitboxPosition();
+        GestionAnimation(gameTime);
         testOverlapseWithEnemy();
         die();
     }
@@ -71,7 +73,6 @@ public class Enemy : Entity
         if (_hp <= 0)
         {
             player.gainXp(xpValue);
-            World.RemoveEntity(this);
         }
     }
 }

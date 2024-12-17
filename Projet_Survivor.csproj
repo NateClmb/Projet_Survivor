@@ -28,7 +28,9 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Content\bin\DesktopGL\Content\" />
+      <Folder Include="Content\bin\DesktopGL\Content\images\" />
       <Folder Include="Content\obj\DesktopGL\net8.0\Content\" />
+      <Folder Include="Content\obj\DesktopGL\net8.0\Content\images\" />
     </ItemGroup>
     <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
         <Message Text="Restoring dotnet tools" Importance="High"/>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,13 +14,27 @@ public abstract class Entity
     public Vector2 Position;
     protected int _hp;
     protected Vector2 Speed;
+    private ArrayList spriteSheets = new ArrayList(); 
     private double lastTimeHit = 0;
     private static readonly double HIT_COUNTDOWN = 10;
+    private int frameCounter = 0;
+    private double lastTimeFrame = 0;
+    private readonly double FRAME_INTERVAL = 250;
 
     public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
     {
         this.Hitbox = hitbox;
         this.Sprite = sprite;
+        this.Position = position;
+        this.Speed = speed;
+        SetHp(hp);
+    }
+    
+    public Entity(Rectangle hitbox, ArrayList spriteSheets, Vector2 position, Vector2 speed, int hp)
+    {
+        this.Hitbox = hitbox;
+        this.spriteSheets = spriteSheets;
+        this.Sprite = (Sprite) spriteSheets[0];
         this.Position = position;
         this.Speed = speed;
         SetHp(hp);
@@ -43,8 +58,16 @@ public abstract class Entity
         }
     }
 
-    private void GestionAnimation()
+    protected void GestionAnimation(GameTime gameTime)
     {
+        if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
+        {
+            lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
+            frameCounter = (frameCounter + 1) % spriteSheets.Count;
+            Sprite = (Sprite) spriteSheets[frameCounter];
+            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
+            Sprite._position = this.Position;
+        }
     }
 
     private void SetHp(int hp)
