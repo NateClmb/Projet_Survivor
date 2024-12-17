@@ -102,7 +102,7 @@ public class Player : Entity
 
         if (_hp <= 0)
         {
-            World.Pause();
+            World.GameOver();
         }
     }
 

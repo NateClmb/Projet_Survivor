@@ -8,7 +8,6 @@ namespace Projet_Survivor;
 
 public class World : Game
 {
-
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
@@ -31,6 +30,7 @@ public class World : Game
     private Texture2D backgroundTexture;
     private Random random;
     private static bool isPaused;
+    private static bool isGameOver;
 
     public static bool IsPaused
     {
@@ -44,6 +44,7 @@ public class World : Game
         WorldHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         Content.RootDirectory = "Content/images";
         isPaused = false;
+        isGameOver = false;
         IsMouseVisible = true;
         random = new Random();
     }
@@ -51,10 +52,6 @@ public class World : Game
     public static void AddEntity(Entity e)
     {
         _entities.Add(e);
-    }
-
-    public static void ShowLevelUpButtons()
-    {
     }
 
     public static ArrayList GetEntities()
@@ -99,6 +96,11 @@ public class World : Game
         isPaused = false;
     }
 
+    public static void GameOver()
+    {
+        isGameOver = true;
+    }
+
     protected override void Initialize()
     {
         _graphics.PreferredBackBufferWidth = WorldWidth;
@@ -113,19 +115,19 @@ public class World : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         Texture2D playerTexture = Content.Load<Texture2D>("playerStill");
         backgroundTexture = Content.Load<Texture2D>("background");
-        
+
         _playerTextureList.Add(Content.Load<Texture2D>("playerStill"));
         for (int i = 0; i < 2; i++)
         {
             _playerTextureList.Add(Content.Load<Texture2D>("playerMoving" + i.ToString()));
         }
-        
+
         for (int i = 0; i < 8; i++)
         {
             _enemyTextureList.Add(Content.Load<Texture2D>("enemyShooter" + i.ToString()));
         }
 
-        defaultProjectileTexture = Content.Load<Texture2D>("missile1");
+        defaultProjectileTexture = Content.Load<Texture2D>("standardProjectile");
         xpBarBackground = Content.Load<Texture2D>("xp_bar_background");
         xpBarForeground = Content.Load<Texture2D>("xp_bar_foreground");
 
@@ -151,7 +153,8 @@ public class World : Game
         attackSpeedUpgradeButton.addAction(() => player.increaseAttackSpeed());
         _buttons.Add(attackSpeedUpgradeButton);
 
-        player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50), constructSpriteSheet(_playerTextureList),
+        player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
+            constructSpriteSheet(_playerTextureList),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             5, 1.0);
         _entities.Add(player);
@@ -162,7 +165,8 @@ public class World : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        if (isPaused)
+        if (isGameOver) ;
+        else if (isPaused)
         {
             foreach (Button button in _buttons)
             {
@@ -187,25 +191,33 @@ public class World : Game
     {
         GraphicsDevice.Clear(Color.White);
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-        _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
-
-        foreach (Entity e in _entities)
+        if (isGameOver)
         {
-            e.Sprite.Draw(_spriteBatch);
-            //Used to show hitboxes
-            //_spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
+            backgroundTexture = Content.Load<Texture2D>("gameOverScreen");
+            _spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, WorldWidth, WorldHeight), null, Color.White, 0.0f,
+                Vector2.Zero, SpriteEffects.None, 0f);
         }
-
-        if (isPaused)
+        else
         {
-            foreach (Button button in _buttons)
+            _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
+
+            foreach (Entity e in _entities)
             {
-                button.Draw(_spriteBatch);
+                e.Sprite.Draw(_spriteBatch);
+                //Used to show hitboxes
+                //_spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
             }
-        }
 
-        player.XpBar.Draw(_spriteBatch);
+            if (isPaused)
+            {
+                foreach (Button button in _buttons)
+                {
+                    button.Draw(_spriteBatch);
+                }
+            }
+
+            player.XpBar.Draw(_spriteBatch);
+        }
 
         _spriteBatch.End();
         base.Draw(gameTime);
