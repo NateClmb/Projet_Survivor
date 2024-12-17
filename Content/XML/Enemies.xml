@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Enemies>
+    <Enemy>
+        <Name>"Gobelin"</Name>
+        <Type>Corps à corps</Type>
+        <HP>40</HP>
+        <AttackDamage>10</AttackDamage>
+        <Speed>1</Speed>
+        <XPValue>20</XPValue>
+    </Enemy>
+    <Enemy>
+        <Name>"Archer"</Name>s
+        <Type>Distance</Type>
+        <HP>15</HP>
+        <AttackDamage>8</AttackDamage>
+        <Speed>2</Speed>
+        <XPValue>25</XPValue>
+    </Enemy>
+</Enemies>
