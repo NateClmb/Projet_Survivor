@@ -55,6 +55,7 @@ public class Player : Entity
     public void increaseMaxHp()
     {
         maxHp++;
+        _hp = maxHp;
     }
 
     public void increaseMaxSpeed()
