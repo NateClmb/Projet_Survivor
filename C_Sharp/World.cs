@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.Net.Mime;
 
 namespace Projet_Survivor;
 
@@ -30,8 +31,8 @@ public class World : Game
     public static Texture2D xpBarForeground;
     public static Texture2D defaultProjectileTexture;
     private Texture2D enemySpawnWarningTexture;
-
     private Texture2D backgroundTexture;
+    private SpriteFont font;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
     private ArrayList _enemyTextureList = new ArrayList();
@@ -42,7 +43,8 @@ public class World : Game
     private static bool isPaused;
     private static bool isGameOver;
     private readonly double SPAWN_WARNING_DURATION = 1500;
-
+    private int level;
+    private double inGameTime;
     public static bool IsPaused
     {
         get => isPaused;
@@ -57,6 +59,7 @@ public class World : Game
         isPaused = false;
         isGameOver = false;
         IsMouseVisible = true;
+        level = 0;
         random = new Random();
     }
 
@@ -88,7 +91,7 @@ public class World : Game
 
     private void spawnEnemy(GameTime gameTime)
     {
-        if ((int)gameTime.TotalGameTime.Ticks % (4 * (40 - player.level)) == 0)
+        if ((int)gameTime.TotalGameTime.Ticks % (Math.Max(30, 300 - level * 10)) == 0)
         {
             int x = random.Next(0, WorldWidth);
             int y = random.Next(0, WorldHeight);
@@ -138,7 +141,9 @@ public class World : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        Texture2D playerTexture = Content.Load<Texture2D>("playerStill");
+        
+        font = Content.Load<SpriteFont>("Winter_Minie");
+        
         backgroundTexture = Content.Load<Texture2D>("background");
 
         _playerTextureList.Add(Content.Load<Texture2D>("playerStill"));
@@ -207,6 +212,11 @@ public class World : Game
         }
         else
         {
+            inGameTime++;
+            if (inGameTime % 600 == 0)
+            {
+                level++;
+            }
             spawnEnemy(gameTime);
             Entity[] copyEntities = new Entity[_entities.Count];
             _entities.CopyTo(copyEntities);
@@ -232,7 +242,7 @@ public class World : Game
         else
         {
             _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
-
+            _spriteBatch.DrawString(font, player.getHp(), new Vector2(50, 100), Color.White);
             foreach (Entity e in _entities)
             {
                 e.Sprite.Draw(_spriteBatch);

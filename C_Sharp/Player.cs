@@ -47,6 +47,11 @@ public class Player : Entity
         maxHp = hp;
     }
 
+    public String getHp()
+    {
+        return _hp.ToString() + " / " + maxHp.ToString();
+    }
+    
     public void increaseMaxHp()
     {
         maxHp++;
