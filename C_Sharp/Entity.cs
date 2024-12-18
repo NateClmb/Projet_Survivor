@@ -16,6 +16,7 @@ public abstract class Entity
     protected Vector2 Speed;
     protected ArrayList spriteSheets = new ArrayList(); 
     protected double lastTimeHit = 0;
+    protected int damage;
 
     public Entity(Rectangle hitbox, Sprite sprite, Vector2 position, Vector2 speed, int hp)
     {
@@ -23,6 +24,7 @@ public abstract class Entity
         this.Sprite = sprite;
         this.Position = position;
         this.Speed = speed;
+        damage = 1;
         SetHp(hp);
     }
     
@@ -33,6 +35,7 @@ public abstract class Entity
         this.Sprite = (Sprite) spriteSheets[World.random.Next(0, spriteSheets.Count)];
         this.Position = position;
         this.Speed = speed;
+        damage = 1;
         SetHp(hp);
     }
 
@@ -52,7 +55,7 @@ public abstract class Entity
         {
             if (test(e))
             {
-                IsHit(1, gameTime);
+                IsHit(e.damage, gameTime);
             }
         }
     }

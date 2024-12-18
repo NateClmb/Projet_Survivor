@@ -8,11 +8,10 @@ namespace Projet_Survivor;
 
 public class Projectile : Entity
 {
-    private int damage;
     private Vector2 direction;
     private bool smart;
     private bool friendly;
-    
+
     private static readonly double HIT_COUNTDOWN = 100;
 
     public Projectile(Rectangle hitbox,

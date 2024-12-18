@@ -11,12 +11,12 @@ public class Enemy : Entity
     private String name;
     private int xpValue { get; init; }
     private Behavior behavior;
-    private readonly Player player = (Player)World.GetEntities()[0];
-    
+    private readonly Player player = World.player;
+
     private int frameCounter = 0;
     private double lastTimeFrame = 0;
     private readonly double FRAME_INTERVAL = 250;
-    
+
     private static readonly double HIT_COUNTDOWN = 100;
 
     public Enemy(Rectangle hitbox,
@@ -57,7 +57,8 @@ public class Enemy : Entity
 
         setHitboxPosition();
         GestionAnimation(gameTime);
-        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).isFriendly());
+        HitTest(gameTime,
+            e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).isFriendly());
         testOverlapseWithEnemy();
         die();
     }
@@ -94,21 +95,21 @@ public class Enemy : Entity
         {
             Sprite.Flipped = false;
         }
+
         if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
         {
             lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
             frameCounter = (frameCounter + 1) % spriteSheets.Count;
             bool flip = Sprite.Flipped;
-            Sprite = (Sprite) spriteSheets[frameCounter];
+            Sprite = (Sprite)spriteSheets[frameCounter];
             //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
             Sprite._position = this.Position;
             Sprite.Flipped = flip;
         }
     }
-    
+
     protected override void IsHit(int damage, GameTime gameTime)
     {
-        Console.Out.WriteLine($"{name} hit for {damage}");
         double time = gameTime.TotalGameTime.TotalMilliseconds;
         if (time >= lastTimeHit + HIT_COUNTDOWN)
         {
