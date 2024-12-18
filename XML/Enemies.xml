@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Enemies>
+    <Enemy>
+        <Name>"eyeShooter"</Name>
+        <Rectangle_X>45</Rectangle_X>
+        <Rectangle_Y>70</Rectangle_Y>
+        <Size>100</Size>
+        <Type>Corps à corps</Type>
+        <HP>3</HP>
+        <AttackDamage>1</AttackDamage>
+        <Speed>1</Speed>
+        <XPValue>10</XPValue>
+    </Enemy>
+</Enemies>

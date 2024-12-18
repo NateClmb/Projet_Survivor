@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><GameList>
+    <Game>
+        <PlayerName>Samy</PlayerName>
+        <Date>2024-12-13</Date>
+        <Score>12000</Score>
+    </Game>
+    <Game>
+        <PlayerName>Samy</PlayerName>
+        <Date>2024-12-14</Date>
+        <Score>18000</Score>
+    </Game>
+    <Game>
+        <PlayerName>Samy</PlayerName>
+        <Date>2024-12-15</Date>
+        <Score>3000</Score>
+    </Game>
+</GameList>

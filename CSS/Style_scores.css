@@ -1,0 +1,48 @@
+/* Styles for the scores page */
+
+/* Style for the body of the page */
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #1e272e;
+    color: #f1f2f6;
+    padding: 20px;
+}
+
+/* Style for the main title */
+h1 {
+    color: #f9ca24;
+    text-align: center;
+    text-shadow: 3px 3px #575fcf;
+}
+
+/* Style for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+/* Style for header and data cells */
+th, td {
+    border: 1px solid #f1f2f6;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Style for header cells */
+th {
+    background-color: #535c68;
+    color: #f9ca24;
+    text-transform: uppercase;
+}
+
+/* Style for even rows */
+tr:nth-child(even) {
+    background-color: #2f3640;
+}
+
+/* Style for rows on hover */
+tr:hover {
+    background-color: #40739e;
+    color: white;
+}
