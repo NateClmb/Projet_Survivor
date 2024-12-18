@@ -17,20 +17,31 @@ public class World : Game
     //liste des entités présentes à un instant t
     //Le joueur est toujours l'entité à l'indice 0
     private static ArrayList _entities = new ArrayList();
+
     private static ArrayList _buttons = new ArrayList();
+
+    //List of visual effects to draw on screen such as enemy spawn warning
+    private static ArrayList _visualEffects = new ArrayList();
+
+    //List containing spawned enemy time during last second
+    private static ArrayList _spawnTimes = new ArrayList();
 
     public static Texture2D xpBarBackground;
     public static Texture2D xpBarForeground;
     public static Texture2D defaultProjectileTexture;
+    private Texture2D enemySpawnWarningTexture;
 
+    private Texture2D backgroundTexture;
+
+    //Lists containing Texture2D used to create sprite sheets for animated sprites
     private ArrayList _enemyTextureList = new ArrayList();
     private ArrayList _playerTextureList = new ArrayList();
 
     public static Player player;
-    private Texture2D backgroundTexture;
     public static Random random;
     private static bool isPaused;
     private static bool isGameOver;
+    private readonly double SPAWN_WARNING_DURATION = 1500;
 
     public static bool IsPaused
     {
@@ -81,8 +92,22 @@ public class World : Game
         {
             int x = random.Next(0, WorldWidth);
             int y = random.Next(0, WorldHeight);
-            _entities.Add(new Enemy(new Rectangle(x, y, 45, 70), ConstructSpriteSheet(_enemyTextureList),
-                new Vector2(x, y), new Vector2(1, 1), 3, "eyeShooter", 10, Behavior.HAND_TO_HAND));
+
+            _visualEffects.Add(new Sprite(enemySpawnWarningTexture, new Vector2(x, y), 100));
+            _spawnTimes.Add(gameTime.TotalGameTime.TotalMilliseconds);
+        }
+        double[] copySpawnTimes = new double[_spawnTimes.Count];
+        _spawnTimes.CopyTo(copySpawnTimes);
+        foreach (double t in copySpawnTimes)
+        {
+            if (gameTime.TotalGameTime.TotalMilliseconds >= t + SPAWN_WARNING_DURATION)
+            {
+                _spawnTimes.Remove(t);
+                Vector2 pos = ((Sprite) _visualEffects[0])._position;
+                _entities.Add(new Enemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70), ConstructSpriteSheet(_enemyTextureList),
+                    pos, new Vector2(1, 1), 3, "eyeShooter", 10, Behavior.HAND_TO_HAND));
+                _visualEffects.RemoveAt(0);
+            }
         }
     }
 
@@ -158,6 +183,8 @@ public class World : Game
         attackSpeedUpgradeButton.addAction(() => player.increaseAttackSpeed());
         _buttons.Add(attackSpeedUpgradeButton);
 
+        enemySpawnWarningTexture = Content.Load<Texture2D>("spawnWarning");
+
         player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
             ConstructSpriteSheet(_playerTextureList),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
@@ -211,6 +238,11 @@ public class World : Game
                 e.Sprite.Draw(_spriteBatch);
                 //Used to show hitboxes
                 //_spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
+            }
+
+            foreach (Sprite s in _visualEffects)
+            {
+                s.Draw(_spriteBatch);
             }
 
             if (isPaused)
