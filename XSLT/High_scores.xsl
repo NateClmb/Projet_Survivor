@@ -11,7 +11,7 @@
             </head>
             <body>
                 <!-- Page title -->
-                <h1>Table of the high scores</h1>
+                <h1>High scores</h1>
 
                 <!-- Table of high scores -->
                 <table border="1">

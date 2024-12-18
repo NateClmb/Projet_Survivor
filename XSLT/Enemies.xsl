@@ -10,7 +10,7 @@
                 <link rel="stylesheet" type="text/css" href="../CSS/Style_enemies.css"/>
             </head>
             <body>
-                <h1>Table of the enemies</h1>
+                <h1>Enemies list</h1>
 
                 <!-- Table of enemies -->
                 <table border="1" cellpadding="5" cellspacing="0">
