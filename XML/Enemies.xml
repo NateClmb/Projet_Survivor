@@ -5,7 +5,7 @@
     <Enemy>
         <!-- Enemy's attributes -->
         <Name>Cyclope</Name>
-        <Type>Corps à corps</Type>
+        <Type>Hand to hand</Type>
         <HP>20</HP>
         <AttackDamage>10</AttackDamage>
         <Speed>1.0</Speed>
