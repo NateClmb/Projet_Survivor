@@ -77,7 +77,7 @@ public class World : Game
 
     private void spawnEnemy(GameTime gameTime)
     {
-        if ((int)gameTime.TotalGameTime.Ticks % (6 * (40 - player.level)) == 0)
+        if ((int)gameTime.TotalGameTime.Ticks % (4 * (40 - player.level)) == 0)
         {
             int x = random.Next(0, WorldWidth);
             int y = random.Next(0, WorldHeight);
@@ -139,7 +139,7 @@ public class World : Game
         Texture2D healthUpgradeTexture = Content.Load<Texture2D>("healthUpgrade");
         Texture2D speedUpgradeTexture = Content.Load<Texture2D>("speedUpgrade");
         Texture2D damageUpgradeTexture = Content.Load<Texture2D>("damageUpgrade");
-        Texture2D attackSpeedUpgradeTexture = Content.Load<Texture2D>("attackspeedUpgrade");
+        Texture2D attackSpeedUpgradeTexture = Content.Load<Texture2D>("attackSpeedUpgrade");
 
         Button healthUpgradeButton = new Button(healthUpgradeTexture,
             new Vector2(WorldWidth / 25, WorldHeight / 4));

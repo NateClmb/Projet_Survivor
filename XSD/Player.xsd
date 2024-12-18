@@ -1,0 +1,54 @@
+<!-- XSD file for the player stats XML file -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- PlayerStats element -->
+    <xsd:element name="PlayerStats">
+        <xsd:complexType>
+            <xsd:sequence>
+                <!-- Player element -->
+                <xsd:element name="Player">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <!-- Attributes with restrictions -->
+                            <xsd:element name="HP" type="xsd:integer">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/> <!-- Game over ! -->
+                                        <xsd:maxInclusive value="500"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                            
+                            <xsd:element name="Speed" type="xsd:string"/>
+                            <xsd:element name="AttackSpeed" type="xsd:decimal" >
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:decimal">
+                                        <xsd:minInclusive value="0.1"/>
+                                        <xsd:maxInclusive value="2"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                            
+                            <xsd:element name="Level" type="xsd:integer" >
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="1"/>
+                                        <xsd:maxInclusive value="100"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                            
+                            <xsd:element name="XP" type="xsd:integer" >
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="100000"/> <!-- 100k XP, that's a lot ! -->
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

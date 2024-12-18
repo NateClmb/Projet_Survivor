@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Root element (all the enemies) -->
+<Enemies>
+    <!-- First enemy -->
+    <Enemy>
+        <!-- Enemy's attributes -->
+        <Name>Cyclope</Name>
+        <Type>Corps à corps</Type>
+        <HP>20</HP>
+        <AttackDamage>10</AttackDamage>
+        <Speed>1.0</Speed>
+        <XPValue>20</XPValue>
+    </Enemy>
+    <!-- Second enemy -->
+    <Enemy>
+        <!-- Enemy's attributes -->
+        <Name>Boss</Name>
+        <Type>Distance</Type>
+        <HP>150</HP>
+        <AttackDamage>30</AttackDamage>
+        <Speed>1.2</Speed>
+        <XPValue>150</XPValue>
+    </Enemy>
+</Enemies>

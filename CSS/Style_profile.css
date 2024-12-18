@@ -1,0 +1,29 @@
+/* Style for the user profile page */
+
+/* Style for the body of the page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Style for the main title */
+h1 {
+    color: #5D3FD3;
+    text-shadow: 2px 2px #C0C0C0;
+}
+
+/* Style for the subtitle */
+h2 {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Style for the paragraphs */
+p {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+

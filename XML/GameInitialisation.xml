@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Root element -->
+<GameInitialization>
+    <!-- Game's settings -->
+    <Settings>
+        <Difficulty>Normal</Difficulty>
+        <Resolution width="1920" height="1080" />
+    </Settings>
+</GameInitialization>
+

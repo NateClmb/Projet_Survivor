@@ -1,0 +1,49 @@
+/* Style for the enemy list page */
+
+/* Style for the body of the page */
+body {
+    font-family: 'Verdana', sans-serif; 
+    background-color: #2c3e50; 
+    color: #ecf0f1; 
+    padding: 20px;
+}
+
+/* Style for the main title */
+h1 {
+    color: #e74c3c; 
+    text-align: center; 
+    text-transform: uppercase; 
+    text-shadow: 3px 3px #c0392b;
+}
+
+/* Style for the table */
+table {
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 20px 0; 
+}
+
+/* Style for header and data cells */
+th, td {
+    border: 1px solid #ecf0f1; 
+    padding: 12px; 
+    text-align: center; 
+}
+
+/* Style for header cells */
+th {
+    background-color: #e74c3c; 
+    color: #ecf0f1; 
+    text-transform: uppercase; 
+}
+
+/* Style for even rows */
+tr:nth-child(even) {
+    background-color: #34495e; 
+}
+
+/* Style for rows on hover */
+tr:hover {
+    background-color: #e74c3c; 
+    color: white; 
+}
