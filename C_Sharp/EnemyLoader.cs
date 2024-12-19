@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
+namespace Projet_Survivor.C_Sharp;
+
 public static class EnemyLoader
 {
     public static List<EnemyData> LoadEnemiesFromXML(string filePath)
