@@ -34,8 +34,9 @@ public class World : Game
     private SpriteFont _font;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
-    private ArrayList _enemyTextureList = new ArrayList();
-    private ArrayList _playerTextureList = new ArrayList();
+    private readonly ArrayList _enemyHandToHandTextureList = new ArrayList();
+    private readonly ArrayList _enemyDistanceTextureList = new ArrayList();
+    private readonly ArrayList _playerTextureList = new ArrayList();
 
     public static Player Player;
     public static Random Random;
@@ -106,9 +107,9 @@ public class World : Game
                 Vector2 pos = ((Sprite)_visualEffects[0]).Position;
                 var chooseEnemy = Random.Next() % 3 == 0
                     ? _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
-                        ConstructSpriteSheet(_enemyTextureList), pos, new Vector2(1, 1), 3, "eyeShooter", 15, 1))
-                    : _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
-                        ConstructSpriteSheet(_enemyTextureList), pos, new Vector2(1, 1), 3, "eyeShooter", 10, 1));
+                        ConstructSpriteSheet(_enemyDistanceTextureList), pos, new Vector2(2, 2), 3, "eyeShooter", 15, 1))
+                    : _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, 70, 45),
+                        ConstructSpriteSheet(_enemyHandToHandTextureList), pos, new Vector2(3, 3), 3, "eyeSprinter", 10, 1));
 
                 _visualEffects.RemoveAt(0);
             }
@@ -158,9 +159,14 @@ public class World : Game
             _playerTextureList.Add(Content.Load<Texture2D>("playerHit" + i.ToString()));
         }
 
+        for (int i = 0; i < 3; i++)
+        {
+            _enemyHandToHandTextureList.Add(Content.Load<Texture2D>("enemyDog" + i.ToString()));
+        }
+        
         for (int i = 0; i < 8; i++)
         {
-            _enemyTextureList.Add(Content.Load<Texture2D>("enemyShooter" + i.ToString()));
+            _enemyDistanceTextureList.Add(Content.Load<Texture2D>("enemyShooter" + i.ToString()));
         }
 
         DefaultProjectileTexture = Content.Load<Texture2D>("standardProjectile");
@@ -249,7 +255,7 @@ public class World : Game
             {
                 e.Sprite.Draw(_spriteBatch);
                 //Used to show hitboxes
-                //_spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
+                _spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
             }
 
             foreach (Sprite s in _visualEffects)

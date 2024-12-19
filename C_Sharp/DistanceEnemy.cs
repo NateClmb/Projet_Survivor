@@ -9,9 +9,9 @@ public class DistanceEnemy : Enemy
 {
     private readonly float MIN_DISTANCE_FROM_PLAYER = 400;
     private readonly float FIRING_DISTANCE = 600;
-    private double _lastTimeFired;
     private readonly double FIRE_RATE = 3000;
-    
+    private double _lastTimeFired;
+
     public DistanceEnemy(
         Rectangle hitbox,
         ArrayList sprite,
@@ -34,18 +34,18 @@ public class DistanceEnemy : Enemy
             // Move away from the player
             Position -= direction * Speed;
         }
-        else 
+        else
         {
             // Move closer to the player
             Position += direction * Speed;
         }
         // If within the desired range, do not move
-        
+
         var time = gameTime.TotalGameTime.TotalMilliseconds;
         if (time >= _lastTimeFired + FIRE_RATE && Vector2.Distance(Position, _player.Position) <= FIRING_DISTANCE)
             World.AddEntity(Fire(time));
     }
-    
+
     public Projectile Fire(double time)
     {
         _lastTimeFired = time;
@@ -53,5 +53,4 @@ public class DistanceEnemy : Enemy
             new Sprite(World.DefaultProjectileTexture, Position, 32), Position, new Vector2(5.0f, 5.0f),
             Vector2.Normalize(_player.Position - Position), 1, Damage, false, false);
     }
-    
 }

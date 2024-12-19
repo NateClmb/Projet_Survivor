@@ -49,7 +49,7 @@ public abstract class Enemy : Entity
     {
         foreach (Entity e in World.GetEntities())
         {
-            if (e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Enemy))
+            if (e.Hitbox.Intersects(Hitbox) && e is Enemy)
             {
                 Vector2 stepAside = new Vector2(Position.X - e.Position.X, Position.Y - e.Position.Y);
                 Position.X += 0.05f * stepAside.X;
