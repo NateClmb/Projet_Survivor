@@ -42,11 +42,14 @@ public class World : Game
     public static Random Random;
     private static bool _isPaused;
     private static bool _isGameOver;
-    private readonly double SPAWN_WARNING_DURATION = 1500;
+    private static double _gameOverTime;
+    private static int _nbKilled;
+    private static double _inGameTime;
     private int _difficultyLevel;
-    private double _inGameTime;
     public static bool IsPaused => _isPaused;
 
+    private readonly double SPAWN_WARNING_DURATION = 1500;
+    
     public World()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -75,6 +78,8 @@ public class World : Game
     public static void RemoveEntity(Entity e)
     {
         _entities.Remove(e);
+        if(e is Enemy)
+            _nbKilled++;
     }
 
     private ArrayList ConstructSpriteSheet(ArrayList textureList)
@@ -131,6 +136,7 @@ public class World : Game
     public static void GameOver()
     {
         _isGameOver = true;
+        _gameOverTime = _inGameTime;
     }
 
     protected override void Initialize()
@@ -248,6 +254,9 @@ public class World : Game
             _backgroundTexture = Content.Load<Texture2D>("gameOverScreen");
             _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, WorldWidth, WorldHeight), null, Color.White, 0.0f,
                 Vector2.Zero, SpriteEffects.None, 0f);
+            String endGameStats = "You killed " + _nbKilled.ToString() + " ennemies !\n";
+            endGameStats += "You survived " + Math.Round(_gameOverTime / 60) + " seconds !\n";
+            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth/2 - (endGameStats.Length - 1) * 10, 2 * WorldHeight/3), Color.White);
         }
         else
         {
