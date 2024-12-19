@@ -7,7 +7,7 @@
             <head>
                 <!-- Page header -->
                 <title>Player profile</title>
-                <link rel="stylesheet" type="text/css" href="../CSS/Style_profile.css"/>
+                <link rel="stylesheet" type="text/css" href="../CSS/StyleProfile.css"/>
 
             </head>
             <body>

@@ -7,7 +7,7 @@
             <head>
                 <!-- Page header -->
                 <title>Enemies list</title>
-                <link rel="stylesheet" type="text/css" href="../CSS/Style_enemies.css"/>
+                <link rel="stylesheet" type="text/css" href="../CSS/StyleEnemies.css"/>
             </head>
             <body>
                 <h1>Enemies list</h1>

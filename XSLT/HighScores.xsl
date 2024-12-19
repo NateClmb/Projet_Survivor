@@ -7,7 +7,7 @@
             <head>
                 <!-- Page header -->
                 <title>High scores</title>
-                <link rel="stylesheet" type="text/css" href="../CSS/Style_scores.css"/>
+                <link rel="stylesheet" type="text/css" href="../CSS/StyleScores.css"/>
             </head>
             <body>
                 <!-- Page title -->

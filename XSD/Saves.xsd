@@ -10,7 +10,7 @@
                         <xsd:sequence>
                             <!-- Save attributes with restrictions-->
                             <xsd:element name="Username" type="xsd:string" />
-                            <xsd:element name="Date" type="xsd:date" >
+                            <xsd:element name="Date">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:date">
                                         <xsd:minInclusive value="2024-12-01"/> <!-- Release date of the beta version -->
@@ -18,11 +18,11 @@
                                     </xsd:restriction>
                                 </xsd:simpleType>
                             </xsd:element>
-                            
-                            <xsd:element name="Score" type="xsd:integer">
+
+                            <xsd:element name="Score">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">
-                                        <xsd:minInclusive value="0"/> 
+                                        <xsd:minInclusive value="0"/>
                                         <xsd:maxInclusive value="1000000"/> <!-- Nice achievement, let's relax now ! -->
                                     </xsd:restriction>
                                 </xsd:simpleType>

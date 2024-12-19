@@ -10,7 +10,7 @@
                         <xsd:sequence>
                             <!-- Attributes with restrictions -->
                             <xsd:element name="Username" type="xsd:string" />
-                            <xsd:element name="Age" type="xsd:integer">
+                            <xsd:element name="Age">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">
                                         <xsd:minInclusive value="12"/> <!-- PEGI 12 -->
@@ -18,8 +18,8 @@
                                     </xsd:restriction>
                                 </xsd:simpleType>
                             </xsd:element>
-                            
-                            <xsd:element name="HighScore" type="xsd:integer">
+
+                            <xsd:element name="HighScore">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">
                                         <xsd:minInclusive value="0"/> <!-- Quite a bad game -->
@@ -27,8 +27,8 @@
                                     </xsd:restriction>
                                 </xsd:simpleType>
                             </xsd:element>
-                            
-                            <xsd:element name="GamesPlayed" type="xsd:integer">
+
+                            <xsd:element name="GamesPlayed">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">
                                         <xsd:minInclusive value="0"/> <!-- No games played, makes me cry -->
