@@ -19,7 +19,7 @@ public class HandToHandEnemy : Enemy
     {
     }
 
-    protected override void EnemyMove()
+    protected override void EnemyMove(GameTime gameTime)
     {
         Vector2 direction = Vector2.Normalize(_player.Position - Position);
         Position += direction * Speed;

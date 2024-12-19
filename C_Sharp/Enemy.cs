@@ -34,7 +34,7 @@ public abstract class Enemy : Entity
 
     public override void Move(GameTime gameTime)
     {
-        EnemyMove();
+        EnemyMove(gameTime);
         SetHitboxPosition();
         GestionAnimation(gameTime);
         HitTest(gameTime,
@@ -43,7 +43,7 @@ public abstract class Enemy : Entity
         Die();
     }
 
-    protected abstract void EnemyMove();
+    protected abstract void EnemyMove(GameTime gameTime);
 
     private void TestOverlapseWithEnemy()
     {
