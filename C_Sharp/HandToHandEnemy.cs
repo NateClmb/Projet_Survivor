@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Projet_Survivor.C_Sharp;
 

@@ -255,7 +255,7 @@ public class World : Game
             {
                 e.Sprite.Draw(_spriteBatch);
                 //Used to show hitboxes
-                _spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
+                //_spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
             }
 
             foreach (Sprite s in _visualEffects)
