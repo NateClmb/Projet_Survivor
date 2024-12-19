@@ -8,7 +8,7 @@
             <xsl:for-each select="//GameSaves/Save">
                 <Game>
                     <!-- Game values -->
-                    <PlayerName><xsl:value-of select="//Username"/></PlayerName>
+                    <PlayerName><xsl:value-of select="Username"/></PlayerName>
                     <Date><xsl:value-of select="Date"/></Date>
                     <Score><xsl:value-of select="Score"/></Score>
                 </Game>
