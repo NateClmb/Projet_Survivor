@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace Projet_Survivor.C_Sharp;
 
@@ -14,17 +15,15 @@ public class World : Game
     public static int WorldWidth;
     public static int WorldHeight;
 
-    //liste des entités présentes à un instant t
-    //Le joueur est toujours l'entité à l'indice 0
-    private static ArrayList _entities = new ArrayList();
-
-    private static ArrayList _buttons = new ArrayList();
-
+    //List of entities existing at an instant
+    //The player is always the entity at index 0
+    private static ArrayList _entities = new();
+    //List containing buttons showed when player levels up
+    private static ArrayList _buttons = new();
     //List of visual effects to draw on screen such as enemy spawn warning
-    private static ArrayList _visualEffects = new ArrayList();
-
+    private static ArrayList _visualEffects = new();
     //List containing spawned enemy time during last second
-    private static ArrayList _spawnTimes = new ArrayList();
+    private static ArrayList _spawnTimes = new();
 
     public static Texture2D XpBarBackground;
     public static Texture2D XpBarForeground;
@@ -34,9 +33,9 @@ public class World : Game
     private SpriteFont _font;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
-    private readonly ArrayList _enemyHandToHandTextureList = new ArrayList();
-    private readonly ArrayList _enemyDistanceTextureList = new ArrayList();
-    private readonly ArrayList _playerTextureList = new ArrayList();
+    private readonly ArrayList _enemyHandToHandTextureList = new();
+    private readonly ArrayList _enemyDistanceTextureList = new();
+    private readonly ArrayList _playerTextureList = new();
 
     public static Player Player;
     public static Random Random;
@@ -139,6 +138,25 @@ public class World : Game
         _gameOverTime = _inGameTime;
     }
 
+    private void Restart()
+    {
+        Random = new Random();
+        _isPaused = false;
+        _isGameOver = false;
+        _gameOverTime = 0;
+        _nbKilled = 0;
+        _inGameTime = 0;
+        _difficultyLevel = 0;
+        _entities.Clear();
+        _buttons.Clear();
+        _visualEffects.Clear();
+        _spawnTimes.Clear();
+        _enemyHandToHandTextureList.Clear();
+        _enemyDistanceTextureList.Clear();
+        _playerTextureList.Clear();
+        LoadContent();
+    }
+
     protected override void Initialize()
     {
         _graphics.PreferredBackBufferWidth = WorldWidth;
@@ -152,7 +170,7 @@ public class World : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        _font = Content.Load<SpriteFont>("Winter_Minie");
+        _font = Content.Load<SpriteFont>("font");
 
         _backgroundTexture = Content.Load<Texture2D>("background");
 
@@ -214,10 +232,15 @@ public class World : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        if (_isGameOver) ;
+        if (_isGameOver)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                Restart();
+            }
+        }
         else if (_isPaused)
         {
             foreach (Button button in _buttons)
@@ -256,7 +279,8 @@ public class World : Game
                 Vector2.Zero, SpriteEffects.None, 0f);
             String endGameStats = "You killed " + _nbKilled.ToString() + " ennemies !\n";
             endGameStats += "You survived " + Math.Round(_gameOverTime / 60) + " seconds !\n";
-            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth/2 - (endGameStats.Length - 1) * 10, 2 * WorldHeight/3), Color.White);
+            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth/6, 2 * WorldHeight/3), Color.White);
+            _spriteBatch.DrawString(_font, "Press Enter to restart", new Vector2(WorldWidth/2 - 160, 7 * WorldHeight/8), Color.White);
         }
         else
         {
