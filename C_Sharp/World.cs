@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
-using System.Net.Mime;
 
-namespace Projet_Survivor;
+namespace Projet_Survivor.C_Sharp;
 
 public class World : Game
 {
@@ -27,28 +26,25 @@ public class World : Game
     //List containing spawned enemy time during last second
     private static ArrayList _spawnTimes = new ArrayList();
 
-    public static Texture2D xpBarBackground;
-    public static Texture2D xpBarForeground;
-    public static Texture2D defaultProjectileTexture;
-    private Texture2D enemySpawnWarningTexture;
-    private Texture2D backgroundTexture;
-    private SpriteFont font;
+    public static Texture2D XpBarBackground;
+    public static Texture2D XpBarForeground;
+    public static Texture2D DefaultProjectileTexture;
+    private Texture2D _enemySpawnWarningTexture;
+    private Texture2D _backgroundTexture;
+    private SpriteFont _font;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
     private ArrayList _enemyTextureList = new ArrayList();
     private ArrayList _playerTextureList = new ArrayList();
 
-    public static Player player;
-    public static Random random;
-    private static bool isPaused;
-    private static bool isGameOver;
+    public static Player Player;
+    public static Random Random;
+    private static bool _isPaused;
+    private static bool _isGameOver;
     private readonly double SPAWN_WARNING_DURATION = 1500;
-    private int level;
-    private double inGameTime;
-    public static bool IsPaused
-    {
-        get => isPaused;
-    }
+    private int _difficultyLevel;
+    private double _inGameTime;
+    public static bool IsPaused => _isPaused;
 
     public World()
     {
@@ -56,11 +52,11 @@ public class World : Game
         WorldWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
         WorldHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
         Content.RootDirectory = "Content/images";
-        isPaused = false;
-        isGameOver = false;
+        _isPaused = false;
+        _isGameOver = false;
         IsMouseVisible = true;
-        level = 0;
-        random = new Random();
+        _difficultyLevel = 0;
+        Random = new Random();
     }
 
     public static void AddEntity(Entity e)
@@ -89,16 +85,17 @@ public class World : Game
         return spriteSheet;
     }
 
-    private void spawnEnemy(GameTime gameTime)
+    private void SpawnEnemy(GameTime gameTime)
     {
-        if ((int)gameTime.TotalGameTime.Ticks % (Math.Max(30, 300 - level * 10)) == 0)
+        if ((int)gameTime.TotalGameTime.Ticks % (Math.Max(30, 300 - _difficultyLevel * 10)) == 0)
         {
-            int x = random.Next(0, WorldWidth);
-            int y = random.Next(0, WorldHeight);
+            int x = Random.Next(0, WorldWidth);
+            int y = Random.Next(0, WorldHeight);
 
-            _visualEffects.Add(new Sprite(enemySpawnWarningTexture, new Vector2(x, y), 100));
+            _visualEffects.Add(new Sprite(_enemySpawnWarningTexture, new Vector2(x, y), 100));
             _spawnTimes.Add(gameTime.TotalGameTime.TotalMilliseconds);
         }
+
         double[] copySpawnTimes = new double[_spawnTimes.Count];
         _spawnTimes.CopyTo(copySpawnTimes);
         foreach (double t in copySpawnTimes)
@@ -106,8 +103,9 @@ public class World : Game
             if (gameTime.TotalGameTime.TotalMilliseconds >= t + SPAWN_WARNING_DURATION)
             {
                 _spawnTimes.Remove(t);
-                Vector2 pos = ((Sprite) _visualEffects[0])._position;
-                _entities.Add(new Enemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70), ConstructSpriteSheet(_enemyTextureList),
+                Vector2 pos = ((Sprite)_visualEffects[0]).Position;
+                _entities.Add(new Enemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
+                    ConstructSpriteSheet(_enemyTextureList),
                     pos, new Vector2(1, 1), 3, "eyeShooter", 10, Behavior.HAND_TO_HAND));
                 _visualEffects.RemoveAt(0);
             }
@@ -116,17 +114,17 @@ public class World : Game
 
     public static void Pause()
     {
-        isPaused = true;
+        _isPaused = true;
     }
 
     public static void Unpause()
     {
-        isPaused = false;
+        _isPaused = false;
     }
 
     public static void GameOver()
     {
-        isGameOver = true;
+        _isGameOver = true;
     }
 
     protected override void Initialize()
@@ -141,10 +139,10 @@ public class World : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        
-        font = Content.Load<SpriteFont>("Winter_Minie");
-        
-        backgroundTexture = Content.Load<Texture2D>("background");
+
+        _font = Content.Load<SpriteFont>("Winter_Minie");
+
+        _backgroundTexture = Content.Load<Texture2D>("background");
 
         _playerTextureList.Add(Content.Load<Texture2D>("playerStill"));
         for (int i = 0; i < 2; i++)
@@ -162,9 +160,9 @@ public class World : Game
             _enemyTextureList.Add(Content.Load<Texture2D>("enemyShooter" + i.ToString()));
         }
 
-        defaultProjectileTexture = Content.Load<Texture2D>("standardProjectile");
-        xpBarBackground = Content.Load<Texture2D>("xp_bar_background");
-        xpBarForeground = Content.Load<Texture2D>("xp_bar_foreground");
+        DefaultProjectileTexture = Content.Load<Texture2D>("standardProjectile");
+        XpBarBackground = Content.Load<Texture2D>("xp_bar_background");
+        XpBarForeground = Content.Load<Texture2D>("xp_bar_foreground");
 
         Texture2D healthUpgradeTexture = Content.Load<Texture2D>("healthUpgrade");
         Texture2D speedUpgradeTexture = Content.Load<Texture2D>("speedUpgrade");
@@ -173,28 +171,28 @@ public class World : Game
 
         Button healthUpgradeButton = new Button(healthUpgradeTexture,
             new Vector2(WorldWidth / 25, WorldHeight / 4));
-        healthUpgradeButton.addAction(() => player.increaseMaxHp());
+        healthUpgradeButton.AddAction(() => Player.IncreaseMaxHp());
         _buttons.Add(healthUpgradeButton);
         Button speedUpgradeButton =
             new Button(speedUpgradeTexture, new Vector2((5 + 2) * WorldWidth / 25, WorldHeight / 4));
-        speedUpgradeButton.addAction(() => player.increaseMaxSpeed());
+        speedUpgradeButton.AddAction(() => Player.IncreaseMaxSpeed());
         _buttons.Add(speedUpgradeButton);
         Button damageUpgradeButton =
             new Button(damageUpgradeTexture, new Vector2((5 * 2 + 3) * WorldWidth / 25, WorldHeight / 4));
-        damageUpgradeButton.addAction(() => player.increaseDamage());
+        damageUpgradeButton.AddAction(() => Player.IncreaseDamage());
         _buttons.Add(damageUpgradeButton);
         Button attackSpeedUpgradeButton = new Button(attackSpeedUpgradeTexture,
             new Vector2((5 * 3 + 4) * WorldWidth / 25, WorldHeight / 4));
-        attackSpeedUpgradeButton.addAction(() => player.increaseAttackSpeed());
+        attackSpeedUpgradeButton.AddAction(() => Player.IncreaseAttackSpeed());
         _buttons.Add(attackSpeedUpgradeButton);
 
-        enemySpawnWarningTexture = Content.Load<Texture2D>("spawnWarning");
+        _enemySpawnWarningTexture = Content.Load<Texture2D>("spawnWarning");
 
-        player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
+        Player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
             ConstructSpriteSheet(_playerTextureList),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             5, 1.0);
-        _entities.Add(player);
+        _entities.Add(Player);
     }
 
     protected override void Update(GameTime gameTime)
@@ -202,8 +200,8 @@ public class World : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        if (isGameOver) ;
-        else if (isPaused)
+        if (_isGameOver) ;
+        else if (_isPaused)
         {
             foreach (Button button in _buttons)
             {
@@ -212,12 +210,13 @@ public class World : Game
         }
         else
         {
-            inGameTime++;
-            if (inGameTime % 600 == 0)
+            _inGameTime++;
+            if (_inGameTime % 600 == 0)
             {
-                level++;
+                _difficultyLevel++;
             }
-            spawnEnemy(gameTime);
+
+            SpawnEnemy(gameTime);
             Entity[] copyEntities = new Entity[_entities.Count];
             _entities.CopyTo(copyEntities);
             foreach (Entity e in copyEntities)
@@ -233,16 +232,16 @@ public class World : Game
     {
         GraphicsDevice.Clear(Color.White);
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        if (isGameOver)
+        if (_isGameOver)
         {
-            backgroundTexture = Content.Load<Texture2D>("gameOverScreen");
-            _spriteBatch.Draw(backgroundTexture, new Rectangle(0, 0, WorldWidth, WorldHeight), null, Color.White, 0.0f,
+            _backgroundTexture = Content.Load<Texture2D>("gameOverScreen");
+            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, WorldWidth, WorldHeight), null, Color.White, 0.0f,
                 Vector2.Zero, SpriteEffects.None, 0f);
         }
         else
         {
-            _spriteBatch.Draw(backgroundTexture, Vector2.Zero, Color.White);
-            _spriteBatch.DrawString(font, player.getHp(), new Vector2(50, 100), Color.White);
+            _spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
+            _spriteBatch.DrawString(_font, Player.GetHp(), new Vector2(50, 100), Color.White);
             foreach (Entity e in _entities)
             {
                 e.Sprite.Draw(_spriteBatch);
@@ -255,7 +254,7 @@ public class World : Game
                 s.Draw(_spriteBatch);
             }
 
-            if (isPaused)
+            if (_isPaused)
             {
                 foreach (Button button in _buttons)
                 {
@@ -263,7 +262,7 @@ public class World : Game
                 }
             }
 
-            player.XpBar.Draw(_spriteBatch);
+            Player.XpBar.Draw(_spriteBatch);
         }
 
         _spriteBatch.End();

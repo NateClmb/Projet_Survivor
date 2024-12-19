@@ -1,16 +1,12 @@
-using System;
-using Microsoft.VisualBasic.FileIO;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace Projet_Survivor;
+namespace Projet_Survivor.C_Sharp;
 
 public class Projectile : Entity
 {
-    private Vector2 direction;
-    private bool smart;
-    private bool friendly;
+    private readonly Vector2 _direction;
+    private bool _smart;
+    private readonly bool _friendly;
 
     private static readonly double HIT_COUNTDOWN = 100;
 
@@ -24,45 +20,44 @@ public class Projectile : Entity
         bool smart,
         bool friendly) : base(hitbox, sprite, pos, spd, piercePotential)
     {
-        this.damage = dmg;
-        this.direction = direction;
-        this.smart = smart;
-        this.friendly = friendly;
+        this.Damage = dmg;
+        this._direction = direction;
+        this._smart = smart;
+        this._friendly = friendly;
     }
 
     public override void Move(GameTime gameTime)
     {
-        Position += direction * Speed;
-        setHitboxPosition();
-        autoDestruct();
-        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && (this.friendly && e.GetType() == typeof(Enemy) ||
-                                                               !friendly && e.GetType() == typeof(Player)));
+        Position += _direction * Speed;
+        SetHitboxPosition();
+        AutoDestruct();
+        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && (this._friendly && e.GetType() == typeof(Enemy) ||
+                                                               !_friendly && e.GetType() == typeof(Player)));
     }
 
     protected override void IsHit(int damage, GameTime gameTime)
     {
         double time = gameTime.TotalGameTime.TotalMilliseconds;
-        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        if (time >= LastTimeHit + HIT_COUNTDOWN)
         {
-            lastTimeHit = time;
-            _hp -= damage;
+            LastTimeHit = time;
+            Hp -= damage;
         }
     }
 
-    public bool isFriendly()
+    public bool IsFriendly()
     {
-        return friendly;
+        return _friendly;
     }
 
-    private void autoDestruct()
+    private void AutoDestruct()
     {
         if (Position.X < 0 || Position.X > World.WorldWidth || Position.Y < 0 || Position.Y > World.WorldHeight ||
-            _hp <= 0)
+            Hp <= 0)
             World.RemoveEntity(this);
     }
 
     protected override void GestionAnimation(GameTime gameTime)
     {
-        return;
     }
 }
