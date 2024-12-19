@@ -175,8 +175,8 @@ public class Player : Entity
         //Fin attaque
 
         HitTest(gameTime,
-            e => e.Hitbox.Intersects(Hitbox) && (e.GetType() == typeof(Enemy) ||
-                                                 (e.GetType() == typeof(Projectile) && !((Projectile)e).IsFriendly())));
+            e => e.Hitbox.Intersects(Hitbox) && (e is Enemy ||
+                                                 (e is Projectile projectile && !projectile.IsFriendly())));
         if (gameTime.TotalGameTime.TotalMilliseconds >= LastTimeHit + HIT_COUNTDOWN)
             _hit = false;
     }

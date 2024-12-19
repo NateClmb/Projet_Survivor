@@ -104,9 +104,12 @@ public class World : Game
             {
                 _spawnTimes.Remove(t);
                 Vector2 pos = ((Sprite)_visualEffects[0]).Position;
-                _entities.Add(new Enemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
-                    ConstructSpriteSheet(_enemyTextureList),
-                    pos, new Vector2(1, 1), 3, "eyeShooter", 10, Behavior.HAND_TO_HAND));
+                var chooseEnemy = Random.Next() % 3 == 0
+                    ? _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
+                        ConstructSpriteSheet(_enemyTextureList), pos, new Vector2(1, 1), 3, "eyeShooter", 15, 1))
+                    : _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
+                        ConstructSpriteSheet(_enemyTextureList), pos, new Vector2(1, 1), 3, "eyeShooter", 10, 1));
+
                 _visualEffects.RemoveAt(0);
             }
         }

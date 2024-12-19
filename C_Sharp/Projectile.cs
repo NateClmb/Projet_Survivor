@@ -31,8 +31,8 @@ public class Projectile : Entity
         Position += _direction * Speed;
         SetHitboxPosition();
         AutoDestruct();
-        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && (this._friendly && e.GetType() == typeof(Enemy) ||
-                                                               !_friendly && e.GetType() == typeof(Player)));
+        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && (this._friendly && e is Enemy ||
+                                                               !_friendly && e is Player));
     }
 
     protected override void IsHit(int damage, GameTime gameTime)

@@ -4,12 +4,11 @@ using Microsoft.Xna.Framework;
 
 namespace Projet_Survivor.C_Sharp;
 
-public class Enemy : Entity
+public abstract class Enemy : Entity
 {
     private String _name;
     private int XpValue { get; init; }
-    private Behavior _behavior;
-    private readonly Player _player = World.Player;
+    protected readonly Player _player = World.Player;
 
     private int _frameCounter;
     private double _lastTimeFrame;
@@ -17,49 +16,34 @@ public class Enemy : Entity
 
     private static readonly double HIT_COUNTDOWN = 100;
 
-    public Enemy(Rectangle hitbox,
+    protected Enemy(Rectangle hitbox,
         ArrayList sprite,
         Vector2 pos,
         Vector2 speed,
         int hp,
         String name,
         int xpValue,
-        Behavior behavior) : base(hitbox, sprite, pos, speed, hp)
+        int damage) : base(hitbox, sprite, pos, speed, hp)
     {
+        this.Damage = damage;
         this._name = name;
         this.XpValue = xpValue;
-        this._behavior = behavior;
     }
 
     //l'ennemi se rapproche en permanence du joueur
 
     public override void Move(GameTime gameTime)
     {
-        if (Position.X > _player.Position.X)
-        {
-            Position.X -= Speed.X;
-        }
-        else
-        {
-            Position.X += Speed.X;
-        }
-
-        if (Position.Y > _player.Position.Y)
-        {
-            Position.Y -= Speed.Y;
-        }
-        else
-        {
-            Position.Y += Speed.Y;
-        }
-
+        EnemyMove();
         SetHitboxPosition();
         GestionAnimation(gameTime);
         HitTest(gameTime,
-            e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).IsFriendly());
+            e => e.Hitbox.Intersects(Hitbox) && e is Projectile projectile && projectile.IsFriendly());
         TestOverlapseWithEnemy();
         Die();
     }
+
+    protected abstract void EnemyMove();
 
     private void TestOverlapseWithEnemy()
     {
