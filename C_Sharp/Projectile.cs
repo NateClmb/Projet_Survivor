@@ -1,4 +1,6 @@
+using System;
 using Microsoft.Xna.Framework;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Projet_Survivor.C_Sharp;
 
@@ -24,6 +26,12 @@ public class Projectile : Entity
         this._direction = direction;
         this._smart = smart;
         this._friendly = friendly;
+        AdjustSprite(_direction);
+    }
+
+    private void AdjustSprite(Vector2 direction)
+    {
+        Sprite.Rotation = 2 * Math.Atan2(direction.Y - 0, direction.X + 1);
     }
 
     public override void Move(GameTime gameTime)

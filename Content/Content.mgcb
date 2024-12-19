@@ -97,6 +97,18 @@
 /processorParam:TextureFormat=Color
 /build:images/enemyDog0.png
 
+#begin images/enemyDog0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/enemyDog0.png
+
 #begin images/enemyDog1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -108,6 +120,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/enemyDog1.png
+
+#begin images/enemyDog1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/enemyDog1.png
+
+#begin images/enemyDog2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/enemyDog2.png
 
 #begin images/enemyDog2.png
 /importer:TextureImporter
@@ -313,6 +349,20 @@
 /processorParam:TextureFormat=Color
 /build:images/enemyShooter7.png
 
+#begin images/font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:images/font.spritefont
+
+#begin images/font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:images/font.spritefont
+
 #begin images/gameOverScreen.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -768,20 +818,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/white-down-arrow-icon-8.png
-
-#begin images/Winter_Minie.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:images/Winter_Minie.spritefont
-
-#begin images/Winter_Minie.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:images/Winter_Minie.spritefont
 
 #begin images/xp_bar_background.png
 /importer:TextureImporter

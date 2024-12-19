@@ -14,17 +14,15 @@ public class World : Game
     public static int WorldWidth;
     public static int WorldHeight;
 
-    //liste des entités présentes à un instant t
-    //Le joueur est toujours l'entité à l'indice 0
-    private static ArrayList _entities = new ArrayList();
-
-    private static ArrayList _buttons = new ArrayList();
-
+    //List of entities existing at an instant
+    //The player is always the entity at index 0
+    private static ArrayList _entities = new();
+    //List containing buttons showed when player levels up
+    private static ArrayList _buttons = new();
     //List of visual effects to draw on screen such as enemy spawn warning
-    private static ArrayList _visualEffects = new ArrayList();
-
+    private static ArrayList _visualEffects = new();
     //List containing spawned enemy time during last second
-    private static ArrayList _spawnTimes = new ArrayList();
+    private static ArrayList _spawnTimes = new();
 
     public static Texture2D XpBarBackground;
     public static Texture2D XpBarForeground;
@@ -34,9 +32,9 @@ public class World : Game
     private SpriteFont _font;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
-    private readonly ArrayList _enemyHandToHandTextureList = new ArrayList();
-    private readonly ArrayList _enemyDistanceTextureList = new ArrayList();
-    private readonly ArrayList _playerTextureList = new ArrayList();
+    private readonly ArrayList _enemyHandToHandTextureList = new();
+    private readonly ArrayList _enemyDistanceTextureList = new();
+    private readonly ArrayList _playerTextureList = new();
 
     public static Player Player;
     public static Random Random;
@@ -152,7 +150,7 @@ public class World : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        _font = Content.Load<SpriteFont>("Winter_Minie");
+        _font = Content.Load<SpriteFont>("font");
 
         _backgroundTexture = Content.Load<Texture2D>("background");
 

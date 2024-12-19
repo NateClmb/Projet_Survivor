@@ -11,6 +11,7 @@ public class Sprite
     private static readonly int SizeMax = 256;
     private static readonly int SizeMin = -SizeMax;
     public bool Flipped;
+    public double Rotation;
 
 
     public Color Color = Color.White;
@@ -55,7 +56,7 @@ public class Sprite
             Rect,
             null,
             Color,
-            0.0f,
+            (float) Rotation,
             origin,
             effects,
             0f);
