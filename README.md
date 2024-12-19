@@ -3,6 +3,7 @@
 ## Game Description
 "**Survivor**" is a shoot'em up game where you control a character who must defeat waves of enemies to upgrade his abilities.
 As you kill enemies, you collect XP, which allow you to upgrade your character's abilities, making him stronger or faster.
+**Surviving is your only goal !**
 The game is built using **MonoGame** for the game engine, and it relies on **XML** for data management, and **C#** for the game logic.
 
 ### Key Features
