@@ -1,44 +1,39 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace Projet_Survivor;
+namespace Projet_Survivor.C_Sharp;
 
 public class Sprite
 {
-    private Texture2D _texture;
-    public Vector2 _position;
-    private int _size;
-    private static readonly int _sizeMax = 256;
-    private static readonly int _sizeMin = -_sizeMax;
-    public bool Flipped = false;
+    private readonly Texture2D _texture;
+    public Vector2 Position;
+    private readonly int _size;
+    private static readonly int SizeMax = 256;
+    private static readonly int SizeMin = -SizeMax;
+    public bool Flipped;
 
 
-    private Color _color = Color.White;
+    private readonly Color _color = Color.White;
 
-    public Texture2D _Texture
+    public Texture2D Texture
     {
         get => _texture;
         init => _texture = value;
     }
 
-    public int _Size
+    public int Size
     {
         get => _size;
-        set => _size = value >= _sizeMin ? (value <= _sizeMax ? value : _sizeMax) : _sizeMin;
+        private init => _size = value >= SizeMin ? (value <= SizeMax ? value : SizeMax) : SizeMin;
     }
 
-    public Rectangle _Rect
-    {
-        get => new Rectangle((int)_position.X, (int)_position.Y, _size, _size);
-    }
+    private Rectangle Rect => new Rectangle((int)Position.X, (int)Position.Y, _size, _size);
 
     public Sprite(Texture2D texture, Vector2 position, int size)
     {
-        _Texture = texture;
-        _position = position;
-        _Size = size;
+        Texture = texture;
+        Position = position;
+        Size = size;
     }
 
     public void Flip()
@@ -49,28 +44,20 @@ public class Sprite
     public void Update(GameTime gameTime, Entity caller)
     {
         caller.Move(gameTime);
-        _position = caller.Position;
+        Position = caller.Position;
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        SpriteEffects effects;
         var origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f);
-        if (Flipped)
-        {
-            effects = SpriteEffects.FlipHorizontally;
-        }
-        else
-        {
-            effects = SpriteEffects.None;
-        }
-        spriteBatch.Draw(_texture, 
-            _Rect, 
-            null, 
-            _color, 
+        SpriteEffects effects = Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        spriteBatch.Draw(_texture,
+            Rect,
+            null,
+            _color,
             0.0f,
-            origin, 
-            effects, 
-            0f); 
+            origin,
+            effects,
+            0f);
     }
 }
