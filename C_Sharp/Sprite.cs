@@ -13,7 +13,7 @@ public class Sprite
     public bool Flipped;
 
 
-    private readonly Color _color = Color.White;
+    public Color Color = Color.White;
 
     public Texture2D Texture
     {
@@ -54,7 +54,7 @@ public class Sprite
         spriteBatch.Draw(_texture,
             Rect,
             null,
-            _color,
+            Color,
             0.0f,
             origin,
             effects,

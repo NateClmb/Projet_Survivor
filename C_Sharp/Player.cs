@@ -202,7 +202,7 @@ public class Player : Entity
             }
 
             bool flip = Sprite.Flipped;
-            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
+            //Update Sprite's position because the entity may have moved 
             Sprite.Position = this.Position;
             Sprite.Flipped = flip;
             Sprite.Flipped = Speed.X > 0.1f;

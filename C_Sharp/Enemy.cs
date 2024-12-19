@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Projet_Survivor.C_Sharp;
 
 public abstract class Enemy : Entity
 {
-    private String _name;
+    protected String Name;
+    protected bool Hit;
     private int XpValue { get; init; }
     protected readonly Player _player = World.Player;
 
@@ -26,7 +28,7 @@ public abstract class Enemy : Entity
         int damage) : base(hitbox, sprite, pos, speed, hp)
     {
         this.Damage = damage;
-        this._name = name;
+        this.Name = name;
         this.XpValue = xpValue;
     }
 
@@ -40,7 +42,8 @@ public abstract class Enemy : Entity
         HitTest(gameTime,
             e => e.Hitbox.Intersects(Hitbox) && e is Projectile projectile && projectile.IsFriendly());
         TestOverlapseWithEnemy();
-        Die();
+        if (gameTime.TotalGameTime.TotalMilliseconds >= LastTimeHit + HIT_COUNTDOWN)
+            Sprite.Color = Color.White;
     }
 
     protected abstract void EnemyMove(GameTime gameTime);
@@ -58,15 +61,6 @@ public abstract class Enemy : Entity
         }
     }
 
-    private void Die()
-    {
-        if (Hp <= 0)
-        {
-            _player.GainXp(XpValue);
-            World.GetEntities().Remove(this);
-        }
-    }
-
     protected override void GestionAnimation(GameTime gameTime)
     {
         Sprite.Flipped = this.Position.X > World.Player.Position.X - 10;
@@ -77,7 +71,7 @@ public abstract class Enemy : Entity
             _frameCounter = (_frameCounter + 1) % SpriteSheet.Count;
             bool flip = Sprite.Flipped;
             Sprite = (Sprite)SpriteSheet[_frameCounter];
-            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
+            //Update Sprite's position because the entity may have moved 
             Sprite.Position = this.Position;
             Sprite.Flipped = flip;
         }
@@ -88,8 +82,15 @@ public abstract class Enemy : Entity
         double time = gameTime.TotalGameTime.TotalMilliseconds;
         if (time >= LastTimeHit + HIT_COUNTDOWN)
         {
+            Sprite.Color = Color.Red;
             LastTimeHit = time;
             Hp -= damage;
+        }
+        
+        if (Hp <= 0)
+        {
+            _player.GainXp(XpValue);
+            World.RemoveEntity(this);
         }
     }
 }

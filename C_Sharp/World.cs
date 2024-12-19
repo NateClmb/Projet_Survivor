@@ -65,9 +65,11 @@ public class World : Game
         _entities.Add(e);
     }
 
-    public static ArrayList GetEntities()
+    public static Entity[] GetEntities()
     {
-        return _entities;
+        Entity[] entities = new Entity[_entities.Count];
+        _entities.CopyTo(entities);
+        return entities;
     }
 
     public static void RemoveEntity(Entity e)
@@ -253,7 +255,7 @@ public class World : Game
             _spriteBatch.DrawString(_font, Player.GetHp(), new Vector2(50, 100), Color.White);
             foreach (Entity e in _entities)
             {
-                e.Sprite.Draw(_spriteBatch);
+                e.Draw(_spriteBatch);
                 //Used to show hitboxes
                 //_spriteBatch.Draw(Content.Load<Texture2D>("hitboxDebug"), e.Hitbox, Color.White);
             }

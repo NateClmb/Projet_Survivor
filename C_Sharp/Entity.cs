@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Projet_Survivor.C_Sharp;
 
@@ -67,5 +68,10 @@ public abstract class Entity
         }
 
         Hp = hp;
+    }
+
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        Sprite.Draw(spriteBatch);
     }
 }
