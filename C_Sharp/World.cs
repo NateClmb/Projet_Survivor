@@ -113,7 +113,15 @@ public class World : Game
             if (gameTime.TotalGameTime.TotalMilliseconds >= t + SPAWN_WARNING_DURATION)
             {
                 
-                Behavior behavior = data.Type == "Corps à corps" ? Behavior.HAND_TO_HAND : Behavior.DISTANCE;
+                Behavior behavior;
+                if (data.Type == "Corps à corps")
+                {
+                    behavior = Behavior.HAND_TO_HAND;
+                }
+                else
+                {
+                    behavior = Behavior.DISTANCE;
+                }
                 
                 _spawnTimes.Remove(t);
                 Vector2 pos = ((Sprite)_visualEffects[0]).Position;
@@ -130,16 +138,14 @@ public class World : Game
                 }
                 else if (behavior == Behavior.HAND_TO_HAND)
                 {
-                    {
-                        _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, data.Rectangle_X, data.Rectangle_Y),
-                            ConstructSpriteSheet(_enemyHandToHandTextureList, data.Size),
-                            pos,
-                            new Vector2(data.Speed + Player.Level / 5, data.Speed + Player.Level / 5),
-                            data.HP + Player.Level,
-                            data.Name,
-                            data.XPValue + data.XPValue * Player.Level / 10,
-                            data.AttackDamage));
-                    }
+                    _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, data.Rectangle_X, data.Rectangle_Y),
+                        ConstructSpriteSheet(_enemyHandToHandTextureList, data.Size),
+                        pos,
+                        new Vector2(data.Speed + Player.Level / 5, data.Speed + Player.Level / 5),
+                        data.HP + Player.Level,
+                        data.Name,
+                        data.XPValue + data.XPValue * Player.Level / 10,
+                        data.AttackDamage));
                 }
 
                 _visualEffects.RemoveAt(0);
