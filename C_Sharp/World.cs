@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 namespace Projet_Survivor.C_Sharp;
 
@@ -137,6 +138,25 @@ public class World : Game
         _gameOverTime = _inGameTime;
     }
 
+    private void Restart()
+    {
+        Random = new Random();
+        _isPaused = false;
+        _isGameOver = false;
+        _gameOverTime = 0;
+        _nbKilled = 0;
+        _inGameTime = 0;
+        _difficultyLevel = 0;
+        _entities.Clear();
+        _buttons.Clear();
+        _visualEffects.Clear();
+        _spawnTimes.Clear();
+        _enemyHandToHandTextureList.Clear();
+        _enemyDistanceTextureList.Clear();
+        _playerTextureList.Clear();
+        LoadContent();
+    }
+
     protected override void Initialize()
     {
         _graphics.PreferredBackBufferWidth = WorldWidth;
@@ -212,10 +232,15 @@ public class World : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        if (_isGameOver) ;
+        if (_isGameOver)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+            {
+                Restart();
+            }
+        }
         else if (_isPaused)
         {
             foreach (Button button in _buttons)
@@ -254,7 +279,8 @@ public class World : Game
                 Vector2.Zero, SpriteEffects.None, 0f);
             String endGameStats = "You killed " + _nbKilled.ToString() + " ennemies !\n";
             endGameStats += "You survived " + Math.Round(_gameOverTime / 60) + " seconds !\n";
-            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth/2 - (endGameStats.Length - 1) * 10, 2 * WorldHeight/3), Color.White);
+            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth/6, 2 * WorldHeight/3), Color.White);
+            _spriteBatch.DrawString(_font, "Press Enter to restart", new Vector2(WorldWidth/2 - 160, 7 * WorldHeight/8), Color.White);
         }
         else
         {
