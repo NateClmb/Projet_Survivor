@@ -1,22 +1,20 @@
 using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace Projet_Survivor;
+namespace Projet_Survivor.C_Sharp;
 
 public class Enemy : Entity
 {
-    private String name;
-    private int xpValue { get; init; }
-    private Behavior behavior;
-    private readonly Player player = (Player)World.GetEntities()[0];
-    
-    private int frameCounter = 0;
-    private double lastTimeFrame = 0;
+    private String _name;
+    private int XpValue { get; init; }
+    private Behavior _behavior;
+    private readonly Player _player = World.Player;
+
+    private int _frameCounter;
+    private double _lastTimeFrame;
     private readonly double FRAME_INTERVAL = 250;
-    
+
     private static readonly double HIT_COUNTDOWN = 100;
 
     public Enemy(Rectangle hitbox,
@@ -28,16 +26,16 @@ public class Enemy : Entity
         int xpValue,
         Behavior behavior) : base(hitbox, sprite, pos, speed, hp)
     {
-        this.name = name;
-        this.xpValue = xpValue;
-        this.behavior = behavior;
+        this._name = name;
+        this.XpValue = xpValue;
+        this._behavior = behavior;
     }
 
     //l'ennemi se rapproche en permanence du joueur
 
     public override void Move(GameTime gameTime)
     {
-        if (Position.X > player.Position.X)
+        if (Position.X > _player.Position.X)
         {
             Position.X -= Speed.X;
         }
@@ -46,7 +44,7 @@ public class Enemy : Entity
             Position.X += Speed.X;
         }
 
-        if (Position.Y > player.Position.Y)
+        if (Position.Y > _player.Position.Y)
         {
             Position.Y -= Speed.Y;
         }
@@ -55,14 +53,15 @@ public class Enemy : Entity
             Position.Y += Speed.Y;
         }
 
-        setHitboxPosition();
+        SetHitboxPosition();
         GestionAnimation(gameTime);
-        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).isFriendly());
-        testOverlapseWithEnemy();
-        die();
+        HitTest(gameTime,
+            e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).IsFriendly());
+        TestOverlapseWithEnemy();
+        Die();
     }
 
-    private void testOverlapseWithEnemy()
+    private void TestOverlapseWithEnemy()
     {
         foreach (Entity e in World.GetEntities())
         {
@@ -75,45 +74,38 @@ public class Enemy : Entity
         }
     }
 
-    private void die()
+    private void Die()
     {
-        if (_hp <= 0)
+        if (Hp <= 0)
         {
-            player.gainXp(xpValue);
+            _player.GainXp(XpValue);
             World.GetEntities().Remove(this);
         }
     }
 
     protected override void GestionAnimation(GameTime gameTime)
     {
-        if (this.Position.X > World.player.Position.X - 10)
+        Sprite.Flipped = this.Position.X > World.Player.Position.X - 10;
+
+        if (gameTime.TotalGameTime.TotalMilliseconds > _lastTimeFrame + FRAME_INTERVAL)
         {
-            Sprite.Flipped = true;
-        }
-        else
-        {
-            Sprite.Flipped = false;
-        }
-        if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
-        {
-            lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
-            frameCounter = (frameCounter + 1) % spriteSheets.Count;
+            _lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
+            _frameCounter = (_frameCounter + 1) % SpriteSheet.Count;
             bool flip = Sprite.Flipped;
-            Sprite = (Sprite) spriteSheets[frameCounter];
+            Sprite = (Sprite)SpriteSheet[_frameCounter];
             //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
-            Sprite._position = this.Position;
+            Sprite.Position = this.Position;
             Sprite.Flipped = flip;
         }
     }
-    
+
     protected override void IsHit(int damage, GameTime gameTime)
     {
-        Console.Out.WriteLine($"{name} hit for {damage}");
         double time = gameTime.TotalGameTime.TotalMilliseconds;
-        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        if (time >= LastTimeHit + HIT_COUNTDOWN)
         {
-            lastTimeHit = time;
-            _hp -= damage;
+            LastTimeHit = time;
+            Hp -= damage;
         }
     }
 }
