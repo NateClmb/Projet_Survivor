@@ -26,11 +26,12 @@ namespace Projet_Survivor.C_Sharp
                 Console.WriteLine($"\nValidating XML File: {xmlFile} against XSD: {xsdFile}\n");
                 ValidateXml(xmlFile, xsdFile);
             }
-            
         }
 
         private static void ValidateXml(string xmlFilePath, string xsdFilePath)
         {
+            bool hasErrors = false; 
+
             try
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
@@ -38,25 +39,36 @@ namespace Projet_Survivor.C_Sharp
                 settings.Schemas.Add(null, xsdFilePath);
                 settings.ValidationType = ValidationType.Schema;
 
-                settings.ValidationEventHandler += ValidationCallback;
+                settings.ValidationEventHandler += (sender, args) =>
+                {
+                    string messageType = args.Severity == XmlSeverityType.Warning ? "Warning" : "Error";
+                    Console.WriteLine($"{messageType}: {args.Message}");
+                    
+                    if (args.Severity == XmlSeverityType.Error)
+                    {
+                        hasErrors = true;
+                    }
+                };
 
                 using (XmlReader reader = XmlReader.Create(xmlFilePath, settings))
                 {
                     while (reader.Read()) { }
                 }
-
-                Console.WriteLine("Validation succeed : XML file is valid against XSD schema.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Validation Error : {ex.Message}");
+                Console.WriteLine($"Validation Error: {ex.Message}");
+                hasErrors = true; 
             }
-        }
 
-        private static void ValidationCallback(object sender, ValidationEventArgs args)
-        {
-            string messageType = args.Severity == XmlSeverityType.Warning ? "Warning" : "Error";
-            Console.WriteLine($"{messageType}: {args.Message}");
+            if (!hasErrors)
+            {
+                Console.WriteLine("\nValidation succeed: XML file is valid against XSD schema.\n");
+            }
+            else
+            {
+                Console.WriteLine("\nValidation failed: XML file is not valid against XSD schema.\n");
+            }
         }
     }
 }

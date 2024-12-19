@@ -1,4 +1,3 @@
-<!-- XSD file for the enemies XML file -->
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <!-- Enemies element -->
     <xsd:element name="Enemies">
@@ -8,8 +7,35 @@
                 <xsd:element name="Enemy" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <!-- Enemy attributes with restrictions-->
                             <xsd:element name="Name" type="xsd:string" />
+
+                            <xsd:element name="Rectangle_X">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="10000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <xsd:element name="Rectangle_Y">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="10000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <xsd:element name="Size">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:positiveInteger">
+                                        <xsd:minInclusive value="1"/>
+                                        <xsd:maxInclusive value="1000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
                             <xsd:element name="Type">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:string">
@@ -39,9 +65,9 @@
 
                             <xsd:element name="Speed">
                                 <xsd:simpleType>
-                                    <xsd:restriction base="xsd:decimal">
-                                        <xsd:minInclusive value="0.05"/>
-                                        <xsd:maxInclusive value="2"/>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="10"/>
                                     </xsd:restriction>
                                 </xsd:simpleType>
                             </xsd:element>
