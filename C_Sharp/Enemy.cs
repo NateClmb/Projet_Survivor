@@ -2,71 +2,57 @@ using System;
 using System.Collections;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
-namespace Projet_Survivor;
+namespace Projet_Survivor.C_Sharp;
 
-public class Enemy : Entity
+public abstract class Enemy : Entity
 {
-    private String name;
-    private int xpValue { get; init; }
-    private Behavior behavior;
-    private readonly Player player = (Player)World.GetEntities()[0];
-    
-    private int frameCounter = 0;
-    private double lastTimeFrame = 0;
+    protected String Name;
+    protected bool Hit;
+    private int XpValue { get; init; }
+    protected readonly Player _player = World.Player;
+
+    private int _frameCounter;
+    private double _lastTimeFrame;
     private readonly double FRAME_INTERVAL = 250;
-    
+
     private static readonly double HIT_COUNTDOWN = 100;
 
-    public Enemy(Rectangle hitbox,
+    protected Enemy(Rectangle hitbox,
         ArrayList sprite,
         Vector2 pos,
         Vector2 speed,
         int hp,
         String name,
         int xpValue,
-        Behavior behavior) : base(hitbox, sprite, pos, speed, hp)
+        int damage) : base(hitbox, sprite, pos, speed, hp)
     {
-        this.name = name;
-        this.xpValue = xpValue;
-        this.behavior = behavior;
+        this.Damage = damage;
+        this.Name = name;
+        this.XpValue = xpValue;
     }
 
     //l'ennemi se rapproche en permanence du joueur
 
     public override void Move(GameTime gameTime)
     {
-        if (Position.X > player.Position.X)
-        {
-            Position.X -= Speed.X;
-        }
-        else
-        {
-            Position.X += Speed.X;
-        }
-
-        if (Position.Y > player.Position.Y)
-        {
-            Position.Y -= Speed.Y;
-        }
-        else
-        {
-            Position.Y += Speed.Y;
-        }
-
-        setHitboxPosition();
+        EnemyMove(gameTime);
+        SetHitboxPosition();
         GestionAnimation(gameTime);
-        HitTest(gameTime, e => e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Projectile) && ((Projectile)e).isFriendly());
-        testOverlapseWithEnemy();
-        die();
+        HitTest(gameTime,
+            e => e.Hitbox.Intersects(Hitbox) && e is Projectile projectile && projectile.IsFriendly());
+        TestOverlapseWithEnemy();
+        if (gameTime.TotalGameTime.TotalMilliseconds >= LastTimeHit + HIT_COUNTDOWN)
+            Sprite.Color = Color.White;
     }
 
-    private void testOverlapseWithEnemy()
+    protected abstract void EnemyMove(GameTime gameTime);
+
+    private void TestOverlapseWithEnemy()
     {
         foreach (Entity e in World.GetEntities())
         {
-            if (e.Hitbox.Intersects(Hitbox) && e.GetType() == typeof(Enemy))
+            if (e.Hitbox.Intersects(Hitbox) && e is Enemy)
             {
                 Vector2 stepAside = new Vector2(Position.X - e.Position.X, Position.Y - e.Position.Y);
                 Position.X += 0.05f * stepAside.X;
@@ -75,45 +61,36 @@ public class Enemy : Entity
         }
     }
 
-    private void die()
-    {
-        if (_hp <= 0)
-        {
-            player.gainXp(xpValue);
-            World.GetEntities().Remove(this);
-        }
-    }
-
     protected override void GestionAnimation(GameTime gameTime)
     {
-        if (this.Position.X > World.player.Position.X - 10)
+        Sprite.Flipped = this.Position.X > World.Player.Position.X - 10;
+
+        if (gameTime.TotalGameTime.TotalMilliseconds > _lastTimeFrame + FRAME_INTERVAL)
         {
-            Sprite.Flipped = true;
-        }
-        else
-        {
-            Sprite.Flipped = false;
-        }
-        if (gameTime.TotalGameTime.TotalMilliseconds > lastTimeFrame + FRAME_INTERVAL)
-        {
-            lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
-            frameCounter = (frameCounter + 1) % spriteSheets.Count;
+            _lastTimeFrame = gameTime.TotalGameTime.TotalMilliseconds;
+            _frameCounter = (_frameCounter + 1) % SpriteSheet.Count;
             bool flip = Sprite.Flipped;
-            Sprite = (Sprite) spriteSheets[frameCounter];
-            //On met à jour la position du Sprite car l'entité a possiblement bougé entre temps
-            Sprite._position = this.Position;
+            Sprite = (Sprite)SpriteSheet[_frameCounter];
+            //Update Sprite's position because the entity may have moved 
+            Sprite.Position = this.Position;
             Sprite.Flipped = flip;
         }
     }
-    
+
     protected override void IsHit(int damage, GameTime gameTime)
     {
-        Console.Out.WriteLine($"{name} hit for {damage}");
         double time = gameTime.TotalGameTime.TotalMilliseconds;
-        if (time >= lastTimeHit + HIT_COUNTDOWN)
+        if (time >= LastTimeHit + HIT_COUNTDOWN)
         {
-            lastTimeHit = time;
-            _hp -= damage;
+            Sprite.Color = Color.Red;
+            LastTimeHit = time;
+            Hp -= damage;
+        }
+        
+        if (Hp <= 0)
+        {
+            _player.GainXp(XpValue);
+            World.RemoveEntity(this);
         }
     }
 }
