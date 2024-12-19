@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Root element (all the enemies) -->
 <Enemies>
-    <!-- First enemy -->
     <Enemy>
-        <!-- Enemy's attributes -->
-        <Name>Cyclope</Name>
-        <Type>Hand to hand</Type>
-        <HP>20</HP>
-        <AttackDamage>10</AttackDamage>
-        <Speed>1.0</Speed>
-        <XPValue>20</XPValue>
-    </Enemy>
-    <!-- Second enemy -->
-    <Enemy>
-        <!-- Enemy's attributes -->
-        <Name>Boss</Name>
+        <Name>"eyeShooter"</Name>
+        <Rectangle_X>45</Rectangle_X>
+        <Rectangle_Y>70</Rectangle_Y>
+        <Size>100</Size>
         <Type>Distance</Type>
-        <HP>150</HP>
-        <AttackDamage>30</AttackDamage>
-        <Speed>1.2</Speed>
-        <XPValue>150</XPValue>
+        <HP>3</HP>
+        <AttackDamage>1</AttackDamage>
+        <Speed>2</Speed>
+        <XPValue>15</XPValue>
+    </Enemy>
+    <Enemy>
+        <Name>"eyeSprinter"</Name>
+        <Rectangle_X>70</Rectangle_X>
+        <Rectangle_Y>45</Rectangle_Y>
+        <Size>100</Size>
+        <Type>Corps à corps</Type>
+        <HP>3</HP>
+        <AttackDamage>1</AttackDamage>
+        <Speed>3</Speed>
+        <XPValue>10</XPValue>
     </Enemy>
 </Enemies>
