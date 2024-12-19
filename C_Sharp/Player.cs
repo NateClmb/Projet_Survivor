@@ -39,7 +39,7 @@ public class Player : Entity
     {
         _maxSpeed = 6.0f;
         this._attackSpd = attackSpd;
-        this._weapon = new Weapon(World.DefaultProjectileTexture, 1, 1, 500, new Vector2(10.0f, 10.0f));
+        this._weapon = new Weapon(this, World.DefaultProjectileTexture, 1, 1, 500, new Vector2(10.0f, 10.0f));
         XpBar = new ProgressBar(World.XpBarBackground, World.XpBarForeground, new Vector2(30, 30));
         _maxHp = hp;
     }
@@ -211,7 +211,7 @@ public class Player : Entity
 
     private class Weapon
     {
-        private Player _player = World.Player;
+        private Player _player;
         private Texture2D _projectileTexture;
         private int _piercePotential;
         private int _damage;
@@ -220,9 +220,10 @@ public class Player : Entity
         public double BaseFireRate;
         public double LastTimeFired;
 
-        public Weapon(Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate,
+        public Weapon(Player player, Texture2D projectileTexture, int piercePotential, int damage, float baseFireRate,
             Vector2 projectileSpeed)
         {
+            this._player = player;
             this._projectileTexture = projectileTexture;
             this._piercePotential = piercePotential;
             this._damage = damage;
