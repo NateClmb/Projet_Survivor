@@ -69,7 +69,7 @@ public class Player : Entity
 
     public void IncreaseAttackSpeed()
     {
-        _attackSpd -= 0.75;
+        _attackSpd *= 0.8f;
     }
 
     public void Heal(int heal)
