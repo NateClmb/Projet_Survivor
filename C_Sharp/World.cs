@@ -31,6 +31,8 @@ public class World : Game
     //List containing spawned enemy time during last second
     private static ArrayList _spawnTimes = new();
 
+    List<EnemyData> enemyDataList;
+
     public static Texture2D XpBarBackground;
     public static Texture2D XpBarForeground;
     public static Texture2D DefaultProjectileTexture;
@@ -88,12 +90,12 @@ public class World : Game
             _nbKilled++;
     }
 
-    private ArrayList ConstructSpriteSheet(ArrayList textureList)
+    private ArrayList ConstructSpriteSheet(ArrayList textureList, int size)
     {
         ArrayList spriteSheet = new ArrayList();
         foreach (var t in textureList)
         {
-            spriteSheet.Add(new Sprite((Texture2D)t, Vector2.Zero, 100));
+            spriteSheet.Add(new Sprite((Texture2D)t, Vector2.Zero, size));
         }
 
         return spriteSheet;
@@ -204,6 +206,7 @@ public class World : Game
         _graphics.PreferredBackBufferHeight = WorldHeight;
         _graphics.IsFullScreen = true;
         _graphics.ApplyChanges();
+        enemyDataList = EnemyLoader.LoadEnemiesFromXML("XML/Enemies.xml");
         base.Initialize();
     }
 
@@ -265,7 +268,7 @@ public class World : Game
         _enemySpawnWarningTexture = Content.Load<Texture2D>("spawnWarning");
 
         Player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
-            ConstructSpriteSheet(_playerTextureList),
+            ConstructSpriteSheet(_playerTextureList, 100),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             5, 1.0);
         _entities.Add(Player);
