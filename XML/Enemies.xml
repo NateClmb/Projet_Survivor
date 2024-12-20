@@ -20,4 +20,15 @@
     <!-- Enemy's experience value -->
     <XPValue>15</XPValue>
   </Enemy>
+  <Enemy>
+    <Name>eyeSprinter</Name>
+    <Rectangle_X>70</Rectangle_X>
+    <Rectangle_Y>45</Rectangle_Y>
+    <Size>100</Size>
+    <Type>HandToHand</Type>
+    <HP>3</HP>
+    <AttackDamage>1</AttackDamage>
+    <Speed>3</Speed>
+    <XPValue>10</XPValue>
+  </Enemy>
 </Enemies>
