@@ -121,7 +121,7 @@ public class World : Game
             {
                 
                 Behavior behavior;
-                if (data.Type == "Corps à corps")
+                if (data.Type == "HandToHand")
                 {
                     behavior = Behavior.HAND_TO_HAND;
                 }
