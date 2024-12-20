@@ -111,7 +111,7 @@ public class World : Game
             _nbKilled++;
     }
 
-    //Creates an ArrayList of Sprite from an ArrayList of Texture2D. All Sprite have a size of 100
+    //Creates an ArrayList of Sprite from an ArrayList of Texture2D. The size can be read in the xml.
     private ArrayList ConstructSpriteSheet(ArrayList textureList, int size)
     {
         ArrayList spriteSheet = new ArrayList();
