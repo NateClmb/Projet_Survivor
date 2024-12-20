@@ -17,7 +17,7 @@ namespace Projet_Survivor.C_Sharp
 
             reader.DisplayEnemyNames();
 
-            reader.UpdateEnemyHP("eyeShooter", 5);
+            reader.UpdateEnemyHP("eyeShooter", 2);
 
             reader.AddNewEnemy(
                 name: "eyeSprinter",

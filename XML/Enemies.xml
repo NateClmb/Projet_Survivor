@@ -12,12 +12,23 @@
     <!-- Enemy's type -->
     <Type>Distance</Type>
     <!-- Enemy's health points -->
-    <HP>5</HP>
+    <HP>2</HP>
     <!-- Enemy's attack damage -->
     <AttackDamage>1</AttackDamage>
     <!-- Enemy's speed -->
     <Speed>2</Speed>
     <!-- Enemy's experience value -->
     <XPValue>15</XPValue>
+  </Enemy>
+  <Enemy>
+    <Name>eyeSprinter</Name>
+    <Rectangle_X>70</Rectangle_X>
+    <Rectangle_Y>45</Rectangle_Y>
+    <Size>100</Size>
+    <Type>Corps à corps</Type>
+    <HP>3</HP>
+    <AttackDamage>1</AttackDamage>
+    <Speed>3</Speed>
+    <XPValue>10</XPValue>
   </Enemy>
 </Enemies>

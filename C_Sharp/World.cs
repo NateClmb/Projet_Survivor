@@ -206,7 +206,7 @@ public class World : Game
         _graphics.PreferredBackBufferHeight = WorldHeight;
         _graphics.IsFullScreen = true;
         _graphics.ApplyChanges();
-        enemyDataList = EnemyLoader.LoadEnemiesFromXML("XML/Enemies.xml");
+        enemyDataList = EnemyLoader.LoadEnemiesFromXML("../../../XML/Enemies.xml");
         base.Initialize();
     }
 
