@@ -1,0 +1,21 @@
+<!-- XSD file for the player profile XML file -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- PlayerProfile element -->
+    <xsd:element name="PlayerProfile">
+        <xsd:complexType>
+            <xsd:sequence>
+                <!-- Player element -->
+                <xsd:element name="Player">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <!-- Attributes with restrictions -->
+                            <xsd:element name="GamesPlayed" type="xsd:int"/>
+                        </xsd:sequence>
+                        <!-- Player element has an attribute 'Username' -->
+                        <xsd:attribute name="Username" type="xsd:string" />
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

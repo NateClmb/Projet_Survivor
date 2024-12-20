@@ -1,0 +1,100 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <!-- Enemies element -->
+    <xsd:element name="Enemies">
+        <xsd:complexType>
+            <xsd:sequence>
+                <!-- Enemy element (can be repeated) -->
+                <xsd:element name="Enemy" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <!-- Name with restrictions, between 1 and 50 characters -->
+                            <xsd:element name="Name">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:string">
+                                        <xsd:minLength value="1"/>
+                                        <xsd:maxLength value="50"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <!-- Position X and Ywith restrictions, between 0 and 10000 -->
+                            <xsd:element name="Rectangle_X">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="10000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                            <xsd:element name="Rectangle_Y">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="10000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <!-- Size with restrictions, between 1 and 1000 -->
+                            <xsd:element name="Size">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:positiveInteger">
+                                        <xsd:minInclusive value="1"/>
+                                        <xsd:maxInclusive value="1000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <!-- Type with restrictions, either HandToHand or Distance -->
+                            <xsd:element name="Type">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:string">
+                                        <xsd:enumeration value="HandToHand"/>
+                                        <xsd:enumeration value="Distance"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <!-- HP, AttackDamage, Speed, and XPValue with restrictions -->
+                            <xsd:element name="HP">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="300"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <xsd:element name="AttackDamage">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:positiveInteger">
+                                        <xsd:minInclusive value="1"/>
+                                        <xsd:maxInclusive value="200"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <xsd:element name="Speed">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:integer">
+                                        <xsd:minInclusive value="0"/>
+                                        <xsd:maxInclusive value="10"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+
+                            <xsd:element name="XPValue">
+                                <xsd:simpleType>
+                                    <xsd:restriction base="xsd:positiveInteger">
+                                        <xsd:minInclusive value="1"/>
+                                        <xsd:maxInclusive value="1000"/>
+                                    </xsd:restriction>
+                                </xsd:simpleType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>

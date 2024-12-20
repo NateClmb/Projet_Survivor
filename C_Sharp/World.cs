@@ -3,7 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Xml;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
 
 namespace Projet_Survivor.C_Sharp;
 
@@ -27,6 +33,8 @@ public class World : Game
 
     //List containing spawned enemy time during last second
     private static ArrayList _spawnTimes = new();
+    
+    List<EnemyData> enemyDataList;
 
     //Textures used in World
     private Texture2D _enemySpawnWarningTexture;
@@ -67,6 +75,8 @@ public class World : Game
     //Duration of a glyph drawn to warn player about incoming enemy spawn
     private readonly double SPAWN_WARNING_DURATION = 1500;
 
+    private string username;
+    
     public World()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -102,12 +112,12 @@ public class World : Game
     }
 
     //Creates an ArrayList of Sprite from an ArrayList of Texture2D. All Sprite have a size of 100
-    private ArrayList ConstructSpriteSheet(ArrayList textureList)
+    private ArrayList ConstructSpriteSheet(ArrayList textureList, int size)
     {
         ArrayList spriteSheet = new ArrayList();
         foreach (var t in textureList)
         {
-            spriteSheet.Add(new Sprite((Texture2D)t, Vector2.Zero, 100));
+            spriteSheet.Add(new Sprite((Texture2D)t, Vector2.Zero, size));
         }
 
         return spriteSheet;
@@ -129,17 +139,46 @@ public class World : Game
         _spawnTimes.CopyTo(copySpawnTimes);
         foreach (double t in copySpawnTimes)
         {
+            EnemyData data = enemyDataList[Random.Next(enemyDataList.Count)];
             if (gameTime.TotalGameTime.TotalMilliseconds >= t + SPAWN_WARNING_DURATION)
             {
+                
+                Behavior behavior;
+                if (data.Type == "HandToHand")
+                {
+                    behavior = Behavior.HAND_TO_HAND;
+                }
+                else
+                {
+                    behavior = Behavior.DISTANCE;
+                }
+                
                 _spawnTimes.Remove(t);
                 Vector2 pos = ((Sprite)_visualEffects[0]).Position;
-                var chooseEnemy = Random.Next() % 3 == 0
-                    ? _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
-                        ConstructSpriteSheet(_enemyDistanceTextureList), pos, new Vector2(2, 2), 3, "eyeShooter", 15,
-                        1))
-                    : _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, 70, 45),
-                        ConstructSpriteSheet(_enemyHandToHandTextureList), pos, new Vector2(3, 3), 3, "eyeSprinter", 10,
-                        1));
+                switch(behavior){
+                    case Behavior.DISTANCE:
+                        _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, data.Rectangle_X, data.Rectangle_Y),
+                            ConstructSpriteSheet(_enemyDistanceTextureList, data.Size),
+                            pos,
+                            new Vector2(data.Speed + Player.Level / 5, data.Speed + Player.Level / 5),
+                            data.HP + Player.Level,
+                            data.Name,
+                            data.XPValue + data.XPValue * Player.Level / 10,
+                            data.AttackDamage));
+                        break;
+                    case Behavior.HAND_TO_HAND:
+                        _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, data.Rectangle_X, data.Rectangle_Y),
+                            ConstructSpriteSheet(_enemyHandToHandTextureList, data.Size),
+                            pos,
+                            new Vector2(data.Speed + Player.Level / 5, data.Speed + Player.Level / 5),
+                            data.HP + Player.Level,
+                            data.Name,
+                            data.XPValue + data.XPValue * Player.Level / 10,
+                            data.AttackDamage));
+                        break;
+                    default:
+                        break;
+                }
 
                 _visualEffects.RemoveAt(0);
             }
@@ -163,6 +202,9 @@ public class World : Game
     {
         _isGameOver = true;
         _gameOverTime = _inGameTime;
+        
+        CreateOrUpdatePlayerProfile();
+        World.SaveGameData();
     }
 
     //Start a new game
@@ -191,6 +233,7 @@ public class World : Game
         _graphics.PreferredBackBufferHeight = WorldHeight;
         _graphics.IsFullScreen = true;
         _graphics.ApplyChanges();
+        enemyDataList = EnemyLoader.LoadEnemiesFromXML("../../../XML/Enemies.xml");
         base.Initialize();
     }
 
@@ -254,7 +297,7 @@ public class World : Game
         _enemySpawnWarningTexture = Content.Load<Texture2D>("spawnWarning");
 
         Player = new Player(new Rectangle(WorldWidth / 2, WorldHeight / 2, 60, 50),
-            ConstructSpriteSheet(_playerTextureList),
+            ConstructSpriteSheet(_playerTextureList, 100),
             new Vector2(WorldWidth / 2, WorldHeight / 2), new Vector2(),
             5, 1.0);
         _entities.Add(Player);
@@ -343,4 +386,128 @@ public class World : Game
         _spriteBatch.End();
         base.Draw(gameTime);
     }
+    
+    private static void SaveGameData()
+    {
+        try
+        {
+            string filePath = "../../../XML/Saves.xml";
+            
+            XmlDocument xmlDoc = new XmlDocument();
+            if (File.Exists(filePath))
+            {
+                xmlDoc.Load(filePath); 
+            }
+            else
+            {
+                XmlElement root = xmlDoc.CreateElement("GameHistory");
+                xmlDoc.AppendChild(root);
+            }
+
+            XmlElement gameElement = xmlDoc.CreateElement("Game");
+            
+            XmlElement userNameElement = xmlDoc.CreateElement("Username");
+            userNameElement.InnerText = Environment.UserName;
+            gameElement.AppendChild(userNameElement);
+
+            XmlElement killedElement = xmlDoc.CreateElement("Killed");
+            killedElement.InnerText = _nbKilled.ToString();
+            gameElement.AppendChild(killedElement);
+
+            
+            XmlElement timeElement = xmlDoc.CreateElement("Time");
+            string timeValue = Math.Round(_gameOverTime / 60, 2).ToString();
+            string timeWithDot = timeValue.Replace(',', '.');
+            timeElement.InnerText = timeWithDot;
+            gameElement.AppendChild(timeElement);
+
+            XmlElement dateElement = xmlDoc.CreateElement("Date");
+            dateElement.InnerText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            gameElement.AppendChild(dateElement);
+
+            xmlDoc.DocumentElement.AppendChild(gameElement);
+
+            xmlDoc.Save(filePath);
+            Console.WriteLine($"Game data saved successfully in {filePath}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error while saving game data: " + ex.Message);
+        }
+    }
+    
+    public static void CreateOrUpdatePlayerProfile()
+    {
+        string username = Environment.UserName;
+        
+        int gamesPlayed = CountGamesPlayed();
+
+        string profileFilePath = "../../../XML/PlayerProfile.xml";
+
+        try
+        {
+            XmlDocument profileDoc = new XmlDocument();
+
+            if (File.Exists(profileFilePath))
+            {
+                profileDoc.Load(profileFilePath);
+            }
+            else
+            {
+                XmlElement rootElement = profileDoc.CreateElement("PlayerProfiles");
+                profileDoc.AppendChild(rootElement);
+            }
+
+            XmlElement playerElement = profileDoc.SelectSingleNode($"//Player[@Username='{username}']") as XmlElement;
+
+            if (playerElement == null)
+            {
+                playerElement = profileDoc.CreateElement("Player");
+                XmlAttribute usernameAttribute = profileDoc.CreateAttribute("Username");
+                usernameAttribute.Value = username;
+                playerElement.Attributes.Append(usernameAttribute);
+                profileDoc.DocumentElement.AppendChild(playerElement);
+            }
+
+            XmlElement gamesPlayedElement = profileDoc.SelectSingleNode($"//Player[@Username='{username}']/GamesPlayed") as XmlElement;
+            if (gamesPlayedElement == null)
+            {
+                gamesPlayedElement = profileDoc.CreateElement("GamesPlayed");
+                playerElement.AppendChild(gamesPlayedElement);
+            }
+            gamesPlayedElement.InnerText = gamesPlayed.ToString();
+
+            profileDoc.Save(profileFilePath);
+            Console.WriteLine("Player profile saved successfully");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error while saving player profile: " + ex.Message);
+        }
+    }
+
+    private static int CountGamesPlayed()
+    {
+        string savesFilePath = "../../../XML/Saves.xml";
+        int gamesPlayed = 0;
+
+        try
+        {
+            if (File.Exists(savesFilePath))
+            {
+                XmlDocument savesDoc = new XmlDocument();
+                savesDoc.Load(savesFilePath);
+
+                XmlNodeList games = savesDoc.SelectNodes("//Game");
+                gamesPlayed = games.Count;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error while counting games played: " + ex.Message);
+        }
+
+        return gamesPlayed;
+    }
+
 }

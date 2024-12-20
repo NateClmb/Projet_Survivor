@@ -7,7 +7,7 @@
             <head>
                 <!-- Page header -->
                 <title>High scores</title>
-                <link rel="stylesheet" type="text/css" href="../CSS/Style_scores.css"/>
+                <link rel="stylesheet" type="text/css" href="../CSS/StyleScores.css"/>
             </head>
             <body>
                 <!-- Page title -->
@@ -17,25 +17,27 @@
                 <table border="1">
                     <tr>
                         <!-- Table header -->
-                        <th>Player name</th>
+                        <th>Username</th>
                         <th>Date</th>
-                        <th>Score</th>
+                        <th>Enemies killed</th>
+                        <th>Time played</th>
                     </tr>
-                    <!-- Loop through each high score -->
-                    <xsl:for-each select="//GameSaves/Save">
-                        <!-- Sort the high scores by score -->
-                        <xsl:sort select="Score" data-type="number" order="descending"/>
+                    <!-- For each game in the history -->
+                    <xsl:for-each select="//GameHistory/Game">
+                        <!-- Sort the games by the number of Killed (descending) to rank the high scores -->
+                        <xsl:sort select="Killed" data-type="number" order="descending"/>
                         <tr>
                             <!-- High score values -->
                             <td><xsl:value-of select="Username"/></td>
                             <td><xsl:value-of select="Date"/></td>
-                            <td><xsl:value-of select="Score"/></td>
+                            <td><xsl:value-of select="Killed"/></td>
+                            <td><xsl:value-of select="Time"/></td>
                         </tr>
                     </xsl:for-each>
                 </table>
             </body>
             <footer>
-                <!-- Page footer including copyrights -->
+                <!-- Page footer -->
                 <p>© 2024 | COLOMBAN N. - DELEUZE-DORDRON A. - YAHA S. | All rights reserved.</p>
             </footer>
         </html>

@@ -1,25 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Root element (all the game saves) -->
-<GameSaves>
-    <!-- First save -->
-    <Save>
-        <!-- Save's attributes -->
-        <Username>Samy</Username>
-        <Date>2024-12-13</Date>
-        <Score>12000</Score>
-    </Save>
-    <!-- Second save -->
-    <Save>
-        <!-- Save's attributes -->
-        <Username>Axel</Username>
-        <Date>2024-12-14</Date>
-        <Score>18000</Score>
-    </Save>
-    <!-- Third save -->
-    <Save>
-        <!-- Save's attributes -->
-        <Username>Nathan</Username>
-        <Date>2024-12-15</Date>
-        <Score>3000</Score>
-    </Save>
-</GameSaves>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML file for storing game history data -->
+<GameHistory>
+  <!-- Game element can be repeated -->
+  <Game>
+    <!-- Username of the player -->
+    <Username>nate</Username>
+    <!-- Number of enemies killed -->
+    <Killed>1</Killed>
+    <!-- Time taken to complete the game -->
+    <Time>9.63</Time>
+    <!-- Date and time of the game -->
+    <Date>2024-12-20 12:13:24</Date>
+  </Game>
+  <Game>
+    <Username>nate</Username>
+    <Killed>1</Killed>
+    <Time>13.68</Time>
+    <Date>2024-12-20 12:18:59</Date>
+  </Game>
+  <Game>
+    <Username>nate</Username>
+    <Killed>0</Killed>
+    <Time>12.82</Time>
+    <Date>2024-12-20 12:20:01</Date>
+  </Game>
+  <Game>
+    <Username>nate</Username>
+    <Killed>0</Killed>
+    <Time>8.82</Time>
+    <Date>2024-12-20 12:21:33</Date>
+  </Game>
+  <Game>
+    <Username>nate</Username>
+    <Killed>0</Killed>
+    <Time>9.52</Time>
+    <Date>2024-12-20 12:25:51</Date>
+  </Game>
+  <Game>
+    <Username>nate</Username>
+    <Killed>0</Killed>
+    <Time>10.57</Time>
+    <Date>2024-12-20 12:42:41</Date>
+  </Game>
+  <Game>
+    <Username>nate</Username>
+    <Killed>3</Killed>
+    <Time>21.7</Time>
+    <Date>2024-12-20 14:33:29</Date>
+  </Game>
+</GameHistory>

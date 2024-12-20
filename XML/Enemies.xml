@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Root element (all the enemies) -->
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML file for storing enemy data -->
 <Enemies>
-    <!-- First enemy -->
-    <Enemy>
-        <!-- Enemy's attributes -->
-        <Name>Cyclope</Name>
-        <Type>Hand to hand</Type>
-        <HP>20</HP>
-        <AttackDamage>10</AttackDamage>
-        <Speed>1.0</Speed>
-        <XPValue>20</XPValue>
-    </Enemy>
-    <!-- Second enemy -->
-    <Enemy>
-        <!-- Enemy's attributes -->
-        <Name>Boss</Name>
-        <Type>Distance</Type>
-        <HP>150</HP>
-        <AttackDamage>30</AttackDamage>
-        <Speed>1.2</Speed>
-        <XPValue>150</XPValue>
-    </Enemy>
+  <Enemy>
+    <!-- Enemy name -->
+    <Name>eyeShooter</Name>
+    <!-- Enemy's position -->
+    <Rectangle_X>45</Rectangle_X>
+    <Rectangle_Y>70</Rectangle_Y>
+    <!-- Enemy's size -->
+    <Size>100</Size>
+    <!-- Enemy's type -->
+    <Type>Distance</Type>
+    <!-- Enemy's health points -->
+    <HP>2</HP>
+    <!-- Enemy's attack damage -->
+    <AttackDamage>1</AttackDamage>
+    <!-- Enemy's speed -->
+    <Speed>2</Speed>
+    <!-- Enemy's experience value -->
+    <XPValue>15</XPValue>
+  </Enemy>
 </Enemies>
