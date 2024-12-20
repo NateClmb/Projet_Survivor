@@ -17,19 +17,21 @@
                 <table border="1">
                     <tr>
                         <!-- Table header -->
-                        <th>Player name</th>
+                        <th>Username</th>
                         <th>Date</th>
-                        <th>Score</th>
+                        <th>Enemies killed</th>
+                        <th>Time played</th>
                     </tr>
-                    <!-- Loop through each high score -->
-                    <xsl:for-each select="//GameSaves/Save">
-                        <!-- Sort the high scores by score -->
-                        <xsl:sort select="Score" data-type="number" order="descending"/>
+                    <!-- Loop through each game in the history -->
+                    <xsl:for-each select="//GameHistory/Game">
+                        <!-- Sort the games by the number of Killed (descending) -->
+                        <xsl:sort select="Killed" data-type="number" order="descending"/>
                         <tr>
                             <!-- High score values -->
                             <td><xsl:value-of select="Username"/></td>
                             <td><xsl:value-of select="Date"/></td>
-                            <td><xsl:value-of select="Score"/></td>
+                            <td><xsl:value-of select="Killed"/></td>
+                            <td><xsl:value-of select="Time"/></td>
                         </tr>
                     </xsl:for-each>
                 </table>

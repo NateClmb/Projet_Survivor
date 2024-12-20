@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><GameList>
     <Game>
-        <PlayerName>Samy</PlayerName>
-        <Date>2024-12-13</Date>
-        <Score>12000</Score>
+        <PlayerName>nate</PlayerName>
+        <Date>2024-12-20 12:13:24</Date>
     </Game>
     <Game>
-        <PlayerName>Axel</PlayerName>
-        <Date>2024-12-14</Date>
-        <Score>18000</Score>
+        <PlayerName>nate</PlayerName>
+        <Date>2024-12-20 12:18:59</Date>
     </Game>
     <Game>
-        <PlayerName>Nathan</PlayerName>
-        <Date>2024-12-15</Date>
-        <Score>3000</Score>
+        <PlayerName>nate</PlayerName>
+        <Date>2024-12-20 12:20:01</Date>
+    </Game>
+    <Game>
+        <PlayerName>nate</PlayerName>
+        <Date>2024-12-20 12:21:33</Date>
+    </Game>
+    <Game>
+        <PlayerName>nate</PlayerName>
+        <Date>2024-12-20 12:25:51</Date>
     </Game>
 </GameList>

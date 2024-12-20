@@ -1,36 +1,50 @@
-<!-- XSD file for the saved games XML file -->
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <!-- GameSaves element -->
-    <xsd:element name="GameSaves">
-        <xsd:complexType>
-            <xsd:sequence>
-                <!-- Save element (can be repeated) -->
-                <xsd:element name="Save" maxOccurs="unbounded">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <!-- Save attributes with restrictions-->
-                            <xsd:element name="Username" type="xsd:string" />
-                            <xsd:element name="Date">
-                                <xsd:simpleType>
-                                    <xsd:restriction base="xsd:date">
-                                        <xsd:minInclusive value="2024-12-01"/> <!-- Release date of the beta version -->
-                                        <xsd:maxInclusive value="2099-12-31"/> <!-- Will we still play that game in 2100 ?? -->
-                                    </xsd:restriction>
-                                </xsd:simpleType>
-                            </xsd:element>
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-                            <xsd:element name="Score">
-                                <xsd:simpleType>
-                                    <xsd:restriction base="xsd:integer">
-                                        <xsd:minInclusive value="0"/>
-                                        <xsd:maxInclusive value="1000000"/> <!-- Nice achievement, let's relax now ! -->
-                                    </xsd:restriction>
-                                </xsd:simpleType>
-                            </xsd:element>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-</xsd:schema>
+    <!-- Root element GameHistory-->
+    <xs:element name="GameHistory">
+        <xs:complexType>
+            <xs:sequence>
+                <!-- Game element can be repeated -->
+                <xs:element name="Game" minOccurs="0" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Username">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:minLength value="1" />
+                                        <xs:maxLength value="50" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="Killed">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:integer">
+                                        <xs:minInclusive value="0" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+
+                            <xs:element name="Time">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:float" />
+                                </xs:simpleType>
+                            </xs:element>
+
+                            <!-- Specific date format -->
+                            <xs:element name="Date">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:pattern value="\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}" />
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -8,16 +8,16 @@
                 <!-- Page header -->
                 <title>Player profile</title>
                 <link rel="stylesheet" type="text/css" href="../CSS/StyleProfile.css"/>
-
             </head>
             <body>
                 <!-- Page title -->
                 <h1>Player profile</h1>
+
                 <!-- Player values -->
-                <h2>Username: <xsl:value-of select="//Username"/></h2>
-                <p>Age : <xsl:value-of select="//Age"/></p>
-                <p>Highest Score : <xsl:value-of select="//HighScore"/></p>
-                <p>Games Played : <xsl:value-of select="//GamesPlayed"/></p>
+                <xsl:for-each select="/PlayerProfile/Player">
+                    <h2>Username: <xsl:value-of select="@Username"/></h2>  <!-- Corrected here -->
+                    <p>Games Played: <xsl:value-of select="GamesPlayed"/></p>
+                </xsl:for-each>
             </body>
             <footer>
                 <!-- Page footer including copyrights -->
@@ -25,4 +25,5 @@
             </footer>
         </html>
     </xsl:template>
+
 </xsl:stylesheet>

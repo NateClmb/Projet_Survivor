@@ -9,34 +9,10 @@
                     <xsd:complexType>
                         <xsd:sequence>
                             <!-- Attributes with restrictions -->
-                            <xsd:element name="Username" type="xsd:string" />
-                            <xsd:element name="Age">
-                                <xsd:simpleType>
-                                    <xsd:restriction base="xsd:integer">
-                                        <xsd:minInclusive value="12"/> <!-- PEGI 12 -->
-                                        <xsd:maxInclusive value="122"/> <!-- Oldest person ever lived was 122 -->
-                                    </xsd:restriction>
-                                </xsd:simpleType>
-                            </xsd:element>
-
-                            <xsd:element name="HighScore">
-                                <xsd:simpleType>
-                                    <xsd:restriction base="xsd:integer">
-                                        <xsd:minInclusive value="0"/> <!-- Quite a bad game -->
-                                        <xsd:maxInclusive value="1000000"/> <!-- Time to take a shower ! -->
-                                    </xsd:restriction>
-                                </xsd:simpleType>
-                            </xsd:element>
-
-                            <xsd:element name="GamesPlayed">
-                                <xsd:simpleType>
-                                    <xsd:restriction base="xsd:integer">
-                                        <xsd:minInclusive value="0"/> <!-- No games played, makes me cry -->
-                                        <xsd:maxInclusive value="1000000"/> <!-- 1 million games played, that's a lot, consider touching grass -->
-                                    </xsd:restriction>
-                                </xsd:simpleType>
-                            </xsd:element>
+                            <xsd:element name="GamesPlayed" type="xsd:int"/>
                         </xsd:sequence>
+                        <!-- Player element has an attribute 'Username' -->
+                        <xsd:attribute name="Username" type="xsd:string" />
                     </xsd:complexType>
                 </xsd:element>
             </xsd:sequence>

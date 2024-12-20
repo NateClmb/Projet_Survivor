@@ -12,8 +12,6 @@ namespace Projet_Survivor.C_Sharp
             var xmlFilesWithSchemas = new Dictionary<string, string>
             {
                 { "../../../XML/Enemies.xml", "../../../XSD/Enemies.xsd" },
-                { "../../../XML/GameInitialization.xml", "../../../XSD/GameInitialization.xsd" },
-                { "../../../XML/Player.xml", "../../../XSD/Player.xsd" },
                 { "../../../XML/PlayerProfile.xml", "../../../XSD/PlayerProfile.xsd" },
                 { "../../../XML/Saves.xml", "../../../XSD/Saves.xsd" }
             };

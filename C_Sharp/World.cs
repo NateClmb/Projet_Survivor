@@ -3,7 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Xml;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
 
 namespace Projet_Survivor.C_Sharp;
 
@@ -46,9 +52,10 @@ public class World : Game
     private static double _inGameTime;
     private int _difficultyLevel;
     public static bool IsPaused => _isPaused;
-
+    
     private readonly double SPAWN_WARNING_DURATION = 1500;
     
+    private string username;
     public World()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -136,6 +143,9 @@ public class World : Game
     {
         _isGameOver = true;
         _gameOverTime = _inGameTime;
+
+        CreateOrUpdatePlayerProfile();
+        World.SaveGameData();
     }
 
     private void Restart()
@@ -312,4 +322,128 @@ public class World : Game
         _spriteBatch.End();
         base.Draw(gameTime);
     }
+    
+    private static void SaveGameData()
+    {
+        try
+        {
+            string filePath = "../../../XML/Saves.xml";
+            
+            XmlDocument xmlDoc = new XmlDocument();
+            if (File.Exists(filePath))
+            {
+                xmlDoc.Load(filePath); 
+            }
+            else
+            {
+                XmlElement root = xmlDoc.CreateElement("GameHistory");
+                xmlDoc.AppendChild(root);
+            }
+
+            XmlElement gameElement = xmlDoc.CreateElement("Game");
+            
+            XmlElement userNameElement = xmlDoc.CreateElement("Username");
+            userNameElement.InnerText = Environment.UserName;
+            gameElement.AppendChild(userNameElement);
+
+            XmlElement killedElement = xmlDoc.CreateElement("Killed");
+            killedElement.InnerText = _nbKilled.ToString();
+            gameElement.AppendChild(killedElement);
+
+            
+            XmlElement timeElement = xmlDoc.CreateElement("Time");
+            string timeValue = Math.Round(_gameOverTime / 60, 2).ToString();
+            string timeWithDot = timeValue.Replace(',', '.');
+            timeElement.InnerText = timeWithDot;
+            gameElement.AppendChild(timeElement);
+
+            XmlElement dateElement = xmlDoc.CreateElement("Date");
+            dateElement.InnerText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            gameElement.AppendChild(dateElement);
+
+            xmlDoc.DocumentElement.AppendChild(gameElement);
+
+            xmlDoc.Save(filePath);
+            Console.WriteLine($"Données de la partie enregistrées dans {filePath}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erreur lors de la sauvegarde des données : " + ex.Message);
+        }
+    }
+    
+    public static void CreateOrUpdatePlayerProfile()
+    {
+        string username = Environment.UserName;
+        
+        int gamesPlayed = CountGamesPlayed();
+
+        string profileFilePath = "../../../XML/PlayerProfile.xml";
+
+        try
+        {
+            XmlDocument profileDoc = new XmlDocument();
+
+            if (File.Exists(profileFilePath))
+            {
+                profileDoc.Load(profileFilePath);
+            }
+            else
+            {
+                XmlElement rootElement = profileDoc.CreateElement("PlayerProfiles");
+                profileDoc.AppendChild(rootElement);
+            }
+
+            XmlElement playerElement = profileDoc.SelectSingleNode($"//Player[@Username='{username}']") as XmlElement;
+
+            if (playerElement == null)
+            {
+                playerElement = profileDoc.CreateElement("Player");
+                XmlAttribute usernameAttribute = profileDoc.CreateAttribute("Username");
+                usernameAttribute.Value = username;
+                playerElement.Attributes.Append(usernameAttribute);
+                profileDoc.DocumentElement.AppendChild(playerElement);
+            }
+
+            XmlElement gamesPlayedElement = profileDoc.SelectSingleNode($"//Player[@Username='{username}']/GamesPlayed") as XmlElement;
+            if (gamesPlayedElement == null)
+            {
+                gamesPlayedElement = profileDoc.CreateElement("GamesPlayed");
+                playerElement.AppendChild(gamesPlayedElement);
+            }
+            gamesPlayedElement.InnerText = gamesPlayed.ToString();
+
+            profileDoc.Save(profileFilePath);
+            Console.WriteLine("Le profil du joueur a été mis à jour !");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erreur lors de la sauvegarde du profil du joueur : " + ex.Message);
+        }
+    }
+
+    private static int CountGamesPlayed()
+    {
+        string savesFilePath = "../../../XML/Saves.xml";
+        int gamesPlayed = 0;
+
+        try
+        {
+            if (File.Exists(savesFilePath))
+            {
+                XmlDocument savesDoc = new XmlDocument();
+                savesDoc.Load(savesFilePath);
+
+                XmlNodeList games = savesDoc.SelectNodes("//Game");
+                gamesPlayed = games.Count;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Erreur lors du comptage des parties jouées : " + ex.Message);
+        }
+
+        return gamesPlayed;
+    }
+
 }
