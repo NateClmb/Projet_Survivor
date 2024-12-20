@@ -52,13 +52,13 @@ public class Player : Entity
     public void IncreaseMaxHp()
     {
         _maxHp++;
-        Hp = _maxHp;
+        Heal(1);
     }
 
     public void IncreaseMaxSpeed()
     {
         _acceleration += _acceleration * (_maxSpeed + 0.2f) / _maxSpeed;
-        _maxSpeed += 0.2f;
+        _maxSpeed += 0.5f;
     }
 
     public void IncreaseDamage()
@@ -68,7 +68,7 @@ public class Player : Entity
 
     public void IncreaseAttackSpeed()
     {
-        _attackSpd -= 0.05;
+        _attackSpd -= 0.2;
     }
 
     public void Heal(int heal)
@@ -91,6 +91,7 @@ public class Player : Entity
     private void LevelUp()
     {
         Level++;
+        Heal(2);
         _currentXp -= _xpObjective;
         _xpObjective = (int)(_xpObjective * 1.5);
         World.Pause();
