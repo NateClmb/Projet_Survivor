@@ -37,6 +37,7 @@ public class World : Game
     public static Texture2D XpBarBackground;
     public static Texture2D XpBarForeground;
     public static Texture2D DefaultProjectileTexture;
+    public static Texture2D EnemyProjectileTexture;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
     private readonly ArrayList _enemyHandToHandTextureList = new();
@@ -224,6 +225,7 @@ public class World : Game
         }
 
         DefaultProjectileTexture = Content.Load<Texture2D>("standardProjectile");
+        EnemyProjectileTexture = Content.Load<Texture2D>("enemyProjectile");
         XpBarBackground = Content.Load<Texture2D>("xp_bar_background");
         XpBarForeground = Content.Load<Texture2D>("xp_bar_foreground");
 

@@ -52,7 +52,7 @@ public class DistanceEnemy : Enemy
     {
         _lastTimeFired = time;
         return new Projectile(new Rectangle((int)Position.X, (int)Position.Y, 32, 32),
-            new Sprite(World.DefaultProjectileTexture, Position, 32), Position, new Vector2(5.0f, 5.0f),
+            new Sprite(World.EnemyProjectileTexture, Position, 40), Position, new Vector2(5.0f, 5.0f),
             Vector2.Normalize(_player.Position - Position), 1, Damage, false, false);
     }
 }
