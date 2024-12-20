@@ -22,9 +22,9 @@
                         <th>Enemies killed</th>
                         <th>Time played</th>
                     </tr>
-                    <!-- Loop through each game in the history -->
+                    <!-- For each game in the history -->
                     <xsl:for-each select="//GameHistory/Game">
-                        <!-- Sort the games by the number of Killed (descending) -->
+                        <!-- Sort the games by the number of Killed (descending) to rank the high scores -->
                         <xsl:sort select="Killed" data-type="number" order="descending"/>
                         <tr>
                             <!-- High score values -->
@@ -37,7 +37,7 @@
                 </table>
             </body>
             <footer>
-                <!-- Page footer including copyrights -->
+                <!-- Page footer -->
                 <p>© 2024 | COLOMBAN N. - DELEUZE-DORDRON A. - YAHA S. | All rights reserved.</p>
             </footer>
         </html>

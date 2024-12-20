@@ -4,10 +4,10 @@
 
     <xsl:template match="/">
         <GameList>
-            <!-- Loop through each game save -->
+            <!-- For each game save -->
             <xsl:for-each select="//GameHistory/Game">
                 <Game>
-                    <!-- Game values -->
+                    <!-- Collect game values -->
                     <PlayerName><xsl:value-of select="Username"/></PlayerName>
                     <Date><xsl:value-of select="Date"/></Date>
                 </Game>

@@ -1,14 +1,23 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- XML file for storing enemy data -->
 <Enemies>
   <Enemy>
+    <!-- Enemy name -->
     <Name>eyeShooter</Name>
+    <!-- Enemy's position -->
     <Rectangle_X>45</Rectangle_X>
     <Rectangle_Y>70</Rectangle_Y>
+    <!-- Enemy's size -->
     <Size>100</Size>
+    <!-- Enemy's type -->
     <Type>Distance</Type>
+    <!-- Enemy's health points -->
     <HP>5</HP>
+    <!-- Enemy's attack damage -->
     <AttackDamage>1</AttackDamage>
+    <!-- Enemy's speed -->
     <Speed>2</Speed>
+    <!-- Enemy's experience value -->
     <XPValue>15</XPValue>
   </Enemy>
   <Enemy>

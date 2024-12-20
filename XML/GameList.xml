@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><GameList>
+    <!-- XML file for storing game data -->
     <Game>
+        <!-- Player name -->
         <PlayerName>nate</PlayerName>
+        <!-- Date of the game -->
         <Date>2024-12-20 12:13:24</Date>
     </Game>
     <Game>

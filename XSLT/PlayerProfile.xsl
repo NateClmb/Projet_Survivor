@@ -15,12 +15,12 @@
 
                 <!-- Player values -->
                 <xsl:for-each select="/PlayerProfile/Player">
-                    <h2>Username: <xsl:value-of select="@Username"/></h2>  <!-- Corrected here -->
+                    <h2>Username: <xsl:value-of select="@Username"/></h2> 
                     <p>Games Played: <xsl:value-of select="GamesPlayed"/></p>
                 </xsl:for-each>
             </body>
             <footer>
-                <!-- Page footer including copyrights -->
+                <!-- Page footer -->
                 <p>© 2024 | COLOMBAN N. - DELEUZE-DORDRON A. - YAHA S. | All rights reserved.</p>
             </footer>
         </html>

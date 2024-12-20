@@ -24,10 +24,10 @@
                         <th>XP Value</th>
                     </tr>
 
-                    <!-- Loop through each enemy -->
+                    <!-- For each enemy -->
                     <xsl:for-each select="/Enemies/Enemy">
                         <tr>
-                            <!-- Enemy values -->
+                            <!-- Collect enemy values -->
                             <td><xsl:value-of select="Name"/></td>
                             <td><xsl:value-of select="Type"/></td>
                             <td><xsl:value-of select="HP"/></td>
@@ -37,8 +37,9 @@
                         </tr>
                     </xsl:for-each>
                 </table>
+
                 <footer>
-                    <!-- Page footer including copyrights -->
+                    <!-- Page footer -->
                     <p>© 2024 | COLOMBAN N. - DELEUZE-DORDRON A. - YAHA S. | All rights reserved.</p>
                 </footer>
             </body>

@@ -7,6 +7,7 @@
                 <xsd:element name="Enemy" maxOccurs="unbounded">
                     <xsd:complexType>
                         <xsd:sequence>
+                            <!-- Name with restrictions, between 1 and 50 characters -->
                             <xsd:element name="Name">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:string">
@@ -16,6 +17,7 @@
                                 </xsd:simpleType>
                             </xsd:element>
 
+                            <!-- Position X and Ywith restrictions, between 0 and 10000 -->
                             <xsd:element name="Rectangle_X">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">
@@ -24,7 +26,6 @@
                                     </xsd:restriction>
                                 </xsd:simpleType>
                             </xsd:element>
-
                             <xsd:element name="Rectangle_Y">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">
@@ -34,6 +35,7 @@
                                 </xsd:simpleType>
                             </xsd:element>
 
+                            <!-- Size with restrictions, between 1 and 1000 -->
                             <xsd:element name="Size">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:positiveInteger">
@@ -43,6 +45,7 @@
                                 </xsd:simpleType>
                             </xsd:element>
 
+                            <!-- Type with restrictions, either HandToHand or Distance -->
                             <xsd:element name="Type">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:string">
@@ -52,6 +55,7 @@
                                 </xsd:simpleType>
                             </xsd:element>
 
+                            <!-- HP, AttackDamage, Speed, and XPValue with restrictions -->
                             <xsd:element name="HP">
                                 <xsd:simpleType>
                                     <xsd:restriction base="xsd:integer">

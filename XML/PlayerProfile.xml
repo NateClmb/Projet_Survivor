@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!-- Root element -->
 <PlayerProfile>
-  <!-- Player's profile -->
+  <!-- Player's profile (username and games played) -->
   <Player Username="nate">
-    <GamesPlayed>4</GamesPlayed>
+    <GamesPlayed>5</GamesPlayed>
   </Player>
 </PlayerProfile>
