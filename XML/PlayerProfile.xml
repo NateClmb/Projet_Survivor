@@ -2,6 +2,6 @@
 <PlayerProfile>
   <!-- Player's profile (username and games played) -->
   <Player Username="nate">
-    <GamesPlayed>6</GamesPlayed>
+    <GamesPlayed>7</GamesPlayed>
   </Player>
 </PlayerProfile>

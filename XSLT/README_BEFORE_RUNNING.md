@@ -18,7 +18,7 @@
 
 ---
 
-## High_scores.xsl Instructions
+## HighScores.xsl Instructions
 ### Input Settings
 1. Choose the XSLT script file (**Do not modify this file**).
 2. Click the "..." button, navigate to the **XML** folder, and select **Saves.xml**.
@@ -53,6 +53,6 @@
 
 ### Output Settings
 1. Check **"Show in extra console tab"** and set Highlight output to **XML**.
-2. Check **"Save to file"**, click on the folder icon, navigate to the **XMl** folder, and select **GameList.html**.
+2. Check **"Save to file"**, click on the folder icon, navigate to the **XML** folder, and select **GameList.xml**.
 
 **Result**: This will create the file **GameList.xml** containing all the games played.
