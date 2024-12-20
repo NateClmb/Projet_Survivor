@@ -114,15 +114,46 @@ public class World : Game
         _spawnTimes.CopyTo(copySpawnTimes);
         foreach (double t in copySpawnTimes)
         {
+            EnemyData data = enemyDataList[Random.Next(enemyDataList.Count)];
             if (gameTime.TotalGameTime.TotalMilliseconds >= t + SPAWN_WARNING_DURATION)
             {
+                
+                Behavior behavior;
+                if (data.Type == "Corps à corps")
+                {
+                    behavior = Behavior.HAND_TO_HAND;
+                }
+                else
+                {
+                    behavior = Behavior.DISTANCE;
+                }
+                
                 _spawnTimes.Remove(t);
                 Vector2 pos = ((Sprite)_visualEffects[0]).Position;
-                var chooseEnemy = Random.Next() % 3 == 0
-                    ? _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
-                        ConstructSpriteSheet(_enemyDistanceTextureList), pos, new Vector2(2, 2), 3, "eyeShooter", 15, 1))
-                    : _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, 70, 45),
-                        ConstructSpriteSheet(_enemyHandToHandTextureList), pos, new Vector2(3, 3), 3, "eyeSprinter", 10, 1));
+                switch(behavior){
+                    case Behavior.DISTANCE:
+                        _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, data.Rectangle_X, data.Rectangle_Y),
+                            ConstructSpriteSheet(_enemyDistanceTextureList, data.Size),
+                            pos,
+                            new Vector2(data.Speed + Player.Level / 5, data.Speed + Player.Level / 5),
+                            data.HP + Player.Level,
+                            data.Name,
+                            data.XPValue + data.XPValue * Player.Level / 10,
+                            data.AttackDamage));
+                        break;
+                    case Behavior.HAND_TO_HAND:
+                        _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, data.Rectangle_X, data.Rectangle_Y),
+                            ConstructSpriteSheet(_enemyHandToHandTextureList, data.Size),
+                            pos,
+                            new Vector2(data.Speed + Player.Level / 5, data.Speed + Player.Level / 5),
+                            data.HP + Player.Level,
+                            data.Name,
+                            data.XPValue + data.XPValue * Player.Level / 10,
+                            data.AttackDamage));
+                        break;
+                    default:
+                        break;
+                }
 
                 _visualEffects.RemoveAt(0);
             }
