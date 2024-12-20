@@ -24,7 +24,7 @@ namespace Projet_Survivor.C_Sharp
                 rectX: 70,
                 rectY: 45,
                 size: 100,
-                type: "Corps à corps",
+                type: "HandToHand",
                 hp: 3,
                 attackDamage: 1,
                 speed: 3,

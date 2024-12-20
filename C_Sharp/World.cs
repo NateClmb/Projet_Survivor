@@ -121,7 +121,7 @@ public class World : Game
             {
                 
                 Behavior behavior;
-                if (data.Type == "Corps à corps")
+                if (data.Type == "HandToHand")
                 {
                     behavior = Behavior.HAND_TO_HAND;
                 }
@@ -398,11 +398,11 @@ public class World : Game
             xmlDoc.DocumentElement.AppendChild(gameElement);
 
             xmlDoc.Save(filePath);
-            Console.WriteLine($"Données de la partie enregistrées dans {filePath}");
+            Console.WriteLine($"Game data saved successfully in {filePath}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Erreur lors de la sauvegarde des données : " + ex.Message);
+            Console.WriteLine("Error while saving game data: " + ex.Message);
         }
     }
     
@@ -448,11 +448,11 @@ public class World : Game
             gamesPlayedElement.InnerText = gamesPlayed.ToString();
 
             profileDoc.Save(profileFilePath);
-            Console.WriteLine("Le profil du joueur a été mis à jour !");
+            Console.WriteLine("Player profile saved successfully");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Erreur lors de la sauvegarde du profil du joueur : " + ex.Message);
+            Console.WriteLine("Error while saving player profile: " + ex.Message);
         }
     }
 
@@ -474,7 +474,7 @@ public class World : Game
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Erreur lors du comptage des parties jouées : " + ex.Message);
+            Console.WriteLine("Error while counting games played: " + ex.Message);
         }
 
         return gamesPlayed;
