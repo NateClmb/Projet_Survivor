@@ -20,15 +20,15 @@ namespace Projet_Survivor.C_Sharp
             reader.UpdateEnemyHP("eyeShooter", 5);
 
             reader.AddNewEnemy(
-                name: "daBoss",
-                rectX: 150,
-                rectY: 200,
-                size: 120,
-                type: "Distance",
-                hp: 8,
-                attackDamage: 3,
-                speed: 2,
-                xpValue: 25
+                name: "eyeSprinter",
+                rectX: 70,
+                rectY: 45,
+                size: 100,
+                type: "Corps à corps",
+                hp: 3,
+                attackDamage: 1,
+                speed: 3,
+                xpValue: 10
             );
 
             reader.SaveChanges(filePath);
