@@ -1,5 +1,16 @@
 # Survivor: A C# and XML developed shoot'em up game using MonoGame
 
+## Important warning !##
+Depending on your OS you may have trouble with the file **font.spritefont**. Most of the gamers use Windows that is why Arial is the original font used in the game but it may not be natively installed on Linux (Ubuntu for example).
+So if there is a issue with this file while trying to run the game, relax and follow those simple steps :
+1. Open the file, his path is : **/Content/images/font.spritefont**
+2. Replace the line **<FontName>Arial</FontName>** by **<FontName>Liberation Sans</FontName>**.
+3. Save the file
+4. Run the game
+5. Enjoy it !
+
+We’re really sorry for any inconvenience this may cause and appreciate your understanding.
+
 ## Game Description
 "**Survivor**" is a shoot'em up game where you control a character who must defeat waves of enemies to upgrade his abilities.
 As you kill enemies, you collect XP, which allow you to upgrade your character's abilities, making him stronger or faster.<br>
