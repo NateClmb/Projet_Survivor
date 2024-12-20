@@ -8,9 +8,9 @@ The game is built using **MonoGame** for the game engine, and it relies on **XML
 
 ### Key Features
 - **Upgrade System**: Kill enemies to be more powerful.
-- **Increasing Difficulty**: As you defeat enemies your XP level increases making enemies spawn faster, adding an increasing challenge to the gameplay.
+- **Increasing Difficulty**: As you defeat enemies your XP level increases making enemies spawn faster and stronger, adding an increasing challenge to the gameplay.
 - **Fancy Game Design**: Thanks to **Mrs. ADD_NAME**, the game looks very nice !
-- **Player Stats**: Track your milestones with player profiles and high scores pages.
+- **Player Stats**: Track your score at the end of each game with your time survived and amount of kills !
 
 ## Project Structure
 
