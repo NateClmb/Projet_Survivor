@@ -8,6 +8,7 @@ public class Projectile : Entity
 {
     private readonly Vector2 _direction;
     private bool _smart;
+    //If true, will only hurt enemies. Else will only hurt player
     private readonly bool _friendly;
 
     private static readonly double HIT_COUNTDOWN = 100;
@@ -29,6 +30,7 @@ public class Projectile : Entity
         AdjustSprite(_direction);
     }
 
+    //Rotate the sprite according to its firing angle
     private void AdjustSprite(Vector2 direction)
     {
         Sprite.Rotation = 2 * Math.Atan2(direction.Y - 0, direction.X + 1);
@@ -58,6 +60,7 @@ public class Projectile : Entity
         return _friendly;
     }
 
+    //Projectile disappear if it has no hp left or if it hits the window border
     private void AutoDestruct()
     {
         if (Position.X < 0 || Position.X > World.WorldWidth || Position.Y < 0 || Position.Y > World.WorldHeight ||
@@ -65,6 +68,7 @@ public class Projectile : Entity
             World.RemoveEntity(this);
     }
 
+    //Projectile aren't animated
     protected override void GestionAnimation(GameTime gameTime)
     {
     }

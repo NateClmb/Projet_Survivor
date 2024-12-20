@@ -32,8 +32,7 @@ public abstract class Enemy : Entity
         this.XpValue = xpValue;
     }
 
-    //l'ennemi se rapproche en permanence du joueur
-
+    //Enemy behave differently depending on its type
     public override void Move(GameTime gameTime)
     {
         EnemyMove(gameTime);
@@ -46,8 +45,10 @@ public abstract class Enemy : Entity
             Sprite.Color = Color.White;
     }
 
+    //Each Enemy implements its way of moving
     protected abstract void EnemyMove(GameTime gameTime);
 
+    //Test if two enemies overlapse. If true, they repel each other
     private void TestOverlapseWithEnemy()
     {
         foreach (Entity e in World.GetEntities())
@@ -61,6 +62,7 @@ public abstract class Enemy : Entity
         }
     }
 
+    //Manage the Sprite to draw
     protected override void GestionAnimation(GameTime gameTime)
     {
         Sprite.Flipped = this.Position.X > World.Player.Position.X - 10;
@@ -77,6 +79,7 @@ public abstract class Enemy : Entity
         }
     }
 
+    //Deal damage and if hp go below 0, remove it from World's _entities
     protected override void IsHit(int damage, GameTime gameTime)
     {
         double time = gameTime.TotalGameTime.TotalMilliseconds;

@@ -18,6 +18,7 @@ public class HandToHandEnemy : Enemy
     {
     }
 
+    //Always move towards player
     protected override void EnemyMove(GameTime gameTime)
     {
         Vector2 direction = Vector2.Normalize(_player.Position - Position);

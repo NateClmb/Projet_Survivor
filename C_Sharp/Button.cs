@@ -19,32 +19,30 @@ public class Button
         _hitbox = new Rectangle((int)pos.X, (int)pos.Y, World.WorldWidth / 5,
             (texture.Height * World.WorldWidth / 5) / World.WorldHeight);
     }
-
-    /**
-     * @return true: If a player enters the button with mouse
-     */
-    private bool InButton()
+    
+    private bool IsInButton()
     {
         return _hitbox.Contains(Mouse.GetState().Position);
     }
 
+    //Link an action to a button
     public void AddAction(Action action)
     {
         this._action = action;
     }
-
+    
     public void Update(GameTime gameTime)
     {
         if (World.IsPaused)
         {
-            if (InButton() && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (IsInButton() && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
                 _startClick = true;
             }
 
             if (Mouse.GetState().LeftButton == ButtonState.Released)
             {
-                if (_newClick && _startClick && InButton())
+                if (_newClick && _startClick && IsInButton())
                 {
                     _newClick = false;
                     _action();
@@ -65,6 +63,6 @@ public class Button
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        Draw(spriteBatch, InButton() ? Color.Gray : Color.White);
+        Draw(spriteBatch, IsInButton() ? Color.Gray : Color.White);
     }
 }

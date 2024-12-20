@@ -27,6 +27,7 @@ public class Player : Entity
     private float _maxSpeed;
     private float _acceleration = 1.3f;
 
+    //Weapon is supposed to be change thus the private class 
     private Weapon _weapon;
     public ProgressBar XpBar;
 
@@ -48,7 +49,7 @@ public class Player : Entity
     {
         return Hp.ToString() + " / " + _maxHp.ToString();
     }
-
+    
     public void IncreaseMaxHp()
     {
         _maxHp++;
@@ -68,7 +69,7 @@ public class Player : Entity
 
     public void IncreaseAttackSpeed()
     {
-        _attackSpd -= 0.05;
+        _attackSpd -= 0.75;
     }
 
     public void Heal(int heal)
@@ -88,6 +89,7 @@ public class Player : Entity
         XpBar.Update(_currentXp * 100 / _xpObjective);
     }
 
+    //Pause the world to let the player choose an upgrade
     private void LevelUp()
     {
         Level++;
@@ -95,7 +97,7 @@ public class Player : Entity
         _xpObjective = (int)(_xpObjective * 1.5);
         World.Pause();
     }
-
+    
     protected override void IsHit(int damage, GameTime gameTime)
     {
         double time = gameTime.TotalGameTime.TotalMilliseconds;
@@ -112,9 +114,12 @@ public class Player : Entity
         }
     }
 
+    //Manage movement and attacks
     public override void Move(GameTime gameTime)
     {
-        //déplacements aux flèches du clavier
+        //Deplacement
+        
+        //Player can be moved with arrows or ZQSD keys
         if (Keyboard.GetState().IsKeyDown(Keys.Right) || Keyboard.GetState().IsKeyDown(Keys.D))
         {
             Speed.X += _acceleration;
@@ -142,41 +147,42 @@ public class Player : Entity
         Position.X += Speed.X;
         Position.Y += Speed.Y;
 
-        //limite dans la box
+        //Player can't go out of the window
         float halfSpriteSize = Sprite.Size / 2.0f;
         if (Position.X < halfSpriteSize) Position.X = halfSpriteSize;
         if (Position.X > World.WorldWidth - halfSpriteSize) Position.X = World.WorldWidth - halfSpriteSize;
         if (Position.Y < halfSpriteSize) Position.Y = halfSpriteSize;
         if (Position.Y > World.WorldHeight - halfSpriteSize) Position.Y = World.WorldHeight - halfSpriteSize;
 
-        //décélération avec le temps
+        //It decelerates rapidly
         if (Speed.X > 0) Speed.X -= 0.5f;
         if (Speed.X < 0) Speed.X += 0.5f;
         if (Speed.Y > 0) Speed.Y -= 0.5f;
         if (Speed.Y < 0) Speed.Y += 0.5f;
 
-        //arrêt net si vitesse basse
+        //If its speed is very low, it stops
         if (Math.Abs(Speed.X) < 0.5f) Speed.X = 0;
         if (Math.Abs(Speed.Y) < 0.5f) Speed.Y = 0;
 
-        //réalignement de la hitbox sur le sprite
+        //Snap hitbox's position onto the current position
         SetHitboxPosition();
         GestionAnimation(gameTime);
 
-        //Fin déplacement
+        //End deplacement
 
-        //Attaque
+        //Attack
         if (Mouse.GetState().LeftButton == ButtonState.Pressed)
         {
             double time = gameTime.TotalGameTime.TotalMilliseconds;
             if (time >= _weapon.LastTimeFired + _weapon.BaseFireRate * _attackSpd)
                 World.AddEntity(_weapon.Fire(time));
         }
-        //Fin attaque
+        //End attack
 
         HitTest(gameTime,
             e => e.Hitbox.Intersects(Hitbox) &&
                  (e is Enemy || (e is Projectile projectile && !projectile.IsFriendly())));
+        //If enough time has passed, player can be hit once again
         if (gameTime.TotalGameTime.TotalMilliseconds >= LastTimeHit + HIT_COUNTDOWN)
             _hit = false;
     }
@@ -202,7 +208,7 @@ public class Player : Entity
             }
 
             bool flip = Sprite.Flipped;
-            //Update Sprite's position because the entity may have moved 
+            //Update Sprite's position because the player may have moved 
             Sprite.Position = this.Position;
             Sprite.Flipped = flip;
             Sprite.Flipped = Speed.X > 0.1f;
@@ -232,6 +238,7 @@ public class Player : Entity
             this._smart = false;
         }
 
+        //Create a projectile aimed at the mouse
         public Projectile Fire(double time)
         {
             LastTimeFired = time;
@@ -239,7 +246,7 @@ public class Player : Entity
                 new Sprite(_projectileTexture, _player.Position, 32), _player.Position, _projectileSpeed,
                 CalculateSpeed(), _piercePotential, _damage, _smart, true);
         }
-
+        
         private Vector2 CalculateSpeed()
         {
             Vector2 direction;
@@ -261,19 +268,20 @@ public class Player : Entity
             return direction;
         }
 
+        //Determine who's the nearest enemy from the player
         private Enemy? NearestTarget()
         {
             Enemy? nearest = null;
             float minDist = float.MaxValue;
-            foreach (Entity e in World.GetEntities())
+            foreach (var e in World.GetEntities())
             {
-                if (e.GetType() == typeof(Enemy))
+                if (e is Enemy enemy)
                 {
-                    float dist = Vector2.Distance(e.Position, _player.Position);
+                    float dist = Vector2.Distance(enemy.Position, _player.Position);
                     if (dist < minDist)
                     {
                         minDist = dist;
-                        nearest = (Enemy)e;
+                        nearest = enemy;
                     }
                 }
             }

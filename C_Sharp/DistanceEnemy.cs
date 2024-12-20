@@ -24,6 +24,7 @@ public class DistanceEnemy : Enemy
     {
     }
 
+    //Wants to stay at a constant distance from the player
     protected override void EnemyMove(GameTime gameTime)
     {
         float distanceToPlayer = Vector2.Distance(Position, _player.Position);
@@ -46,6 +47,7 @@ public class DistanceEnemy : Enemy
             World.AddEntity(Fire(time));
     }
 
+    //Creates a projectile aimed at the player
     public Projectile Fire(double time)
     {
         _lastTimeFired = time;

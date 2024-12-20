@@ -18,19 +18,25 @@ public class World : Game
     //List of entities existing at an instant
     //The player is always the entity at index 0
     private static ArrayList _entities = new();
+
     //List containing buttons showed when player levels up
     private static ArrayList _buttons = new();
+
     //List of visual effects to draw on screen such as enemy spawn warning
     private static ArrayList _visualEffects = new();
+
     //List containing spawned enemy time during last second
     private static ArrayList _spawnTimes = new();
 
-    public static Texture2D XpBarBackground;
-    public static Texture2D XpBarForeground;
-    public static Texture2D DefaultProjectileTexture;
+    //Textures used in World
     private Texture2D _enemySpawnWarningTexture;
     private Texture2D _backgroundTexture;
     private SpriteFont _font;
+
+    //Textures used elsewhere
+    public static Texture2D XpBarBackground;
+    public static Texture2D XpBarForeground;
+    public static Texture2D DefaultProjectileTexture;
 
     //Lists containing Texture2D used to create sprite sheets for animated sprites
     private readonly ArrayList _enemyHandToHandTextureList = new();
@@ -38,17 +44,28 @@ public class World : Game
     private readonly ArrayList _playerTextureList = new();
 
     public static Player Player;
+
+    //Every class shares the same random generator
     public static Random Random;
+
+    //Game state, default being running
     private static bool _isPaused;
     private static bool _isGameOver;
-    private static double _gameOverTime;
-    private static int _nbKilled;
-    private static double _inGameTime;
-    private int _difficultyLevel;
     public static bool IsPaused => _isPaused;
 
+    //Game stats
+    private static double _gameOverTime;
+    private static int _nbKilled;
+
+    //Represents time passed when the game was running
+    private static double _inGameTime;
+
+    //Difficulty level influence enemise spawn rate and their stats
+    private int _difficultyLevel;
+
+    //Duration of a glyph drawn to warn player about incoming enemy spawn
     private readonly double SPAWN_WARNING_DURATION = 1500;
-    
+
     public World()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -67,6 +84,7 @@ public class World : Game
         _entities.Add(e);
     }
 
+    //Return an array that contains a copy of _entities
     public static Entity[] GetEntities()
     {
         Entity[] entities = new Entity[_entities.Count];
@@ -74,13 +92,15 @@ public class World : Game
         return entities;
     }
 
+    //Remove an Entity from _entities and update the kill counter accordingly
     public static void RemoveEntity(Entity e)
     {
         _entities.Remove(e);
-        if(e is Enemy)
+        if (e is Enemy)
             _nbKilled++;
     }
 
+    //Creates an ArrayList of Sprite from an ArrayList of Texture2D. All Sprite have a size of 100
     private ArrayList ConstructSpriteSheet(ArrayList textureList)
     {
         ArrayList spriteSheet = new ArrayList();
@@ -92,6 +112,7 @@ public class World : Game
         return spriteSheet;
     }
 
+    //Manage all things related to enemy spawn. From warning glyphes to enemy type choice
     private void SpawnEnemy(GameTime gameTime)
     {
         if ((int)gameTime.TotalGameTime.Ticks % (Math.Max(30, 300 - _difficultyLevel * 10)) == 0)
@@ -113,31 +134,37 @@ public class World : Game
                 Vector2 pos = ((Sprite)_visualEffects[0]).Position;
                 var chooseEnemy = Random.Next() % 3 == 0
                     ? _entities.Add(new DistanceEnemy(new Rectangle((int)pos.X, (int)pos.Y, 45, 70),
-                        ConstructSpriteSheet(_enemyDistanceTextureList), pos, new Vector2(2, 2), 3, "eyeShooter", 15, 1))
+                        ConstructSpriteSheet(_enemyDistanceTextureList), pos, new Vector2(2, 2), 3, "eyeShooter", 15,
+                        1))
                     : _entities.Add(new HandToHandEnemy(new Rectangle((int)pos.X, (int)pos.Y, 70, 45),
-                        ConstructSpriteSheet(_enemyHandToHandTextureList), pos, new Vector2(3, 3), 3, "eyeSprinter", 10, 1));
+                        ConstructSpriteSheet(_enemyHandToHandTextureList), pos, new Vector2(3, 3), 3, "eyeSprinter", 10,
+                        1));
 
                 _visualEffects.RemoveAt(0);
             }
         }
     }
 
+    //Pause the game
     public static void Pause()
     {
         _isPaused = true;
     }
 
+    //Unpause the game
     public static void Unpause()
     {
         _isPaused = false;
     }
 
+    //Change game state to game over and measured the time 
     public static void GameOver()
     {
         _isGameOver = true;
         _gameOverTime = _inGameTime;
     }
 
+    //Start a new game
     private void Restart()
     {
         Random = new Random();
@@ -166,6 +193,7 @@ public class World : Game
         base.Initialize();
     }
 
+    //Load all Texture2D used in the game and create a Player
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -189,7 +217,7 @@ public class World : Game
         {
             _enemyHandToHandTextureList.Add(Content.Load<Texture2D>("enemyDog" + i.ToString()));
         }
-        
+
         for (int i = 0; i < 8; i++)
         {
             _enemyDistanceTextureList.Add(Content.Load<Texture2D>("enemyShooter" + i.ToString()));
@@ -279,8 +307,9 @@ public class World : Game
                 Vector2.Zero, SpriteEffects.None, 0f);
             String endGameStats = "You killed " + _nbKilled.ToString() + " ennemies !\n";
             endGameStats += "You survived " + Math.Round(_gameOverTime / 60) + " seconds !\n";
-            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth/6, 2 * WorldHeight/3), Color.White);
-            _spriteBatch.DrawString(_font, "Press Enter to restart", new Vector2(WorldWidth/2 - 160, 7 * WorldHeight/8), Color.White);
+            _spriteBatch.DrawString(_font, endGameStats, new Vector2(WorldWidth / 6, 2 * WorldHeight / 3), Color.White);
+            _spriteBatch.DrawString(_font, "Press Enter to restart",
+                new Vector2(WorldWidth / 2 - 160, 7 * WorldHeight / 8), Color.White);
         }
         else
         {

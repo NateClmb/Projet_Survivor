@@ -9,11 +9,12 @@ public class Sprite
     public Vector2 Position;
     private readonly int _size;
     private static readonly int SizeMax = 256;
-    private static readonly int SizeMin = -SizeMax;
+    private static readonly int SizeMin = 0;
+    //If true, Sprite is drawn flipped on the horizontal axis to always face the direction it's moving
     public bool Flipped;
     public double Rotation;
 
-
+    //By default, there's no coloring filter
     public Color Color = Color.White;
 
     public Texture2D Texture
