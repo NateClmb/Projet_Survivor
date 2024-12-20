@@ -4,7 +4,7 @@
 Depending on your OS you may have trouble with the file **font.spritefont**. Most of the gamers use Windows that is why Arial is the original font used in the game but it may not be natively installed on Linux (Ubuntu for example).
 So if there is a issue with this file while trying to run the game, relax and follow those simple steps :
 1. Open the file, his path is : **/Content/images/font.spritefont**
-2. Replace the line **<FontName>Arial</FontName>** by **<FontName>Liberation Sans</FontName>**.
+2. Replace the line **\<FontName>Arial\</FontName>** by **\<FontName>Liberation Sans\</FontName>**.
 3. Save the file
 4. Run the game
 5. Enjoy it !
